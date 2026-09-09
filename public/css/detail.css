@@ -1,0 +1,131 @@
+.khung-anh-chinh {
+  aspect-ratio: 3 / 4;
+  background-color: #f8f9fa;
+}
+
+.anh-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.khung-thumb {
+  width: 80px;
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+  background-color: #f8f9fa;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.khung-thumb.dang-chon {
+  opacity: 1;
+  border: 2px solid #333;
+}
+
+.tieu-de-sp {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.mo-ta-sp {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.nhan-tieu-de {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.vong-mau-ngoai {
+  width: 36px;
+  height: 36px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  margin: 0 auto 4px auto;
+  box-sizing: border-box;
+}
+
+.vong-mau-ngoai.dang-chon {
+  border-color: #000;
+}
+
+.vong-mau-trong {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.chu-mau {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.chu-mau.dang-chon {
+  color: #000;
+}
+
+.khung-so-luong {
+  width: fit-content;
+  border: 1px solid #dee2e6;
+  display: flex;
+}
+
+.nut-so-luong {
+  background: transparent;
+  border: none;
+  padding: 4px 12px;
+}
+
+.nut-so-luong:hover {
+  background-color: #f8f9fa;
+}
+
+.so-luong-hien-thi {
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+
+.nut-them-gio {
+  background-color: #6C4E31;
+  border: none;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 1rem;
+  transition: background-color 0.3s;
+}
+
+.nut-them-gio:hover {
+  background-color: #5a4129;
+  color: white;
+}
+
+.tab-item {
+  width: 33.33%;
+  text-align: center;
+  padding-bottom: 0.5rem;
+  color: #6c757d;
+}
+
+.tab-item.dang-chon {
+  font-weight: bold;
+  color: #000;
+  border-bottom: 2px solid #000;
+}
+
+.noi-dung-tab {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}

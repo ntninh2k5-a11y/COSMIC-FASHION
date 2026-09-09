@@ -1,0 +1,25 @@
+.neo-card {
+    background: #d1dde3;
+    border: 3px solid #1a1a1a;
+    box-shadow: 8px 8px 0px #1a1a1a;
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+.neo-btn-black {
+    background: #1a1a1a;
+    color: #ffffff;
+    border: 2px solid #1a1a1a;
+    border-radius: 8px;
+    font-weight: 800;
+    padding: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  
+}
+.neo-btn-black:hover {
+    background: #ffffff;
+    color: #1a1a1a;
+}

@@ -1,0 +1,78 @@
+.cosmic-table-wrapper {
+    background: #ffffff;
+    border-radius: 16px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    padding: 24px;
+    border: 1px solid #f3f4f6;
+    overflow: hidden;
+}
+
+.cosmic-table {
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.cosmic-table th,
+.cosmic-table td {
+    border: none !important; 
+    border-bottom: 1px solid #f3f4f6 !important;
+}
+
+.cosmic-table thead th {
+    background-color: #D1DDE3;
+    color: #000000 !important;
+    font-family: 'Montserrat', 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 16px 20px;
+    border-bottom: none !important;
+}
+
+.cosmic-table thead th:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.cosmic-table thead th:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.cosmic-table tbody td {
+    vertical-align: middle;
+    padding: 20px;
+    color: #374151;
+    font-weight: 500;
+}
+
+.cosmic-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.cosmic-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.cosmic-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.btn-cosmic-soft {
+    background-color: #1f2937;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 8px 24px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-cosmic-soft:hover {
+    background-color: #374151;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}

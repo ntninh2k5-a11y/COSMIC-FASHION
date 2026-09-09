@@ -1,0 +1,99 @@
+.khung-tieu-de-bu {
+  padding: 40px 0;
+  background-color: #f4f4f4;
+}
+
+.chu-tieu-de-bu {
+  font-size: 48px; 
+  letter-spacing: 5px;
+  margin-bottom: 10px;
+  color: #c01919;
+} 
+
+.chu-phu-bu {
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.khung-anh-asym-to, 
+.khung-anh-asym-nho {
+  overflow: hidden;
+  position: relative;
+  border-radius: 8px;
+}
+
+.anh-asym-to {
+  height: 800px; 
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.anh-asym-nho {
+  height: 360px;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.link-sp-asym:hover .anh-asym-to,
+.link-sp-asym:hover .anh-asym-nho {
+  transform: scale(1.03);
+}
+
+.nhan-den-asym {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 5px 12px;
+  letter-spacing: 1px;
+  z-index: 2;
+  border-radius: 4px;
+}
+
+.ten-sp-asym-to {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+}
+
+.gia-sp-asym-to {
+  font-size: 24px;
+}
+
+.nut-xem-them-asym {
+  font-size: 13px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.ten-sp-asym {
+  font-size: 14px;
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mau-sac-tron-asym {
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.mau-sac-tron-asym:hover {
+  transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+  .anh-asym-to {
+    height: 400px;
+  }
+  .anh-asym-nho {
+    height: 300px;
+  }
+  .chu-tieu-de-bu {
+    font-size: 32px;
+  }
+}

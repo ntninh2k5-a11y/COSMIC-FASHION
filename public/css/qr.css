@@ -1,0 +1,96 @@
+/* =========================================
+   CSS GIAO DIỆN QUÉT MÁ QR
+========================================= */
+
+.qr-card {
+    background: #ffffff;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+    padding: 40px;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.qr-title {
+    letter-spacing: 1px;
+    color: #1a1a1a;
+}
+
+.qr-image-wrapper {
+    display: inline-block;
+    padding: 15px;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    margin: 20px 0;
+    background: #fcfcfc;
+}
+
+.qr-img {
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+}
+
+.qr-info-box {
+    background: #f8f9fa;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.qr-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.qr-info-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.btn-confirm-qr {
+    background: #1a1a1a;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    padding: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.btn-confirm-qr:hover {
+    background: #333333;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    color: #ffffff;
+}
+
+.btn-cancel-qr {
+    background: transparent;
+    color: #666;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-weight: bold;
+    padding: 14px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn-cancel-qr:hover {
+    background: #f8f9fa;
+    color: #1a1a1a;
+    border-color: #1a1a1a;
+}

@@ -1,0 +1,37 @@
+.neo-card {
+    background: #d1dde3;
+    border: none; /* Bỏ viền đen */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05); /* Thêm bóng mờ nhẹ để thẻ không bị chìm */
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+}
+.neo-input {
+    background: #ffffff;
+    border: 1px solid #ccc; /* Đổi thành viền xám mỏng */
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-weight: 500;
+}
+.neo-input:focus {
+    box-shadow: none;
+    border-color: #D35400;
+    outline: none;
+}
+.neo-btn-black {
+    background: #1a1a1a;
+    color: #ffffff;
+    border: none; /* Bỏ viền đen */
+    border-radius: 8px;
+    font-weight: 900;
+    padding: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.neo-btn-black:hover {
+    background: #ffffff;
+    color: #1a1a1a;
+    border: 1px solid #1a1a1a; /* Thêm viền đen mỏng khi hover để không bị tàng hình trên nền trắng */
+}

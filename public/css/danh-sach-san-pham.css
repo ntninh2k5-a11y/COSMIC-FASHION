@@ -1,0 +1,173 @@
+.tieu-de-chinh {
+  font-size: 24px;
+  letter-spacing: 3px;
+  color: #000;
+}
+
+.thanh-loc-toi-gian {
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding: 12px 0;
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.loc-nhom {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.loc-tieu-de {
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: #1a1a1a;
+  margin-right: 5px;
+  letter-spacing: 0.5px;
+}
+
+.loc-chu-item {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  color: #666;
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+.loc-chu-item:hover {
+  color: #1a1a1a;
+  transform: none;
+}
+
+.loc-chu-item.active {
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+  text-decoration: underline !important;
+  text-underline-offset: 4px;
+  background-color: transparent !important;
+  box-shadow: none;
+}
+
+.bieu-tuong-mau-nho {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 5px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+.phan-trang-js {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 2rem;
+}
+
+.phan-trang-js button {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  border-radius: 4px;
+}
+
+.phan-trang-js button:hover {
+  background: #f8f9fa;
+}
+
+.phan-trang-js button.active {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+}
+
+.phan-trang-js button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.khung-anh-discount {
+  overflow: hidden;
+  border-radius: 16px; 
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.anh-san-pham {
+  border-radius: 16px;
+  object-fit: cover;
+  height: 400px;
+  width: 100%;
+  transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.link-san-pham {
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.link-san-pham:hover {
+  transform: translateY(-8px);
+}
+
+.link-san-pham:hover .khung-anh-discount {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+}
+
+.link-san-pham:hover .anh-san-pham {
+  transform: scale(1.05);
+}
+
+.nhan-discount {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: #e63946;
+  color: #ffffff;
+  padding: 5px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 2;
+  box-shadow: 0 4px 8px rgba(230, 57, 70, 0.3);
+}
+
+.ten-san-pham {
+  font-size: 15px;
+  color: #555;
+  margin-top: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.gia-san-pham {
+  font-size: 17px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-top: 4px;
+}
+
+.mau-sac-vong-tron-men {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  border: 1px solid #eaeaea;
+  transition: transform 0.2s ease;
+}
+
+.mau-sac-vong-tron-men:hover {
+  transform: scale(1.3);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}

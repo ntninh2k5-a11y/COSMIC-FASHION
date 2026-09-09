@@ -1,0 +1,123 @@
+
+.tieu-de-chinh-gio-hang {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.anh-sp-gio {
+  width: 90px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.ten-sp-gio {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.4;
+}
+
+.phan-loai-sp-gio {
+  font-size: 13px;
+}
+
+.gia-sp-gio {
+  font-size: 16px;
+}
+
+
+.tang-giam-so-luong {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.nut-tang-giam {
+  background-color: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #555;
+  transition: all 0.2s;
+}
+
+.nut-tang-giam:hover {
+  background-color: #f0f0f0;
+  color: #000;
+}
+
+.so-luong-hien-thi {
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 30px;
+  text-align: center;
+}
+
+
+.nut-xoa-sp {
+  opacity: 0.5;
+  transition: opacity 0.3s, transform 0.2s;
+}
+
+.nut-xoa-sp:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+
+.khung-tong-ket {
+  background-color: #fafafa; 
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.tieu-de-tong-ket {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.chu-tong-ket {
+  font-size: 15px;
+  color: #555;
+}
+
+
+.nut-thanh-toan {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 16px 0;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 14px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.nut-thanh-toan:hover {
+  background-color: #333;
+  transform: translateY(-2px); 
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+  .anh-sp-gio {
+    width: 70px;
+    height: 90px;
+  }
+  .dieu-chinh-sp-gio {
+    flex-direction: column-reverse; 
+    align-items: flex-end;
+  }
+  .tang-giam-so-luong {
+    margin-top: 10px;
+  }
+  .nut-xoa-sp {
+    margin-bottom: 10px;
+  }
+}
