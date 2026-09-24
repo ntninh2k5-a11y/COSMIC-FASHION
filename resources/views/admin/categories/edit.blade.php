@@ -23,6 +23,21 @@
                 </div>
 
                 <div class="mb-4">
+                    <label class="fw-bolder mb-2 text-dark">DANH MỤC CHA</label>
+                    <select name="parent_id" class="form-select neo-input">
+                        <option value="">-- Không có (Danh mục gốc) --</option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat->id }}" {{ $category->parent_id == $cat->id ? 'selected' : '' }}>
+                                {{ $cat->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('parent_id')
+                        <div class="text-danger mt-1 fw-bold">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
                     <label class="fw-bolder mb-2 text-dark">ẢNH ĐẠI DIỆN</label>
                     <input type="file" name="image" class="form-control neo-input" accept="image/*">
                     @if($category->image_url)

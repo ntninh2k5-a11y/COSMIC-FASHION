@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
+use App\Http\Controllers\Admin\FooterMenuController as AdminFooterMenuController;
 
 use App\Http\Middleware\CheckAccountStatus;
 use App\Http\Middleware\CheckAdmin;
@@ -96,7 +97,10 @@ Route::middleware([CheckAccountStatus::class, CheckAdmin::class])
         Route::get('/users/{id}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{id}', [AdminUserController::class, 'update'])->name('users.update');
         Route::put('/users/{id}/lock', [AdminUserController::class, 'toggleLock'])->name('users.lock');
+        
+        Route::resource('footer_menus', AdminFooterMenuController::class);
+        Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class);
     });
 
-    Route::get('/thanh-toan-qr/{order}/status', [OrderController::class, 'paymentStatus'])
+Route::get('/thanh-toan-qr/{order}/status', [OrderController::class, 'paymentStatus'])
     ->name('payment.status');

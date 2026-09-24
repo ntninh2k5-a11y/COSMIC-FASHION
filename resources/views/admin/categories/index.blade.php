@@ -25,6 +25,7 @@
                         <tr>
                             <th class="fw-bolder text-dark" style="width: 80px;">ID</th>
                             <th class="fw-bolder text-dark">TÊN DANH MỤC</th>
+                            <th class="fw-bolder text-dark">DANH MỤC CHA</th>
                             <th class="fw-bolder text-dark text-center">TRẠNG THÁI</th>
                             <th class="fw-bolder text-dark text-center" style="width: 180px;">HÀNH ĐỘNG</th>
                         </tr>
@@ -48,6 +49,13 @@
                                         <span class="text-dark">{{ $category->name }}</span>
                                     </div>
                                 </td>
+                                <td>
+                                    @if($category->parent)
+                                        <span class="text-primary">{{ $category->parent->name }}</span>
+                                    @else
+                                        <span class="text-muted fst-italic">-- Danh mục gốc --</span>
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     @if($category->status == 1)
                                         <span class="text-success">Hiển thị</span>
@@ -66,7 +74,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center py-4 text-secondary">Chưa có danh mục nào.</td>
+                                <td colspan="5" class="text-center py-4 text-secondary">Chưa có danh mục nào.</td>
                             </tr>
                         @endforelse
                     </tbody>

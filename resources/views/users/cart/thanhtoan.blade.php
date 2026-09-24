@@ -7,7 +7,6 @@
 @endpush
 
 @section('content')
-
 <div class="container py-5">
     <div class="mb-5 text-center">
         <h2 class="fw-bolder text-uppercase" style="letter-spacing: 1px; color: #1a1a1a;">THANH TOÁN ĐƠN HÀNG</h2>
@@ -21,7 +20,8 @@
     <form id="form-thanh-toan" action="{{ route('order.store') }}" method="POST">
         @csrf
         
-        <input type="hidden" name="total_amount" value="{{ $total }}">
+        <input type="hidden" name="subtotal_amount" value="{{ $subtotal }}">
+        <input type="hidden" name="voucher_code" value="{{ $voucher ? $voucher->code : '' }}">
         
         @foreach($cartItems as $index => $item)
             <input type="hidden" name="cart_items[{{ $index }}][product_id]" value="{{ $item->product_id }}">
@@ -89,15 +89,35 @@
                         @endforeach
                     </div>
 
+                    <div class="mb-4">
+                        <label class="fw-bolder mb-2" style="font-size: 0.8rem;">MÃ GIẢM GIÁ</label>
+                        <div class="d-flex gap-2">
+                            <input type="text" id="voucher-input" class="form-control neo-input text-uppercase" placeholder="Nhập mã giảm giá" value="{{ request('voucher_code') }}">
+                            <button type="button" class="btn neo-btn-black px-4" onclick="applyVoucher()">ÁP DỤNG</button>
+                        </div>
+                        @if(session('voucher_error'))
+                            <div class="text-danger mt-2 fw-bold" style="font-size: 0.85rem;">{{ session('voucher_error') }}</div>
+                        @endif
+                        @if($voucher)
+                            <div class="text-success mt-2 fw-bold" style="font-size: 0.85rem;">Đã áp dụng mã: {{ $voucher->code }} (-{{ number_format($discountAmount, 0, ',', '.') }}đ)</div>
+                        @endif
+                    </div>
+
                     <div class="border-top border-dark border-2 pt-4 mt-3">
                         <div class="d-flex justify-content-between mb-3">
                             <span class="text-secondary fw-bold">Tạm tính ({{ $cartItems->sum('quantity') }} sản phẩm)</span>
-                            <span class="fw-bolder text-dark">{{ number_format($total, 0, ',', '.') }}đ</span>
+                            <span class="fw-bolder text-dark">{{ number_format($subtotal, 0, ',', '.') }}đ</span>
                         </div>
-                        <div class="d-flex justify-content-between mb-4">
+                        <div class="d-flex justify-content-between mb-3">
                             <span class="text-secondary fw-bold">Phí vận chuyển</span>
                             <span class="fw-bolder text-success">Miễn phí</span>
                         </div>
+                        @if($discountAmount > 0)
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-secondary fw-bold">Giảm giá (Voucher)</span>
+                                <span class="fw-bolder text-danger">-{{ number_format($discountAmount, 0, ',', '.') }}đ</span>
+                            </div>
+                        @endif
                         <div class="d-flex justify-content-between align-items-center border-top border-dark border-2 pt-4">
                             <h4 class="fw-bolder m-0 text-dark">Thành tiền</h4>
                             <h3 class="fw-bolder m-0 text-danger">{{ number_format($total, 0, ',', '.') }}đ</h3>
@@ -117,9 +137,18 @@
 @push('scripts')
 <script>
     document.getElementById('form-thanh-toan').addEventListener('submit', function() {
-        let btn = document.querySelector('.neo-btn-black');
+        let btn = document.querySelector('button[type="submit"].neo-btn-black');
         btn.innerText = 'ĐANG XỬ LÝ...';
         btn.style.pointerEvents = 'none';
     });
+
+    function applyVoucher() {
+        let code = document.getElementById('voucher-input').value.trim();
+        if(code) {
+            window.location.href = "{{ route('checkout') }}?voucher_code=" + encodeURIComponent(code);
+        } else {
+            window.location.href = "{{ route('checkout') }}";
+        }
+    }
 </script>
 @endpush

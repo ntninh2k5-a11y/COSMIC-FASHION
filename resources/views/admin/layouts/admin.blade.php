@@ -43,6 +43,16 @@
            class="sidebar-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
             Quản lý Tài Khoản
         </a>
+
+        <a href="{{ route('admin.footer_menus.index') }}" 
+           class="sidebar-link {{ request()->routeIs('admin.footer_menus.*') ? 'active' : '' }}">
+            Quản lý Chân Trang
+        </a>
+
+        <a href="{{ route('admin.vouchers.index') }}" 
+           class="sidebar-link {{ request()->routeIs('admin.vouchers.*') ? 'active' : '' }}">
+            Quản lý Voucher
+        </a>
         
         <a href="{{ route('home') }}" class="sidebar-link mt-5 text-center" style="background: #1a1a1a; color: white;">
             Xem Website

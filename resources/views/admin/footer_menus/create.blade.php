@@ -1,19 +1,19 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Thêm Danh Mục - Admin')
+@section('title', 'Thêm Link Footer - Admin')
 
-@section('page-title', 'THÊM DANH MỤC')
+@section('page-title', 'THÊM MỚI FOOTER')
 
 @section('content')
 <div class="row">
     <div class="col-md-8 mx-auto">
         <div class="neo-card">
-            <h4 class="fw-bolder mb-4 border-bottom border-dark border-2 pb-2">Thêm Danh Mục Mới</h4>
+            <h4 class="fw-bolder mb-4 border-bottom border-dark border-2 pb-2">Thêm Link Mới</h4>
             
-            <form action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.footer_menus.store') }}" method="POST">
                 @csrf
                 <div class="mb-4">
-                    <label class="fw-bolder mb-2 text-dark">TÊN DANH MỤC</label>
+                    <label class="fw-bolder mb-2 text-dark">TÊN HIỂN THỊ</label>
                     <input type="text" name="name" class="form-control neo-input" required>
                     @error('name')
                         <div class="text-danger mt-1 fw-bold">{{ $message }}</div>
@@ -21,11 +21,11 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="fw-bolder mb-2 text-dark">DANH MỤC CHA</label>
+                    <label class="fw-bolder mb-2 text-dark">CỘT TIÊU ĐỀ (CHA)</label>
                     <select name="parent_id" class="form-select neo-input">
-                        <option value="">-- Không có (Danh mục gốc) --</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        <option value="">-- Trống (Làm cột tiêu đề mới) --</option>
+                        @foreach($footerColumns as $col)
+                            <option value="{{ $col->id }}">{{ $col->name }}</option>
                         @endforeach
                     </select>
                     @error('parent_id')
@@ -34,9 +34,9 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="fw-bolder mb-2 text-dark">ẢNH ĐẠI DIỆN</label>
-                    <input type="file" name="image" class="form-control neo-input" accept="image/*">
-                    @error('image')
+                    <label class="fw-bolder mb-2 text-dark">ĐƯỜNG DẪN (URL)</label>
+                    <input type="text" name="url" class="form-control neo-input" value="#">
+                    @error('url')
                         <div class="text-danger mt-1 fw-bold">{{ $message }}</div>
                     @enderror
                 </div>
@@ -50,8 +50,8 @@
                 </div>
 
                 <div class="d-flex justify-content-end gap-2">
-                    <a href="{{ route('admin.categories.index') }}" class="neo-btn bg-secondary text-white text-decoration-none">HỦY</a>
-                    <button type="submit" class="neo-btn border-0">LƯU DANH MỤC</button>
+                    <a href="{{ route('admin.footer_menus.index') }}" class="neo-btn bg-secondary text-white text-decoration-none">HỦY</a>
+                    <button type="submit" class="neo-btn border-0">LƯU THÔNG TIN</button>
                 </div>
             </form>
         </div>

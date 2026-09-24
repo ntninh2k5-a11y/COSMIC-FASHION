@@ -14,16 +14,20 @@
 <body>
     <header>
         @include('partials.header')
-        @include('partials.menu')
+        @if(!request()->is('login') && !request()->is('register'))
+            @include('partials.menu')
+        @endif
     </header>
     
     <main>
         @yield('content')
     </main>
     
-    <footer>
-        @include('partials.footer')
-    </footer>
+    @if(!request()->is('login') && !request()->is('register'))
+        <footer>
+            @include('partials.footer')
+        </footer>
+    @endif
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')

@@ -1,53 +1,46 @@
 <footer class="footer-bg py-5 mt-5">
     <div class="container">
+        
+        @php
+            $footerColumns = \App\Models\FooterMenu::whereNull('parent_id')->where('status', 1)->get();
+        @endphp
+
         <div class="row">
-            <div class="col-md-3">
-                <div class="footer-title">CUSTOMER CARE</div>
-                <ul class="footer-list">
-                    <li>Contact US</li>
-                    <li>Track an Order</li>
-                    <li>Create a Return</li>
-                    <li>Exchange & Returns</li>
-                    <li>Delivery</li>
-                    <li>Payments</li>
-                    <li>FAQs</li>
+         
+            @foreach($footerColumns as $column)
+            <div class="col-md-4">
+                <div class="footer-title text-uppercase fw-bold mb-3">{{ $column->name }}</div>
+                
+                @if($column->children && $column->children->where('status', 1)->count() > 0)
+                <ul class="footer-list list-unstyled">
+                    @foreach($column->children->where('status', 1) as $link)
+                        <li class="mb-2">
+                            <a href="{{ $link->url }}" class="text-decoration-none text-muted">
+                                {{ $link->name }}
+                            </a>
+                        </li>
+                    @endforeach
                 </ul>
+                @endif
+                
             </div>
-            <div class="col-md-3">
-                <div class="footer-title">ABOUT US</div>
-                <ul class="footer-list">
-                    <li>About Cosmic Fashion</li>
-                    <li>Advertising</li>
-                    <li>People</li>
-                    <li>Careers</li>
-                    <li>Terms & Conditions</li>
-                    <li>Privacy</li>
+            @endforeach
+
+            <div class="col-md-4">
+                <div class="footer-title text-uppercase fw-bold mb-3">MẠNG XÃ HỘI</div>
+                <ul class="footer-list list-unstyled mb-4">
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Instagram</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Facebook</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">TikTok</a></li>
                 </ul>
-            </div>
-            <div class="col-md-3">
-                <div class="footer-title">AFFILIATE BRANDS</div>
-                <ul class="footer-list">
-                    <li>Gucci</li>
-                    <li>Balenciaga</li>
-                    <li>Off-White</li>
-                    <li>SAINT LAURENT</li>
-                    <li>Prada</li>
-                </ul>
-            </div>
-            <div class="col-md-3">
-                <div class="footer-title">SOCIALS</div>
-                <ul class="footer-list mb-4">
-                    <li>Instagram</li>
-                    <li>Twitter</li>
-                    <li>YouTube</li>
-                    <li>Facebook</li>
-                </ul>
-                <div class="footer-title mb-2">COSMIC FASHION ACCEPTS</div>
-                <div class="payment-icons">
-                    <span> PayPal</span>
-                    <span> Visa</span>
+                
+                <div class="footer-title text-uppercase fw-bold mb-2" style="font-size: 14px;">THANH TOÁN AN TOÀN</div>
+                <div class="payment-icons d-flex gap-2">
+                    <span class="badge bg-secondary">PayPal</span>
+                    <span class="badge bg-secondary">Visa/Mastercard</span>
                 </div>
             </div>
+            
         </div>
     </div>
 </footer>

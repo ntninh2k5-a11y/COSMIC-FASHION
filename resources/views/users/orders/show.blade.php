@@ -67,8 +67,18 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="3" class="text-end fw-bolder" style="color: #6b7280; font-size: 0.85rem; letter-spacing: 0.5px;">TỔNG CỘNG:</td>
-                        <td class="text-end fw-bolder fs-5" style="color: #ef4444;">{{ number_format($order->total_amount, 0, ',', '.') }}đ</td>
+                        <td colspan="3" class="text-end fw-bold border-0 pb-1" style="color: #6b7280; font-size: 0.85rem; letter-spacing: 0.5px;">TẠM TÍNH:</td>
+                        <td class="text-end fw-bold text-dark border-0 pb-1">{{ number_format($order->total_amount + $order->discount_amount, 0, ',', '.') }}đ</td>
+                    </tr>
+                    @if($order->discount_amount > 0)
+                    <tr>
+                        <td colspan="3" class="text-end fw-bold border-0 pb-1 pt-1" style="color: #6b7280; font-size: 0.85rem; letter-spacing: 0.5px;">GIẢM GIÁ VOUCHER:</td>
+                        <td class="text-end fw-bold text-danger border-0 pb-1 pt-1">-{{ number_format($order->discount_amount, 0, ',', '.') }}đ</td>
+                    </tr>
+                    @endif
+                    <tr>
+                        <td colspan="3" class="text-end fw-bolder pt-2" style="color: #6b7280; font-size: 0.85rem; letter-spacing: 0.5px;">THÀNH TIỀN:</td>
+                        <td class="text-end fw-bolder fs-5 pt-2" style="color: #ef4444;">{{ number_format($order->total_amount, 0, ',', '.') }}đ</td>
                     </tr>
                 </tfoot>
             </table>

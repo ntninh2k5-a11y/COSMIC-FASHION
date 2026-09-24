@@ -18,13 +18,15 @@ class CategoryController extends Controller
 
     public function create()
     {
-        return view('admin.categories.create');
+        $categories = Category::all();
+        return view('admin.categories.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:categories',
+            'parent_id' => 'nullable|integer',
             'status' => 'required|boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
         ]);
@@ -40,6 +42,7 @@ class CategoryController extends Controller
         Category::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
+            'parent_id' => $request->parent_id,
             'status' => $request->status,
             'image_url' => $imagePath,
         ]);
@@ -50,7 +53,8 @@ class CategoryController extends Controller
     public function edit(int $id)
     {
         $category = Category::findOrFail($id);
-        return view('admin.categories.edit', compact('category'));
+        $categories = Category::where('id', '!=', $id)->get();
+        return view('admin.categories.edit', compact('category', 'categories'));
     }
 
     public function update(Request $request, int $id)
@@ -59,6 +63,7 @@ class CategoryController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'parent_id' => 'nullable|integer',
             'status' => 'required|boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240'
         ]);
@@ -79,6 +84,7 @@ class CategoryController extends Controller
         $category->update([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
+            'parent_id' => $request->parent_id,
             'status' => $request->status,
             'image_url' => $imagePath,
         ]);

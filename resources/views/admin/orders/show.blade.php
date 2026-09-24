@@ -56,9 +56,19 @@
             </div>
 
             <div class="border-top border-dark border-2 pt-3 mt-3">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between mb-2">
+                    <h6 class="fw-bold m-0 text-muted">Tạm tính:</h6>
+                    <h6 class="fw-bold m-0 text-dark">{{ number_format($order->total_amount + $order->discount_amount, 0, ',', '.') }}đ</h6>
+                </div>
+                @if($order->discount_amount > 0)
+                <div class="d-flex justify-content-between mb-2">
+                    <h6 class="fw-bold m-0 text-muted">Giảm giá (Voucher):</h6>
+                    <h6 class="fw-bold m-0 text-danger">-{{ number_format($order->discount_amount, 0, ',', '.') }}đ</h6>
+                </div>
+                @endif
+                <div class="d-flex justify-content-between mt-3">
                     <h5 class="fw-bolder m-0">TỔNG CỘNG:</h5>
-                    <h5 class="fw-bolder m-0 text-dark">{{ number_format($order->total_amount, 0, ',', '.') }}đ</h5>
+                    <h5 class="fw-bolder m-0 text-danger">{{ number_format($order->total_amount, 0, ',', '.') }}đ</h5>
                 </div>
             </div>
         </div>
