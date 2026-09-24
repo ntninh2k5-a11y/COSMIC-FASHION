@@ -53,6 +53,11 @@
            class="sidebar-link {{ request()->routeIs('admin.vouchers.*') ? 'active' : '' }}">
             Quản lý Voucher
         </a>
+
+        <a href="{{ route('admin.banners.index') }}" 
+           class="sidebar-link {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}">
+            Quản lý Banner
+        </a>
         
         <a href="{{ route('home') }}" class="sidebar-link mt-5 text-center" style="background: #1a1a1a; color: white;">
             Xem Website

@@ -40,7 +40,14 @@
                         </a>
                     @else
                         <div class="dropdown d-inline-block icon-btn">
-                            <a class="text-dark text-decoration-none fw-bold dropdown-toggle dropdown-user-name" href="#" role="button" data-bs-toggle="dropdown">
+                            <a class="text-dark text-decoration-none fw-bold dropdown-toggle dropdown-user-name d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
+                                @if(session()->has('user_avatar'))
+                                    <img src="{{ asset(session('user_avatar')) }}" alt="Avatar" class="rounded-circle object-fit-cover" style="width: 28px; height: 28px;">
+                                @else
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center text-primary" style="width: 28px; height: 28px; font-size: 0.9rem;">
+                                        {{ strtoupper(substr(session('user_name'), 0, 1)) }}
+                                    </div>
+                                @endif
                                 {{ session('user_name') }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end rounded-0 shadow-sm">
@@ -54,8 +61,8 @@
                                 <li><hr class="dropdown-divider m-0"></li>
                                 @endif
                                 <li>
-                                    <a class="dropdown-item py-2" href="{{ route('user.orders') }}">
-                                        Đơn hàng của tôi
+                                    <a class="dropdown-item py-2" href="{{ route('user.profile') }}">
+                                        Trang cá nhân
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider m-0"></li>

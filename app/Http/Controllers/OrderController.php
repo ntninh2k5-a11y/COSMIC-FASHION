@@ -30,7 +30,9 @@ class OrderController extends Controller
             abort(403, 'Bạn không có quyền xem đơn hàng này.');
         }
 
-        return view('users.orders.show', compact('order'));
+        $user = \App\Models\User::with('profile')->findOrFail($userId);
+
+        return view('users.profile.orders_show', compact('order', 'user'));
     }
 
     public function checkout(Request $request)

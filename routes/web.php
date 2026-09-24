@@ -16,6 +16,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductDetailController;
 use App\Http\Controllers\SePayController;
+use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -75,7 +76,9 @@ Route::middleware([CheckAccountStatus::class])->group(function () {
     Route::post('/orders/{id}/confirm-qr', [OrderController::class, 'confirmQr'])->name('orders.confirm_qr');
     Route::get('/dat-hang-thanh-cong', [OrderController::class, 'success'])->name('checkout.success');
 
-    Route::get('/don-hang-cua-toi', [OrderController::class, 'index'])->name('user.orders');
+    Route::get('/trang-ca-nhan', [ProfileController::class, 'index'])->name('user.profile');
+    Route::post('/trang-ca-nhan', [ProfileController::class, 'update'])->name('user.profile.update');
+    Route::get('/don-hang-cua-toi', [ProfileController::class, 'orders'])->name('user.orders');
     Route::get('/don-hang-cua-toi/{id}', [OrderController::class, 'show'])->name('user.orders.show');
 });
 
@@ -100,6 +103,7 @@ Route::middleware([CheckAccountStatus::class, CheckAdmin::class])
         
         Route::resource('footer_menus', AdminFooterMenuController::class);
         Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class);
+        Route::resource('banners', App\Http\Controllers\Admin\BannerController::class);
     });
 
 Route::get('/thanh-toan-qr/{order}/status', [OrderController::class, 'paymentStatus'])

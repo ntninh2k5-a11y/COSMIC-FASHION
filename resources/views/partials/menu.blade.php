@@ -1,6 +1,6 @@
 
 
-<div class="top-bar-bg border-bottom position-relative">
+<div class="top-bar-bg position-relative shadow-sm" style="border-bottom: 2px solid rgba(0,0,0,0.08);">
     <div class="container position-static">
         
         @php
@@ -25,15 +25,15 @@
                 
                 <!-- Mega Menu Xổ Xuống -->
                 @if($parent->children && $parent->children->where('status', 1)->count() > 0)
-                <div class="mega-menu-container text-start">
+                <div class="mega-menu-container text-center">
                     <div class="container d-flex pt-4 pb-4">
                         
                         <!-- Cột Danh mục chữ (75%) -->
-                        <div class="menu-categories d-flex flex-wrap gap-5 w-75">
+                        <div class="menu-categories d-flex flex-wrap justify-content-center gap-5 w-75">
                             @foreach($parent->children->where('status', 1) as $child)
-                            <div class="category-column d-flex flex-column" style="min-width: 180px;">
+                            <div class="category-column d-flex flex-column align-items-center text-center" style="min-width: 180px;">
                                 
-                                <a href="{{ route('frontend.category.detail', $child->slug ?? '') }}" class="fw-bold text-dark mb-3 text-decoration-none d-flex align-items-center menu-item-hover" style="font-size: 14px;">
+                                <a href="{{ route('frontend.category.detail', $child->slug ?? '') }}" class="fw-bold text-dark mb-3 text-decoration-none d-flex align-items-center justify-content-center menu-item-hover" style="font-size: 14px;">
                                     @if($child->image_url)
                                         <img src="{{ asset($child->image_url) }}" class="rounded-circle me-2 border" width="35" height="35" style="object-fit: cover;">
                                     @endif
@@ -53,9 +53,11 @@
                         </div>
 
                         <!-- Cột Ảnh Banner (25%) -->
-                        <div class="menu-banners w-25 border-start ps-5">
+                        <div class="menu-banners w-25 border-start text-center">
                             <h6 class="fw-bold mb-3" style="font-size: 14px; letter-spacing: 1px;">BỘ SƯU TẬP</h6>
-                            <img src="{{ asset('uploads/categories/1787206327_maytinh-17-8.jpg') }}" class="img-fluid rounded shadow-sm w-100" style="object-fit: cover; height: 160px;">
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ asset('uploads/categories/1787206327_maytinh-17-8.jpg') }}" class="img-fluid rounded shadow-sm w-100" style="object-fit: cover; height: 160px; max-width: 250px;">
+                            </div>
                         </div>
                         
                     </div>

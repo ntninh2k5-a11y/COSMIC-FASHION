@@ -1,16 +1,13 @@
-@extends('layouts.app')
-
-@section('title', 'Chi tiết đơn hàng')
+@extends('users.profile.layout')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/orders_user.css') }}">
 @endpush
 
-@section('content')
-<div class="container py-5">
+@section('profile_content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bolder m-0 text-uppercase" style="color: #1f2937; letter-spacing: 1px;">Chi tiết đơn hàng: {{ $order->order_code }}</h3>
-        <a href="{{ route('user.orders') }}" class="btn btn-cosmic-soft">TRỞ LẠI</a>
+        <h4 class="m-0">Chi tiết đơn hàng: {{ $order->order_code }}</h4>
+        <a href="{{ route('user.orders') }}" class="btn btn-cosmic-soft btn-sm">TRỞ LẠI</a>
     </div>
 
     <div class="cosmic-table-wrapper mb-4">
@@ -84,5 +81,4 @@
             </table>
         </div>
     </div>
-</div>
 @endsection

@@ -14,6 +14,10 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
-        return view('users.home.index', compact('khoSanPhamGiamGia'));
+        $banners = \App\Models\Banner::where('is_active', 1)
+            ->orderBy('order', 'asc')
+            ->get();
+
+        return view('users.home.index', compact('khoSanPhamGiamGia', 'banners'));
     }
 }

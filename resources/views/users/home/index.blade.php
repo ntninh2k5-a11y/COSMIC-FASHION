@@ -8,7 +8,45 @@
     <link rel="stylesheet" href="{{ asset('css/pages/home.css') }}">
 @endpush
 
-<main class="py-5">
+<main class="pb-5">
+    @if(isset($banners) && $banners->count() > 0)
+    <!-- Banners thương hiệu -->
+    <div id="brandBannerCarousel" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="3000">
+        @if($banners->count() > 1)
+        <div class="carousel-indicators">
+            @foreach($banners as $index => $banner)
+            <button type="button" data-bs-target="#brandBannerCarousel" data-bs-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}" aria-label="Slide {{ $index + 1 }}"></button>
+            @endforeach
+        </div>
+        @endif
+        
+        <div class="carousel-inner">
+            @foreach($banners as $index => $banner)
+            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                @if($banner->link)
+                    <a href="{{ $banner->link }}">
+                        <img src="{{ asset($banner->image_url) }}" class="d-block w-100 object-fit-cover" alt="{{ $banner->title }}" style="height: 70vh; min-height: 400px; max-height: 800px;">
+                    </a>
+                @else
+                    <img src="{{ asset($banner->image_url) }}" class="d-block w-100 object-fit-cover" alt="{{ $banner->title }}" style="height: 70vh; min-height: 400px; max-height: 800px;">
+                @endif
+            </div>
+            @endforeach
+        </div>
+        
+        @if($banners->count() > 1)
+        <button class="carousel-control-prev" type="button" data-bs-target="#brandBannerCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#brandBannerCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+        @endif
+    </div>
+    @endif
+
     <div class="container">
 
         <div class="row mb-5 g-1">

@@ -8,6 +8,7 @@
         .tang-giam-so-luong {
             height: 38px;
             overflow: hidden;
+            background: #fff;
         }
         .nut-tang-giam {
             width: 36px;
@@ -17,14 +18,16 @@
             align-items: center;
             transition: all 0.2s ease;
             outline: none;
+            background: #fff;
         }
         .nut-tang-giam:hover:not([disabled]) {
-            background-color: #f1f3f5 !important;
-            color: #1a1a1a !important;
+            background-color: #1a1a1a !important;
+            color: #fff !important;
         }
         .nut-tang-giam[disabled] {
             opacity: 0.4;
             cursor: not-allowed;
+            background: #f1f3f5;
         }
         .so-luong-hien-thi {
             width: 45px;
@@ -33,99 +36,108 @@
             justify-content: center;
             align-items: center;
             font-size: 0.95rem;
+            background: #fff;
         }
         .nut-xoa-sp {
-            transition: transform 0.2s ease, opacity 0.2s;
-            opacity: 0.7;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
         }
         .nut-xoa-sp:hover {
-            transform: scale(1.15);
-            opacity: 1;
+            background-color: #dc3545 !important;
+            color: white !important;
+            border-color: #dc3545 !important;
+        }
+        .nut-xoa-sp:hover img {
+            filter: brightness(0) invert(1);
         }
     </style>
 @endpush
 
 @section('content')
-<main class="py-5">
+<main class="py-5 bg-light" style="min-height: calc(100vh - 200px);">
     <div class="container">
-        <div class="khung-tieu-de-gio-hang mb-5">
-            <h2 class="tieu-de-chinh-gio-hang text-uppercase">Giỏ Hàng Của Bạn</h2>
-            <p class="tieu-de-phu-gio-hang text-secondary">
+        <div class="khung-tieu-de-gio-hang mb-5 border-bottom border-dark border-2 pb-3">
+            <h2 class="tieu-de-chinh-gio-hang text-uppercase fw-bolder mb-2" style="letter-spacing: -0.5px;">Giỏ Hàng Của Bạn</h2>
+            <p class="tieu-de-phu-gio-hang text-secondary m-0 fw-bold">
                 Bạn đang có {{ $cartItems->sum('quantity') }} sản phẩm trong giỏ hàng
             </p>
         </div>
 
         <div class="row">
             <div class="col-md-8 mb-5 mb-md-0">
-                <div class="danh-sach-sp-gio">
+                <div class="danh-sach-sp-gio neo-card p-0 overflow-hidden">
                     @if($cartItems->count() > 0)
                         @foreach($cartItems as $item)
-                            <div class="o-sp-gio d-flex align-items-center py-3 border-bottom" 
+                            <div class="o-sp-gio d-flex align-items-center p-3 p-md-4 {{ !$loop->last ? 'border-bottom border-dark border-2' : '' }} bg-white" 
                                  data-id="{{ $item->id }}" 
                                  data-price="{{ $item->product->discount_percent > 0 ? $item->product->sale_price : $item->product->price }}">
                                  
                                 <img src="{{ asset($item->product->image_url ?? 'images/default.jpg') }}"
                                      alt="{{ $item->product->name }}"
-                                     class="anh-sp-gio border rounded"
+                                     class="anh-sp-gio border border-dark border-2 rounded-0 shadow-sm"
                                      style="width: 100px; height: 100px; object-fit: cover;">
 
                                 <div class="thong-tin-sp-gio flex-grow-1 px-3 px-md-4">
                                     <a href="{{ route('product.detail', $item->product_id) }}" class="text-dark text-decoration-none">
-                                        <h4 class="ten-sp-gio m-0 fs-5 mb-1">
+                                        <h4 class="ten-sp-gio m-0 fs-5 mb-2 fw-bold text-truncate" style="max-width: 250px;">
                                             {{ $item->product->name }}
                                         </h4>
                                     </a>
 
                                     @if($item->variant)
-                                        <div class="phan-loai-sp-gio text-secondary mt-1" style="font-size: 0.9rem;">
+                                        <div class="phan-loai-sp-gio text-secondary mt-1 fw-medium" style="font-size: 0.9rem;">
                                             Phân loại:
-                                            <strong>{{ isset($item->variant->color) ? ($colorNames[strtoupper($item->variant->color)] ?? $item->variant->color) : '' }}</strong>
+                                            <span class="text-dark fw-bold">{{ isset($item->variant->color) ? ($colorNames[strtoupper($item->variant->color)] ?? $item->variant->color) : '' }}</span>
                                             /
-                                            <strong>{{ $item->variant->size ?? '' }}</strong>
+                                            <span class="text-dark fw-bold">{{ $item->variant->size ?? '' }}</span>
                                         </div>
                                     @endif
                                 </div>
 
                                 <div class="dieu-chinh-sp-gio d-flex align-items-center justify-content-end">
-                                    <div class="tang-giam-so-luong d-flex align-items-center me-3 me-md-5 border rounded bg-white">
+                                    <div class="tang-giam-so-luong d-flex align-items-center me-3 me-md-4 border border-dark border-2 rounded-0 shadow-sm">
                                         <button type="button"
                                                 onclick="capNhatSoLuong({{ $item->id }}, {{ $item->quantity - 1 }})"
-                                                class="nut-tang-giam border-0 bg-transparent fs-5 text-secondary"
+                                                class="nut-tang-giam border-0 border-end border-dark border-2 fs-5 fw-bold"
                                                 {{ $item->quantity <= 1 ? 'disabled' : '' }}>
                                             -
                                         </button>
 
-                                        <span class="so-luong-hien-thi fw-bold border-start border-end">
+                                        <span class="so-luong-hien-thi fw-bold text-dark fs-6">
                                             {{ $item->quantity }}
                                         </span>
 
                                         <button type="button"
                                                 onclick="capNhatSoLuong({{ $item->id }}, {{ $item->quantity + 1 }})"
-                                                class="nut-tang-giam border-0 bg-transparent fs-5 text-secondary">
+                                                class="nut-tang-giam border-0 border-start border-dark border-2 fs-5 fw-bold">
                                             +
                                         </button>
                                     </div>
 
-                                    <div class="gia-sp-gio fw-bold me-4 d-none d-md-block text-danger fs-5" style="min-width: 120px; text-align: right;">
+                                    <div class="gia-sp-gio fw-bolder me-4 d-none d-md-block text-danger fs-5" style="min-width: 130px; text-align: right;">
                                         {{ number_format(($item->product->discount_percent > 0 ? $item->product->sale_price : $item->product->price) * $item->quantity, 0, ',', '.') }}đ
                                     </div>
 
                                     <button type="button"
                                             onclick="xoaSanPham({{ $item->id }})"
-                                            class="nut-xoa-sp text-secondary border-0 bg-transparent fs-5"
+                                            class="nut-xoa-sp btn btn-outline-dark border-2 rounded-0 shadow-sm p-0"
                                             title="Xóa sản phẩm">
-                                        <img src="{{ asset('img_react/trash3.svg') }}" alt="Xóa" style="width: 20px;">
+                                        <img src="{{ asset('img_react/trash3.svg') }}" alt="Xóa" style="width: 16px;">
                                     </button>
                                 </div>
                             </div>
                         @endforeach
                     @else
-                        <div id="gio-hang-trong" class="text-center py-5 bg-light rounded mt-3 border">
-                            <h5 class="text-secondary mb-4">
+                        <div id="gio-hang-trong" class="text-center py-5 bg-white">
+                            <h5 class="text-secondary fw-bold mb-4">
                                 Giỏ hàng của bạn đang trống
                             </h5>
-                            <a href="{{ route('home') }}" class="btn btn-dark px-4 py-2 text-uppercase fw-bold rounded-0">
-                                Tiếp tục mua sắm
+                            <a href="{{ route('home') }}" class="neo-btn d-inline-block">
+                                TIẾP TỤC MUA SẮM
                             </a>
                         </div>
                     @endif
@@ -133,21 +145,21 @@
             </div>
 
             <div class="col-md-4">
-                <div class="khung-tong-ket p-4 sticky-md-top border rounded-3 bg-light shadow-sm" style="top: 20px;">
-                    <h3 class="tieu-de-tong-ket text-uppercase mb-4 fs-5 fw-bold border-bottom pb-3">
+                <div class="khung-tong-ket p-4 sticky-md-top neo-card bg-white" style="top: 20px;">
+                    <h3 class="tieu-de-tong-ket text-uppercase mb-4 fs-5 fw-bold border-bottom border-dark border-2 pb-3" style="letter-spacing: -0.5px;">
                         Tổng Đơn Hàng
                     </h3>
 
-                    <div class="dong-tong-ket d-flex justify-content-between mb-3 text-secondary">
+                    <div class="dong-tong-ket d-flex justify-content-between mb-3 text-secondary fw-medium">
                         <span class="chu-tong-ket">
                             Tạm tính ({{ $cartItems->sum('quantity') }} sản phẩm)
                         </span>
-                        <span class="so-tong-ket fw-bold">
+                        <span class="so-tong-ket fw-bold text-dark">
                             {{ number_format($total, 0, ',', '.') }}đ
                         </span>
                     </div>
 
-                    <div class="dong-tong-ket d-flex justify-content-between mb-3 border-bottom pb-3 text-secondary">
+                    <div class="dong-tong-ket d-flex justify-content-between mb-3 border-bottom border-dark border-2 pb-3 text-secondary fw-medium">
                         <span class="chu-tong-ket">
                             Phí vận chuyển
                         </span>
@@ -157,22 +169,22 @@
                     </div>
 
                     <div class="dong-tong-ket d-flex justify-content-between mb-4 mt-3">
-                        <span class="chu-tong-ket fw-bold" style="font-size: 18px;">
+                        <span class="chu-tong-ket fw-bold text-uppercase" style="font-size: 16px;">
                             Thành tiền
                         </span>
-                        <span class="so-tong-ket text-danger fw-bold" style="font-size: 24px;">
+                        <span class="so-tong-ket text-danger fw-bolder" style="font-size: 24px;">
                             {{ number_format($total, 0, ',', '.') }}đ
                         </span>
                     </div>
 
-                    <p class="ghi-chu-thue text-secondary small mb-4 fst-italic">
+                    <p class="ghi-chu-thue text-secondary small mb-4 fw-medium fst-italic">
                         *Đã bao gồm VAT. Phí vận chuyển có thể thay đổi ở bước thanh toán.
                     </p>
 
                     <button id="btn-thanh-toan"
-                            class="nut-thanh-toan w-100 text-uppercase btn btn-dark py-3 fw-bold fs-6 rounded-0"
+                            class="neo-btn w-100"
                             {{ $cartItems->isEmpty() ? 'disabled' : '' }}>
-                        Tiến Hành Thanh Toán
+                        TIẾN HÀNH THANH TOÁN
                     </button>
                 </div>
             </div>

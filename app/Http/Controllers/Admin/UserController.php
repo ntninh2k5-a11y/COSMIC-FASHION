@@ -16,7 +16,17 @@ class UserController extends Controller
     }
     public function edit(int $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('profile')->findOrFail($id);
+        
+        // Ensure profile exists for the edit form
+        if (!$user->profile) {
+            $user->profile()->create([
+                'full_name' => $user->name,
+                'phone' => $user->phone ?? ''
+            ]);
+            $user->load('profile');
+        }
+        
         return view('admin.users.edit', compact('user'));
     }
 
@@ -26,13 +36,26 @@ class UserController extends Controller
         
         $request->validate([
             'name' => 'required|string|max:255',
-            'role' => 'required|in:admin,user'
+            'role' => 'required|in:admin,user',
+            'full_name' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|string|in:male,female,other',
+            'loyalty_points' => 'nullable|integer|min:0',
         ]);
 
         $user->update([
             'name' => $request->name,
             'role' => $request->role
         ]);
+        
+        $profileData = $request->only(['full_name', 'phone', 'date_of_birth', 'gender', 'loyalty_points']);
+        
+        if ($user->profile) {
+            $user->profile->update($profileData);
+        } else {
+            $user->profile()->create($profileData);
+        }
 
         return redirect()->route('admin.users.index')->with('success', 'Cập nhật tài khoản thành công!');
     }

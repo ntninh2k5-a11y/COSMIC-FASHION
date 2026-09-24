@@ -38,6 +38,10 @@ class LoginController extends Controller
             $request->session()->put('user_id', $user->id);
             $request->session()->put('user_role', $user->role);
             $request->session()->put('user_name', $user->name);
+            
+            if ($user->profile && $user->profile->avatar_url) {
+                $request->session()->put('user_avatar', $user->profile->avatar_url);
+            }
 
             if ($request->boolean('remember')) {
                 $token = Str::random(60);
