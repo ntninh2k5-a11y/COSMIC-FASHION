@@ -3,7 +3,7 @@
 @section('title', 'Đăng Nhập - Cosmic Fashion')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/auth/login.css') }}">
 @endpush
 
 @section('content')
@@ -54,7 +54,7 @@
 
             <div class="position-relative text-center mb-4">
                 <hr class="border-dark opacity-100" style="border-width: 2px;">
-                <span class="position-absolute top-50 start-50 translate-middle px-3 fw-bolder" style="font-size: 0.8rem; background: #d1dde3; color: #1a1a1a;">OR</span>
+                <span class="position-absolute top-50 start-50 translate-middle px-3 fw-bolder" style="font-size: 0.8rem; background: #fff; color: #1a1a1a;">OR</span>
             </div>
 
             <a href="{{ route('google.login') }}" class="btn w-100 neo-btn-white mb-4 d-flex align-items-center justify-content-center text-decoration-none">

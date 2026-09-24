@@ -1,0 +1,187 @@
+/* === COSMIC ADMIN — Dashboard Styles === */
+
+body {
+    background-color: #f0f4f8;
+    color: #2D3436;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---- Sidebar ---- */
+.admin-sidebar {
+    width: 260px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: linear-gradient(180deg, #1A2B4C 0%, #24577A 100%);
+    padding: 28px 16px 20px;
+    z-index: 100;
+    overflow-y: auto;
+    box-shadow: 4px 0 20px rgba(26, 43, 76, 0.2);
+}
+
+.admin-sidebar h3 {
+    color: #fff;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+/* ---- Sidebar Links ---- */
+.sidebar-link {
+    display: block;
+    padding: 12px 16px;
+    color: rgba(255,255,255,0.65);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    transition: all 0.25s ease;
+    border-left: 3px solid transparent;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+    border-left: 3px solid #d1dde3;
+    padding-left: 20px;
+}
+
+.sidebar-link.mt-5 {
+    background: rgba(255,255,255,0.1) !important;
+    color: #d1dde3 !important;
+    border: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+    margin-top: 24px;
+}
+.sidebar-link.mt-5:hover {
+    background: rgba(255,255,255,0.2) !important;
+    color: #fff !important;
+}
+
+/* ---- Main Content ---- */
+.admin-content {
+    margin-left: 260px;
+    padding: 28px 32px;
+    min-height: 100vh;
+    width: calc(100% - 260px);
+    box-sizing: border-box;
+}
+
+/* ---- Header ---- */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border-left: 4px solid #d1dde3;
+}
+.admin-header h2 {
+    font-size: 1.1rem;
+    color: #1A2B4C;
+    letter-spacing: 1px;
+}
+
+/* ---- Cards ---- */
+.neo-card {
+    background: #ffffff;
+    border: 1px solid #e8edf2;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+/* ---- Buttons ---- */
+.neo-btn {
+    background: linear-gradient(135deg, #1A2B4C, #24577A);
+    color: #fff;
+    border: none;
+    border-radius: 50rem;
+    font-weight: 700;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    font-size: 0.82rem;
+    letter-spacing: 0.5px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+.neo-btn:hover {
+    background: linear-gradient(135deg, #D9534F, #c0392b);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(26, 43, 76, 0.25);
+}
+
+.neo-btn-sm {
+    background: linear-gradient(135deg, #1A2B4C, #24577A);
+    color: #fff;
+    border: none;
+    border-radius: 50rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 6px 14px;
+    transition: all 0.25s ease;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.neo-btn-sm:hover {
+    background: linear-gradient(135deg, #D9534F, #c0392b);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* ---- Text / badges ---- */
+.text-accent { color: #D9534F !important; }
+
+.neo-badge {
+    border: none;
+    border-radius: 50rem;
+    padding: 5px 12px;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+.neo-badge.pending  { background-color: #fff3cd; color: #856404; }
+.neo-badge.completed { background-color: #d1e7dd; color: #0f5132; }
+
+/* ---- Tables ---- */
+.table-responsive { overflow-x: auto; }
+
+.table thead th {
+    background: #f0f4f8;
+    color: #1A2B4C;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #d1dde3;
+}
+
+/* ---- Pagination ---- */
+.pagination { margin-bottom: 0; }
+.page-link {
+    border-radius: 8px !important;
+    margin: 0 2px;
+    color: #1A2B4C;
+    border-color: #d1dde3;
+    font-weight: 600;
+}
+.page-item.active .page-link {
+    background: linear-gradient(135deg, #1A2B4C, #24577A);
+    border-color: transparent;
+}

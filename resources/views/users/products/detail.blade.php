@@ -3,86 +3,153 @@
 @section('title', 'Chi tiết sản phẩm - Cosmic Fashion')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
-    <style>
-        .btn-size.dang-chon { background-color: #212529; color: #fff; }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/pages/detail.css') }}">
 @endpush
 
 @section('content')
 
-<main class="py-5 bg-white">
+<main class="py-4 bg-white">
     <div class="container">
-        <div class="row">
+        
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb" style="font-size: 0.9rem;">
+                <li class="breadcrumb-item"><a href="{{ route('home') ?? '/' }}" class="text-decoration-none text-muted">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page" style="color: #2D3436; font-weight: 500;">{{ $product->name }}</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4">
             
             <div class="col-md-6 mb-4 mb-md-0">
-                <div class="khung-anh-chinh mb-3 position-relative">
-                    @if($product->discount_percent > 0)
-                        <span class="position-absolute top-0 end-0 m-3 badge bg-danger rounded-0 fs-6 px-3 py-2">
-                            -{{ $product->discount_percent }}%
-                        </span>
-                    @endif
-                    <img src="{{ asset($product->image_url ?? 'images/default.jpg') }}" class="anh-cover w-100" alt="{{ $product->name }}">
+                <div class="d-flex gap-2">
+                    <div class="d-none d-md-flex flex-column gap-2" style="width: 64px; flex-shrink: 0;">
+                        <div class="khung-thumb dang-chon">
+                            <img src="{{ asset($product->image_url ?? 'images/default.jpg') }}" class="w-100 h-100" style="object-fit: cover;" alt="thumb">
+                        </div>
+                        <div class="khung-thumb">
+                            <img src="{{ asset($product->image_url ?? 'images/default.jpg') }}" class="w-100 h-100" style="object-fit: cover;" alt="thumb">
+                        </div>
+                        <div class="khung-thumb">
+                            <img src="{{ asset($product->image_url ?? 'images/default.jpg') }}" class="w-100 h-100" style="object-fit: cover;" alt="thumb">
+                        </div>
+                        <div class="khung-thumb">
+                            <img src="{{ asset($product->image_url ?? 'images/default.jpg') }}" class="w-100 h-100" style="object-fit: cover;" alt="thumb">
+                        </div>
+                    </div>
+                    
+                    <div class="khung-anh-chinh flex-grow-1 position-relative">
+                        @if($product->discount_percent > 0)
+                            <span class="position-absolute top-0 end-0 m-2 badge bg-danger rounded-1" style="z-index: 10; font-size: 0.85rem;">
+                                -{{ $product->discount_percent }}%
+                            </span>
+                        @endif
+                        <img src="{{ asset($product->image_url ?? 'images/default.jpg') }}" class="anh-cover" alt="{{ $product->name }}">
+                    </div>
                 </div>
             </div>
 
-            <div class="col-md-6 ps-md-5 d-flex flex-column">
-                <h1 class="tieu-de-sp mb-2">{{ $product->name }}</h1>
+            <div class="col-md-6 d-flex flex-column">
                 
-                <div class="d-flex align-items-center mb-3">
+
+                <div class="d-flex align-items-baseline gap-2 mb-1">
                     @if($product->discount_percent > 0)
-                        <div class="fw-bold fs-3 text-danger me-3">{{ number_format($product->sale_price, 0, ',', '.') }}đ</div>
+                        <div class="gia-sp">{{ number_format($product->sale_price, 0, ',', '.') }}đ</div>
                         <del class="text-secondary fs-5">{{ number_format($product->price, 0, ',', '.') }}đ</del>
                     @else
-                        <div class="fw-bold fs-3 text-danger me-3">{{ number_format($product->price, 0, ',', '.') }}đ</div>
+                        <div class="gia-sp">{{ number_format($product->price, 0, ',', '.') }}đ</div>
                     @endif
                 </div>
                 
-                <p class="mo-ta-sp text-secondary mb-4 pb-3 border-bottom">
-                    {{ $product->description ?? 'Thiết kế thời thượng, form dáng chuẩn mực. Được làm từ chất liệu cao cấp mang lại sự thoải mái tuyệt đối cho người mặc trong mọi hoạt động hàng ngày.' }}
-                </p>
-
-                @if(count($sizes) > 0)
-                    <div class="mb-4">
-                        <div class="nhan-tieu-de fw-bold mb-2">Kích cỡ</div>
-                        <div class="d-flex gap-2 flex-wrap">
-                            @foreach($sizes as $size)
-                                <button onclick="chonSize('{{ $size }}', this)" class="btn rounded-0 px-4 py-2 fw-bold btn-outline-dark btn-size">
-                                    {{ $size }}
-                                </button>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
+                <h1 class="tieu-de-sp mb-1">{{ $product->name }}</h1>
+                <div class="sku-sp mb-4">Mã SP: SP{{ str_pad($product->id, 5, '0', STR_PAD_LEFT) }}</div>
 
                 @if(count($colors) > 0)
                     <div class="mb-4">
-                        <div class="fw-bold mb-2">Màu sắc</div>
-                        <div class="d-flex gap-3 flex-wrap align-items-center">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="text-dark" style="font-size: 0.95rem;">Màu sắc: </span>
+                            <span class="ms-1 fw-bold text-dark" id="ten-mau-hien-thi"></span>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap align-items-center">
                             @foreach($colors as $color)
-                                <div class="text-center khung-chon-mau" onclick="chonMau('{{ $color }}', this)" style="cursor: pointer; min-width: 50px;">
+                                <div class="khung-chon-mau" onclick="chonMau('{{ $color }}', this)" data-color="{{ $color }}">
                                     <div class="vong-mau-ngoai">
                                         <div class="vong-mau-trong" style="background-color: {{ $color }};"></div>
                                     </div>
-                                    <div class="ten-mau mt-1 small text-secondary">{{ $colorNames[$color] ?? $color }}</div>
+                                    <div class="ten-mau d-none">{{ $colorNames[$color] ?? $color }}</div>
                                 </div>
                             @endforeach
                         </div>
                     </div>
                 @endif
 
-                <div class="mb-4">
-                    <div class="nhan-tieu-de fw-bold mb-2">Số lượng</div>
-                    <div class="khung-so-luong d-flex align-items-center border" style="width: 120px;">
-                        <button onclick="thayDoiSoLuong(-1)" class="nut-so-luong btn border-0 px-3 fs-5">-</button>
-                        <div id="hien-thi-so-luong" class="so-luong-hien-thi px-2 fw-bold text-center flex-grow-1">1</div>
-                        <button onclick="thayDoiSoLuong(1)" class="nut-so-luong btn border-0 px-3 fs-5">+</button>
+                @if(count($sizes) > 0)
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-end mb-2">
+                            <div>
+                                <span class="text-dark" style="font-size: 0.95rem;">Kích thước: </span>
+                                <span class="ms-1 fw-bold text-dark" id="ten-size-hien-thi"></span>
+                            </div>
+                            <a href="#" class="text-decoration-none" style="font-size: 0.85rem; color: #4b5563;">Hướng dẫn chọn size</a>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap">
+                            @foreach($sizes as $size)
+                                <div onclick="chonSize('{{ $size }}', this)" class="btn-size-item">
+                                    {{ $size }}
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <div class="d-flex gap-3 align-items-center mb-3">
+                    <div class="khung-so-luong">
+                        <button onclick="thayDoiSoLuong(-1)" class="nut-so-luong fs-5">-</button>
+                        <div id="hien-thi-so-luong" class="so-luong-hien-thi">1</div>
+                        <button onclick="thayDoiSoLuong(1)" class="nut-so-luong fs-5">+</button>
+                    </div>
+                    
+                    <button onclick="themVaoGio()" class="nut-them-gio flex-grow-1 h-100 d-flex align-items-center justify-content-center gap-2" style="height: 48px;">
+                        Thêm vào giỏ 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16"><path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/></svg>
+                    </button>
+                </div>
+                
+                <div class="text-center mb-4">
+                    <a href="#" class="text-decoration-none" style="font-size: 0.85rem; color: #5046e5;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-shop me-1" viewBox="0 0 16 16"><path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3z"/></svg>
+                        Xem cửa hàng còn sản phẩm
+                    </a>
+                </div>
+
+                <div class="border-top pt-3">
+                    <div class="d-flex align-items-center gap-1 fw-bold mb-3" style="font-size: 0.9rem;">
+                        COSMIC cam kết <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#10b981" class="bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="border rounded-2 p-2 d-flex align-items-center gap-2 h-100" style="background-color: #fff;">
+                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px; border: 1px solid #eee;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#333" class="bi bi-arrow-repeat" viewBox="0 0 16 16"><path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/><path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/></svg>
+                                </div>
+                                <div style="font-size: 0.75rem; line-height: 1.3;">
+                                    Không hài lòng, <strong>đổi trả trong 30 ngày</strong><br>
+                                    <a href="#" class="text-decoration-none" style="color: #5046e5;">Xem chính sách &nearr;</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded-2 p-2 d-flex align-items-center gap-2 h-100" style="background-color: #fff;">
+                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px; border: 1px solid #eee;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#333" class="bi bi-truck" viewBox="0 0 16 16"><path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>
+                                </div>
+                                <div style="font-size: 0.75rem; line-height: 1.3;">
+                                    Giao trong <strong>3-5 ngày</strong> và freeship đơn từ 498k
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <button onclick="themVaoGio()" class="nut-them-gio w-100 mt-4 rounded-0 fs-6 btn btn-dark py-3 text-uppercase fw-bold">
-                    Thêm vào giỏ hàng
-                </button>
             </div>
         </div>
         
@@ -91,19 +158,8 @@
             <h2 class="fs-5 fw-bold mb-4 text-uppercase">Có thể bạn cũng thích</h2>
             <div class="row g-4 mb-5">
                 @foreach($relatedProducts as $sp)
-                    <div class="col-6 col-md-3">
-                        <a href="{{ url('/chi-tiet-san-pham/' . $sp->id) }}" class="text-decoration-none text-dark">
-                            <div class="position-relative mb-3 overflow-hidden khung-anh-chinh">
-                                @if($sp->discount_percent > 0)
-                                    <span class="position-absolute top-0 start-0 m-2 badge bg-danger rounded-0">-{{ $sp->discount_percent }}%</span>
-                                @endif
-                                <img src="{{ asset($sp->image_url ?? 'images/default.jpg') }}" alt="{{ $sp->name }}" class="anh-cover w-100">
-                            </div>
-                            <div class="text-start">
-                                <h6 class="mb-1 fw-normal text-secondary">{{ $sp->name }}</h6>
-                                <div class="fw-bold text-danger">{{ number_format($sp->discount_percent > 0 ? $sp->sale_price : $sp->price, 0, ',', '.') }}đ</div>
-                            </div>
-                        </a>
+                    <div class="col-6 col-md-3 mb-4">
+                        @include('partials.product_card_php', ['sp' => $sp])
                     </div>
                 @endforeach
             </div>
@@ -131,23 +187,27 @@
     function chonSize(size, element) {
         sizeChon = size;
         
-        document.querySelectorAll('.btn-size').forEach(btn => {
-            btn.classList.remove('dang-chon', 'btn-dark');
-            btn.classList.add('btn-outline-dark');
+        document.querySelectorAll('.btn-size-item').forEach(btn => {
+            btn.classList.remove('dang-chon');
         });
         
-        element.classList.remove('btn-outline-dark');
-        element.classList.add('dang-chon', 'btn-dark');
+        element.classList.add('dang-chon');
+        
+        const hienThi = document.getElementById('ten-size-hien-thi');
+        if(hienThi) hienThi.innerText = size;
     }
 
     function chonMau(mau, element) {
         mauChon = mau;
         
         document.querySelectorAll('.vong-mau-ngoai').forEach(vong => vong.classList.remove('dang-chon'));
-        document.querySelectorAll('.ten-mau').forEach(ten => ten.classList.remove('fw-bold', 'text-dark'));
         
         element.querySelector('.vong-mau-ngoai').classList.add('dang-chon');
-        element.querySelector('.ten-mau').classList.add('fw-bold', 'text-dark');
+        
+        const hienThi = document.getElementById('ten-mau-hien-thi');
+        if(hienThi) {
+            hienThi.innerText = element.querySelector('.ten-mau').innerText;
+        }
     }
 
     function thayDoiSoLuong(thayDoi) {
@@ -155,6 +215,17 @@
         if (soLuong < 1) soLuong = 1; 
         document.getElementById('hien-thi-so-luong').innerText = soLuong;
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialColor = urlParams.get('color');
+        if (initialColor) {
+            const el = document.querySelector(`.khung-chon-mau[data-color="${initialColor}"]`);
+            if (el) {
+                chonMau(initialColor, el);
+            }
+        }
+    });
 
     function themVaoGio() {
         @if(count($sizes) > 0)

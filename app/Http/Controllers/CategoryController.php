@@ -60,6 +60,8 @@ class CategoryController extends Controller
                 'image' => asset($sp->image_url ?? 'images/default.jpg'),
                 'price' => number_format($sp->discount_percent > 0 ? $sp->sale_price : $sp->price, 0, ',', '.') . 'đ',
                 'priceNum' => $sp->discount_percent > 0 ? $sp->sale_price : $sp->price,
+                'oldPrice' => $sp->discount_percent > 0 ? number_format($sp->price, 0, ',', '.') . 'đ' : null,
+                'discountPercent' => $sp->discount_percent,
                 'sizes' => $sizes,
                 'colors' => $colors
             ];

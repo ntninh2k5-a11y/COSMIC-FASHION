@@ -138,24 +138,35 @@
                 let vongMauHtml = '';
                 if (hasFilters && sp.colors && sp.colors.length > 0) {
                     sp.colors.forEach(color => {
-                        vongMauHtml += `<span class="mau-sac-vong-tron-men" style="background-color: ${color.bg}; display: inline-block; width: 20px; height: 20px; border-radius: 50%; border: 1px solid #ccc; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);"></span>`;
+                        vongMauHtml += `<a href="/chi-tiet-san-pham/${sp.id}?color=${encodeURIComponent(color.bg)}" class="mau-sac-vong-tron-men d-inline-block rounded-circle" style="background-color: ${color.bg}; width: 20px; height: 20px; border: 1px solid #ddd; box-shadow: 0 0 0 1px #fff, 0 0 0 2px transparent; transition: all 0.2s;" onmouseover="this.style.boxShadow='0 0 0 1px #fff, 0 0 0 2px #333'" onmouseout="this.style.boxShadow='0 0 0 1px #fff, 0 0 0 2px transparent'"></a>`;
                     });
                 }
 
+                let discountHtml = sp.discountPercent > 0 ? `<span class="position-absolute top-0 end-0 m-2 badge bg-danger rounded-1" style="font-size: 0.8rem; padding: 4px 8px;">-${sp.discountPercent}%</span>` : '';
+                let priceHtml = sp.oldPrice 
+                    ? `<div class="d-flex align-items-baseline gap-2 mb-1">
+                           <span class="fw-bold text-danger" style="font-size: 1.1rem;">${sp.price}</span>
+                           <del class="text-secondary" style="font-size: 0.85rem;">${sp.oldPrice}</del>
+                       </div>`
+                    : `<div class="fw-bold text-dark mb-1" style="font-size: 1.1rem;">${sp.price}</div>`;
+
                 htmlContent += `
                     <div class="col-6 col-md-3 mb-5">
-                        <a href="/chi-tiet-san-pham/${sp.id}" class="text-decoration-none text-dark p-0 link-san-pham">
-                            <div class="text-start">
-                                <div class="position-relative mb-3 khung-anh-discount">
-                                    <img src="${sp.image}" alt="${sp.name}" class="w-100 anh-san-pham" />
+                        <div class="product-card">
+                            <a href="/chi-tiet-san-pham/${sp.id}" class="text-decoration-none text-dark d-block">
+                                <div class="position-relative mb-3 overflow-hidden">
+                                    <img src="${sp.image}" alt="${sp.name}" class="w-100 rounded-3" style="aspect-ratio: 3/4; object-fit: cover; background-color: #f1f1f1;" />
+                                    ${discountHtml}
                                 </div>
-                                <div class="pt-1 text-center">
-                                    <h6 class="text-secondary mb-1 ten-san-pham">${sp.name}</h6>
-                                    <div class="fw-bold text-danger gia-san-pham">${sp.price}</div>
-                                </div>
-                                ${hasFilters ? `<div class="d-flex gap-2 pt-2 flex-wrap justify-content-center">${vongMauHtml}</div>` : ''}
+                            </a>
+                            <div class="text-start px-1">
+                                ${priceHtml}
+                                <h6 class="text-secondary mb-2" style="font-size: 0.95rem; font-weight: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <a href="/chi-tiet-san-pham/${sp.id}" class="text-decoration-none text-secondary">${sp.name}</a>
+                                </h6>
+                                ${hasFilters ? `<div class="d-flex gap-2 mt-2 align-items-center">${vongMauHtml}</div>` : ''}
                             </div>
-                        </a>
+                        </div>
                     </div>
                 `;
             });

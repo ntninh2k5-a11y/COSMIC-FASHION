@@ -1,48 +1,4 @@
-<style>
-    /* 1. Trải đều menu ra giữa, tăng khoảng cách cho thoáng */
-    .menu-list {
-        display: flex;
-        justify-content: center;
-        gap: 80px; /* Tăng từ 50px lên 80px để menu rộng rãi, sang trọng hơn */
-        list-style: none;
-        margin: 0;
-        padding: 18px 0;
-        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Phông chữ hiện đại */
-    }
-    
-    /* 2. Style cho chữ trên Menu chính */
-    .menu-item-hover { 
-        font-size: 15px;
-        font-weight: 700; /* In đậm vừa phải */
-        letter-spacing: 0.5px; /* Giãn chữ một chút cho chuẩn thời trang */
-        transition: color 0.2s ease-in-out;
-    }
-    .menu-item-hover:hover { color: #fca120 !important; }
 
-    /* 3. Code CSS cho Mega Menu xổ xuống */
-    .nav-item.has-mega-menu { position: static; }
-    
-    .mega-menu-container {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background-color: #ffffff;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(15px);
-        transition: all 0.3s ease-in-out;
-        z-index: 999;
-        border-top: 1px solid #f0f0f0;
-    }
-
-    .has-mega-menu:hover .mega-menu-container {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
-</style>
 
 <div class="top-bar-bg border-bottom position-relative">
     <div class="container position-static">
@@ -63,7 +19,7 @@
                 @endphp
 
                 <!-- Tên danh mục cấp 1 -->
-                <a href="{{ route('frontend.category.detail', $parent->slug ?? '') }}" class="text-dark text-uppercase text-decoration-none menu-item-hover {{ request()->is('danh-muc/' . $parent->slug) ? 'text-warning' : '' }}">
+                <a href="{{ route('frontend.category.detail', $parent->slug ?? '') }}" class="text-dark text-uppercase text-decoration-none menu-item-hover {{ request()->is('danh-muc/' . $parent->slug) ? 'active-menu' : '' }}">
                     {{ $displayName }}
                 </a>
                 
@@ -110,7 +66,7 @@
 
             <!-- Nút Ưu Đãi -->
             <li class="nav-item">
-                <a href="{{ route('shop.sale') }}" class="text-danger text-uppercase text-decoration-none menu-item-hover {{ request()->routeIs('shop.sale') ? 'text-warning' : '' }}">
+                <a href="{{ route('shop.sale') }}" class="text-sale text-uppercase text-decoration-none menu-item-hover {{ request()->routeIs('shop.sale') ? 'active-menu' : '' }}">
                     ƯU ĐÃI
                 </a>
             </li>

@@ -1,0 +1,85 @@
+/* ===== HEADER ===== */
+.custom-header {
+  padding: 12px 0;
+  background: #d1dde3;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  border-bottom: none;
+}
+
+/* ===== 2T&C LOGO ===== */
+.logo-2tc {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+.logo-2tc-text {
+  background: linear-gradient(135deg, #1A2B4C, #2D4373);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.logo-2tc-amp {
+  color: #D9534F;
+  font-style: italic;
+  margin: 0 1px;
+  -webkit-text-fill-color: #D9534F;
+}
+
+/* Brand name gradient on light header */
+.brand-name {
+  background: linear-gradient(135deg, #1A2B4C, #D9534F);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.dropdown-user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2D3436 !important;
+  border: 1.5px solid rgba(0,0,0,0.1);
+  padding: 6px 14px;
+  border-radius: 50rem;
+  transition: all 0.25s ease;
+}
+.dropdown-user-name:hover {
+  border-color: #FF6B6B;
+  color: #FF6B6B !important;
+}
+
+.btn-logout { cursor: pointer; color: #FF6B6B !important; }
+
+.cart-badge {
+  font-size: 0.6rem;
+  padding: 3px 5px;
+  background: #FF6B6B !important;
+  border-radius: 50rem !important;
+}
+
+/* Icon tints for light header */
+.custom-header .icon-btn img { filter: opacity(0.85); }
+.custom-header .icon-btn:hover img { filter: saturate(100%) invert(55%) sepia(60%) saturate(500%) hue-rotate(310deg); }
+
+.dropdown-menu {
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15) !important;
+  padding: 8px !important;
+  background: #fff !important;
+}
+.dropdown-item {
+  border-radius: 8px !important;
+  font-size: 14px;
+  padding: 8px 14px !important;
+  transition: all 0.2s ease;
+  color: #2D3436;
+}
+.dropdown-item:hover { background: #FFF0F0 !important; color: #FF6B6B !important; }

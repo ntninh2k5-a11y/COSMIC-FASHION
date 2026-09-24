@@ -1,0 +1,30 @@
+.footer-bg {
+  background: #f2f2f2;
+}
+.footer-title {
+  color: #2D3436;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.footer-list a {
+  color: #636E72 !important;
+  font-size: 13px;
+  transition: all 0.25s ease;
+  display: inline-block;
+}
+.footer-list a:hover {
+  color: #FFE66D !important;
+  padding-left: 6px;
+}
+.footer-safe-payment-title { font-size: 13px; color: #2D3436; }
+.payment-icons .badge {
+  background: rgba(0,0,0,0.05) !important;
+  border: 1px solid rgba(0,0,0,0.1);
+  color: #2D3436;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 8px;
+}

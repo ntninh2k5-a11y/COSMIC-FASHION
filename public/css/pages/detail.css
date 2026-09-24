@@ -1,0 +1,145 @@
+/* ---- Khung ảnh chính ---- */
+.khung-anh-chinh {
+  flex: 1 1 0;
+  min-width: 0;
+  aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  background-color: #f1f2f4;
+  overflow: hidden;
+  position: relative;
+}
+
+.anh-cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.khung-thumb {
+  width: 64px;
+  flex: 1 1 0;
+  height: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #f1f2f4;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+
+.khung-thumb:hover {
+  opacity: 0.8;
+}
+
+.khung-thumb.dang-chon {
+  opacity: 1;
+  border-color: #fca120;
+}
+
+.tieu-de-sp {
+  font-size: 1.5rem;
+  font-weight: normal;
+  color: #333;
+}
+
+.gia-sp {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #000;
+}
+
+.sku-sp {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.vong-mau-ngoai {
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  padding: 2px;
+}
+
+.vong-mau-ngoai.dang-chon {
+  border-color: #fca120;
+}
+
+.vong-mau-trong {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid #e0e0e0;
+}
+
+.btn-size-item {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #fff;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.btn-size-item.dang-chon {
+  border-color: #fca120;
+  color: #fca120;
+}
+
+.khung-so-luong {
+  height: 48px;
+  border: 1px solid #dee2e6;
+  border-radius: 50rem;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.nut-so-luong {
+  background: transparent;
+  border: none;
+  width: 40px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.so-luong-hien-thi {
+  width: 40px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.nut-them-gio {
+  background-color: #fcb040;
+  border: none;
+  color: #000;
+  border-radius: 50rem;
+  font-weight: bold;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.nut-them-gio:hover {
+  background-color: #fca120;
+}
+
+.banner-goi-y {
+  border: 1px solid #fcb040;
+  background-color: #fffdf5;
+  border-radius: 12px;
+}

@@ -34,7 +34,7 @@
                     <li class="mb-2"><a href="#" class="text-decoration-none text-muted">TikTok</a></li>
                 </ul>
                 
-                <div class="footer-title text-uppercase fw-bold mb-2" style="font-size: 14px;">THANH TOÁN AN TOÀN</div>
+                <div class="footer-title text-uppercase fw-bold mb-2 footer-safe-payment-title">THANH TOÁN AN TOÀN</div>
                 <div class="payment-icons d-flex gap-2">
                     <span class="badge bg-secondary">PayPal</span>
                     <span class="badge bg-secondary">Visa/Mastercard</span>

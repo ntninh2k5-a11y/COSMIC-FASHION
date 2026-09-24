@@ -83,6 +83,8 @@ class ProductController extends Controller
                     '.'
                 ) . 'đ',
                 'image' => asset($sp->image_url ?? 'images/default.jpg'),
+                'oldPrice' => $sp->discount_percent > 0 ? number_format($sp->price, 0, ',', '.') . 'đ' : null,
+                'discountPercent' => $sp->discount_percent,
                 'discount' => $sp->discount_percent > 0
                     ? '-' . $sp->discount_percent . '%'
                     : null,
