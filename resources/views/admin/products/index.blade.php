@@ -1,108 +1,97 @@
 @extends('admin.layouts.admin')
-
+@section('title', 'Sản phẩm - Admin')
+@section('page-title', 'Quản lý Sản phẩm')
 @section('content')
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0">Quản lý sản phẩm</h1>
-        <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
-            + Thêm sản phẩm
+
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2 class="admin-card-title"><i class="bi bi-bag text-muted"></i> Danh sách sản phẩm</h2>
+        <a href="{{ route('admin.products.create') }}" class="btn-primary-admin">
+            <i class="bi bi-plus-lg"></i> Thêm sản phẩm
         </a>
     </div>
-
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ẢNH</th>
+                    <th>TÊN SẢN PHẨM</th>
+                    <th>DANH MỤC</th>
+                    <th>GIÁ GỐC</th>
+                    <th>GIÁ KM</th>
+                    <th>GIẢM</th>
+                    <th>TRẠNG THÁI</th>
+                    <th class="text-center">HÀNH ĐỘNG</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($products as $product)
+                    <tr>
+                        <td class="text-muted fw-bold" style="font-size:0.8rem;">#{{ $product->id }}</td>
+                        <td>
+                            @if($product->image_url)
+                                <img src="{{ asset($product->image_url) }}"
+                                     alt="{{ $product->name }}"
+                                     style="width:50px;height:50px;object-fit:cover;border-radius:10px;border:1px solid #f0f0f0;">
+                            @else
+                                <div style="width:50px;height:50px;border-radius:10px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;">
+                                    <i class="bi bi-image text-muted"></i>
+                                </div>
+                            @endif
+                        </td>
+                        <td><span class="fw-bold text-dark">{{ $product->name }}</span></td>
+                        <td><span class="text-muted">{{ $product->category->name ?? '—' }}</span></td>
+                        <td>{{ number_format($product->price, 0, ',', '.') }}đ</td>
+                        <td>{{ $product->sale_price ? number_format($product->sale_price, 0, ',', '.').'đ' : '—' }}</td>
+                        <td>
+                            @if($product->discount_percent > 0)
+                                <span class="badge-status badge-pending">-{{ $product->discount_percent }}%</span>
+                            @else
+                                —
+                            @endif
+                        </td>
+                        <td>
+                            @if($product->status)
+                                <span class="badge-status badge-active">
+                                    <i class="bi bi-circle-fill" style="font-size:0.5rem;"></i> Hiển thị
+                                </span>
+                            @else
+                                <span class="badge-status badge-inactive">
+                                    <i class="bi bi-circle-fill" style="font-size:0.5rem;"></i> Ẩn
+                                </span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a href="{{ route('admin.products.edit', $product->id) }}" class="btn-sm-edit">
+                                    <i class="bi bi-pencil"></i> Sửa
+                                </a>
+                                <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="d-inline"
+                                      onsubmit="return confirm('Xóa sản phẩm này?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn-sm-delete">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="9" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                            Chưa có sản phẩm nào.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    @if($products->hasPages())
+        <div class="d-flex justify-content-center mt-4 admin-pagination">
+            {{ $products->links('pagination::bootstrap-5') }}
         </div>
     @endif
-
-    <div class="card shadow">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover align-middle mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th width="60">ID</th>
-                            <th width="80">Ảnh</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Danh mục</th>
-                            <th>Giá</th>
-                            <th>Giá KM</th>
-                            <th width="80">% Giảm</th>
-                            <th width="100">Trạng thái</th>
-                            <th width="160">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($products as $product)
-                            <tr>
-                                <td>{{ $product->id }}</td>
-                                <td>
-                                    @if($product->image_url)
-                                        <img src="{{ asset($product->image_url) }}" 
-                                             alt="{{ $product->name }}" 
-                                             width="60" height="60" 
-                                             style="object-fit: cover; border-radius: 6px;">
-                                    @else
-                                        <span class="text-muted">No image</span>
-                                    @endif
-                                </td>
-                                <td>{{ $product->name }}</td>
-                                <td>{{ $product->category->name ?? '—' }}</td>
-                                <td>{{ number_format($product->price) }} đ</td>
-                                <td>
-                                    @if($product->sale_price)
-                                        {{ number_format($product->sale_price) }} đ
-                                    @else
-                                        —
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($product->discount_percent > 0)
-                                        <span class="badge bg-danger">{{ $product->discount_percent }}%</span>
-                                    @else
-                                        —
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($product->status)
-                                        <span class="badge bg-success">Hiển thị</span>
-                                    @else
-                                        <span class="badge bg-secondary">Ẩn</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ route('admin.products.edit', $product->id) }}" 
-                                       class="btn btn-sm btn-warning me-1">
-                                        Sửa
-                                    </a>
-                                    <form action="{{ route('admin.products.destroy', $product->id) }}" 
-                                          method="POST" 
-                                          class="d-inline"
-                                          onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            Xóa
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="9" class="text-center text-muted py-4">
-                                    Chưa có sản phẩm nào
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="d-flex justify-content-center mt-4">
-                {{ $products->links('pagination::bootstrap-5') }}
-            </div>
-        </div>
-    </div>
 </div>
 @endsection

@@ -1,78 +1,68 @@
 @extends('admin.layouts.admin')
-
-@section('title', 'Quản lý Đơn hàng - Admin')
-
-@section('page-title', 'QUẢN LÝ ĐƠN HÀNG')
-
+@section('title', 'Đơn hàng - Admin')
+@section('page-title', 'Quản lý Đơn hàng')
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="neo-card">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="fw-bolder m-0">Danh sách Đơn hàng</h4>
-            </div>
 
-            <div class="table-responsive">
-                <table class="table table-borderless align-middle">
-                    <thead class="border-bottom border-dark border-2">
-                        <tr>
-                            <th class="fw-bolder text-dark">MÃ ĐƠN</th>
-                            <th class="fw-bolder text-dark">KHÁCH HÀNG</th>
-                            <th class="fw-bolder text-dark">NGÀY ĐẶT</th>
-                            <th class="fw-bolder text-dark">TỔNG TIỀN</th>
-                            <th class="fw-bolder text-dark">TRẠNG THÁI</th>
-                            <th class="fw-bolder text-dark text-center">HÀNH ĐỘNG</th>
-                        </tr>
-                    </thead>
-                    <tbody class="fw-bold text-secondary">
-                        @forelse($orders as $order)
-                            <tr>
-                                <td class="text-dark">{{ $order->order_code }}</td>
-                                <td>{{ $order->user ? $order->user->name : 'Khách vãng lai' }}</td>
-                                <td>{{ $order->created_at->format('d/m/Y') }}</td>
-                                <td>{{ number_format($order->total_amount, 0, ',', '.') }}đ</td>
-                                <td>
-                                    @if($order->status == 'pending')
-                                        <span class="badge rounded-pill px-3 py-2" style="background:#ffc107; color:#000; font-weight:600;">
-                                            Chờ xử lý
-                                        </span>
-                                    @elseif($order->status == 'shipping')
-                                        <span class="badge rounded-pill px-3 py-2" style="background:#0d6efd; color:#fff; font-weight:600;">
-                                            Đang giao
-                                        </span>
-                                    @elseif($order->status == 'completed')
-                                        <span class="badge rounded-pill px-3 py-2" style="background:#198754; color:#fff; font-weight:600;">
-                                            Đã giao
-                                        </span>
-                                    @elseif($order->status == 'cancelled')
-                                        <span class="badge rounded-pill px-3 py-2" style="background:#dc3545; color:#fff; font-weight:600;">
-                                            Đã hủy
-                                        </span>
-                                    @else
-                                        <span class="badge rounded-pill px-3 py-2 bg-secondary text-white" style="font-weight:600;">
-                                            {{ $order->status }}
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    <a href="{{ route('admin.orders.show', $order->id) }}" class="neo-btn-sm text-decoration-none">
-                                        CHI TIẾT
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="text-center py-4">Chưa có đơn hàng nào.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-                
-                <div class="mt-4 d-flex justify-content-center">
-                    {{ $orders->links('pagination::bootstrap-5') }}
-                </div>
-            </div>
-        </div>
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2 class="admin-card-title"><i class="bi bi-receipt text-muted"></i> Danh sách đơn hàng</h2>
     </div>
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>MÃ ĐƠN</th>
+                    <th>KHÁCH HÀNG</th>
+                    <th>NGÀY ĐẶT</th>
+                    <th>TỔNG TIỀN</th>
+                    <th>TRẠNG THÁI</th>
+                    <th class="text-center">HÀNH ĐỘNG</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($orders as $order)
+                    <tr>
+                        <td>
+                            <span class="fw-bold text-dark" style="font-size:0.85rem;">{{ $order->order_code }}</span>
+                        </td>
+                        <td>{{ $order->user ? $order->user->name : 'Khách vãng lai' }}</td>
+                        <td class="text-muted">{{ $order->created_at->format('d/m/Y') }}</td>
+                        <td class="fw-bold">{{ number_format($order->total_amount, 0, ',', '.') }}đ</td>
+                        <td>
+                            @php
+                                $sm = [
+                                    'pending'    => ['Chờ xử lý',      'badge-pending'],
+                                    'processing' => ['Đang chuẩn bị',  'badge-processing'],
+                                    'shipping'   => ['Đang giao',       'badge-shipping'],
+                                    'completed'  => ['Đã giao',         'badge-completed'],
+                                    'cancelled'  => ['Đã hủy',          'badge-cancelled'],
+                                    'paid'       => ['Đã thanh toán',   'badge-paid'],
+                                ];
+                                $s = $sm[$order->status] ?? [$order->status, 'badge-inactive'];
+                            @endphp
+                            <span class="badge-status {{ $s[1] }}">{{ $s[0] }}</span>
+                        </td>
+                        <td class="text-center">
+                            <a href="{{ route('admin.orders.show', $order->id) }}" class="btn-sm-edit">
+                                <i class="bi bi-eye"></i> Chi tiết
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                            Chưa có đơn hàng nào.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    @if($orders->hasPages())
+        <div class="d-flex justify-content-center mt-4 admin-pagination">
+            {{ $orders->links('pagination::bootstrap-5') }}
+        </div>
+    @endif
 </div>
 @endsection

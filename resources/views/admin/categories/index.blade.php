@@ -1,86 +1,93 @@
 @extends('admin.layouts.admin')
-
-@section('title', 'Quản lý Danh mục - Admin')
-
-@section('page-title', 'QUẢN LÝ DANH MỤC')
-
+@section('title', 'Danh mục - Admin')
+@section('page-title', 'Quản lý Danh mục')
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="neo-card">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="fw-bolder m-0">Danh sách Danh mục</h4>
-                <a href="{{ route('admin.categories.create') }}" class="neo-btn text-decoration-none">
-                    + THÊM DANH MỤC
-                </a>
-            </div>
 
-            @if(session('success'))
-                <div class="alert alert-success fw-bold">{{ session('success') }}</div>
-            @endif
-
-            <div class="table-responsive">
-                <table class="table table-borderless align-middle">
-                    <thead class="border-bottom border-dark border-2">
-                        <tr>
-                            <th class="fw-bolder text-dark" style="width: 80px;">ID</th>
-                            <th class="fw-bolder text-dark">TÊN DANH MỤC</th>
-                            <th class="fw-bolder text-dark">DANH MỤC CHA</th>
-                            <th class="fw-bolder text-dark text-center">TRẠNG THÁI</th>
-                            <th class="fw-bolder text-dark text-center" style="width: 180px;">HÀNH ĐỘNG</th>
-                        </tr>
-                    </thead>
-                    <tbody class="fw-bold text-secondary">
-                        @forelse($categories as $category)
-                            <tr>
-                                <td class="text-dark">{{ $category->id }}</td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        @if($category->image_url)
-                                            <img src="{{ asset($category->image_url) }}" 
-                                                 alt="{{ $category->name }}" 
-                                                 class="rounded" 
-                                                 style="width: 48px; height: 48px; object-fit: cover;">
-                                        @else
-                                            <div class="rounded bg-light d-flex align-items-center justify-content-center text-secondary" style="width: 48px; height: 48px; font-size: 0.7rem;">
-                                                No Img
-                                            </div>
-                                        @endif
-                                        <span class="text-dark">{{ $category->name }}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    @if($category->parent)
-                                        <span class="text-primary">{{ $category->parent->name }}</span>
-                                    @else
-                                        <span class="text-muted fst-italic">-- Danh mục gốc --</span>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    @if($category->status == 1)
-                                        <span class="text-success">Hiển thị</span>
-                                    @else
-                                        <span class="text-danger">Đang ẩn</span>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    <a href="{{ route('admin.categories.edit', $category->id) }}" class="neo-btn-sm me-1 text-decoration-none">SỬA</a>
-                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="neo-btn-sm bg-danger text-white border-0">XÓA</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center py-4 text-secondary">Chưa có danh mục nào.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2 class="admin-card-title"><i class="bi bi-folder text-muted"></i> Danh sách danh mục</h2>
+        <a href="{{ route('admin.categories.create') }}" class="btn-primary-admin">
+            <i class="bi bi-plus-lg"></i> Thêm danh mục
+        </a>
     </div>
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ẢNH</th>
+                    <th>TÊN DANH MỤC</th>
+                    <th>DANH MỤC CHA</th>
+                    <th>TRẠNG THÁI</th>
+                    <th class="text-center">HÀNH ĐỘNG</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($categories as $category)
+                    <tr>
+                        <td class="text-muted fw-bold" style="font-size:0.8rem;">#{{ $category->id }}</td>
+                        <td>
+                            @if($category->image_url)
+                                <img src="{{ asset($category->image_url) }}"
+                                     style="width:42px;height:42px;object-fit:cover;border-radius:50%;border:2px solid #f0f0f0;">
+                            @else
+                                <div style="width:42px;height:42px;border-radius:50%;background:#f0f2f5;display:flex;align-items:center;justify-content:center;">
+                                    <i class="bi bi-image text-muted"></i>
+                                </div>
+                            @endif
+                        </td>
+                        <td><span class="fw-bold text-dark">{{ $category->name }}</span></td>
+                        <td>
+                            @if($category->parent)
+                                <a href="{{ route('admin.categories.edit', $category->parent->id) }}"
+                                   class="text-decoration-none" style="color:#FF6B6B; font-weight:500;">
+                                    {{ $category->parent->name }}
+                                </a>
+                            @else
+                                <span class="badge-status badge-active">Cấp gốc</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($category->status == 1)
+                                <span class="badge-status badge-active">
+                                    <i class="bi bi-circle-fill" style="font-size:0.5rem;"></i> Hiển thị
+                                </span>
+                            @else
+                                <span class="badge-status badge-inactive">
+                                    <i class="bi bi-circle-fill" style="font-size:0.5rem;"></i> Ẩn
+                                </span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn-sm-edit">
+                                    <i class="bi bi-pencil"></i> Sửa
+                                </a>
+                                <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST"
+                                      class="d-inline" onsubmit="return confirm('Xóa danh mục này?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn-sm-delete">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                            Chưa có danh mục nào.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    @if(method_exists($categories, 'hasPages') && $categories->hasPages())
+        <div class="d-flex justify-content-center mt-4 admin-pagination">
+            {{ $categories->links('pagination::bootstrap-5') }}
+        </div>
+    @endif
 </div>
 @endsection

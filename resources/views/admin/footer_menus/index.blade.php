@@ -1,184 +1,176 @@
 @extends('admin.layouts.admin')
-
-@section('title', 'Quản lý Chân trang - Admin')
-@section('page-title', 'QUẢN LÝ CHÂN TRANG')
-
+@section('title', 'Chân trang - Admin')
+@section('page-title', 'Quản lý Chân trang')
 @section('content')
-<div class="row g-4">
 
-    {{-- Stats --}}
-    <div class="col-12">
-        <div class="row g-3">
-            @php
-                $totalCols = \App\Models\FooterMenu::whereNull('parent_id')->count();
-                $totalLinks = \App\Models\FooterMenu::whereNotNull('parent_id')->count();
-                $totalActive = \App\Models\FooterMenu::where('status',1)->count();
-            @endphp
-            <div class="col-md-4">
-                <div class="neo-card p-3 d-flex align-items-center gap-3">
-                    <div style="width:44px;height:44px;background:#e0f2fe;border-radius:12px;" class="d-flex align-items-center justify-content-center">
-                        <i class="bi bi-layout-text-sidebar fs-5 text-primary"></i>
-                    </div>
-                    <div>
-                        <div class="fw-bolder fs-4">{{ $totalCols }}</div>
-                        <div class="text-muted" style="font-size:12px;">Cột tiêu đề</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="neo-card p-3 d-flex align-items-center gap-3">
-                    <div style="width:44px;height:44px;background:#fef3c7;border-radius:12px;" class="d-flex align-items-center justify-content-center">
-                        <i class="bi bi-link-45deg fs-5 text-warning"></i>
-                    </div>
-                    <div>
-                        <div class="fw-bolder fs-4">{{ $totalLinks }}</div>
-                        <div class="text-muted" style="font-size:12px;">Liên kết</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="neo-card p-3 d-flex align-items-center gap-3">
-                    <div style="width:44px;height:44px;background:#dcfce7;border-radius:12px;" class="d-flex align-items-center justify-content-center">
-                        <i class="bi bi-eye fs-5 text-success"></i>
-                    </div>
-                    <div>
-                        <div class="fw-bolder fs-4">{{ $totalActive }}</div>
-                        <div class="text-muted" style="font-size:12px;">Đang hiển thị</div>
-                    </div>
-                </div>
-            </div>
+{{-- STAT MINI CARDS --}}
+@php
+    $totalCols   = \App\Models\FooterMenu::whereNull('parent_id')->count();
+    $totalLinks  = \App\Models\FooterMenu::whereNotNull('parent_id')->count();
+    $totalActive = \App\Models\FooterMenu::where('status', 1)->count();
+@endphp
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-card-decoration" style="background:#0284c7;"></div>
+            <div class="stat-card-icon" style="background:#e0f2fe; color:#0284c7;"><i class="bi bi-layout-text-sidebar"></i></div>
+            <div class="stat-card-value">{{ $totalCols }}</div>
+            <div class="stat-card-label">Cột tiêu đề</div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-card-decoration" style="background:#f59e0b;"></div>
+            <div class="stat-card-icon" style="background:#fef3c7; color:#f59e0b;"><i class="bi bi-link-45deg"></i></div>
+            <div class="stat-card-value">{{ $totalLinks }}</div>
+            <div class="stat-card-label">Liên kết</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-card-decoration" style="background:#16a34a;"></div>
+            <div class="stat-card-icon" style="background:#dcfce7; color:#16a34a;"><i class="bi bi-eye"></i></div>
+            <div class="stat-card-value">{{ $totalActive }}</div>
+            <div class="stat-card-label">Đang hiển thị</div>
+        </div>
+    </div>
+</div>
 
-    {{-- Main Table --}}
-    <div class="col-12">
-        <div class="neo-card">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h4 class="fw-bolder m-0">Danh sách Menu Chân trang</h4>
-                    <p class="text-muted mb-0" style="font-size:13px;">Quản lý các cột và liên kết hiển thị ở footer website</p>
-                </div>
-                <a href="{{ route('admin.footer_menus.create') }}" class="neo-btn text-decoration-none">
-                    <i class="bi bi-plus-lg me-1"></i> THÊM MỚI
-                </a>
-            </div>
-
-            @if(session('success'))
-                <div class="alert alert-success rounded-3 fw-bold border-0 mb-4" style="background:#dcfce7; color:#166534;">
-                    <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-                </div>
-            @endif
-
-            {{-- Preview footer structure --}}
-            @php
-                $cols = \App\Models\FooterMenu::whereNull('parent_id')->where('status',1)->orderBy('sort_order')->with('children')->get();
-            @endphp
-            @if($cols->count() > 0)
-            <div class="p-3 rounded-3 mb-4" style="background:#0f172a;">
-                <div class="text-muted mb-2" style="font-size:11px; letter-spacing:1px; text-transform:uppercase;">Preview chân trang</div>
-                <div class="row g-3">
-                    @foreach($cols as $col)
-                    <div class="col">
-                        <div style="color:#e2e8f0; font-weight:700; font-size:11px; letter-spacing:1.5px; margin-bottom:8px; text-transform:uppercase;">{{ $col->name }}</div>
-                        @foreach($col->children as $child)
-                            <div style="color:#64748b; font-size:12px; margin-bottom:4px;">{{ $child->name }}</div>
-                        @endforeach
-                    </div>
+{{-- FOOTER PREVIEW --}}
+@php
+    $cols = \App\Models\FooterMenu::whereNull('parent_id')->where('status', 1)->orderBy('sort_order')->with('children')->get();
+@endphp
+@if($cols->count() > 0)
+    <div class="footer-preview-panel mb-4">
+        <div class="footer-preview-label">Preview chân trang</div>
+        <div class="row g-3">
+            @foreach($cols as $col)
+                <div class="col">
+                    <div class="footer-preview-col-title">{{ $col->name }}</div>
+                    @foreach($col->children as $child)
+                        <div class="footer-preview-link">
+                            @if($child->icon)<i class="bi {{ $child->icon }} me-1"></i>@endif
+                            {{ $child->name }}
+                        </div>
                     @endforeach
                 </div>
-            </div>
-            @endif
-
-            <div class="table-responsive">
-                <table class="table table-borderless align-middle">
-                    <thead class="border-bottom border-2" style="border-color:#e5e7eb!important;">
-                        <tr>
-                            <th class="fw-bolder text-dark" style="width:60px;">STT</th>
-                            <th class="fw-bolder text-dark">TÊN HIỂN THỊ</th>
-                            <th class="fw-bolder text-dark">LOẠI</th>
-                            <th class="fw-bolder text-dark">ĐƯỜNG DẪN</th>
-                            <th class="fw-bolder text-dark">ICON</th>
-                            <th class="fw-bolder text-dark text-center">THỨ TỰ</th>
-                            <th class="fw-bolder text-dark text-center">TRẠNG THÁI</th>
-                            <th class="fw-bolder text-dark text-center" style="width:160px;">HÀNH ĐỘNG</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-secondary">
-                        @forelse($footerMenus as $menu)
-                            <tr class="{{ is_null($menu->parent_id) ? 'table-light' : '' }}" style="{{ is_null($menu->parent_id) ? 'border-top:2px solid #e5e7eb;' : '' }}">
-                                <td>
-                                    @if(is_null($menu->parent_id))
-                                        <span class="badge rounded-pill" style="background:#1e293b;color:#94a3b8;font-size:10px;">COL</span>
-                                    @else
-                                        <span style="color:#cbd5e1; font-size:13px;">└</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <span class="{{ is_null($menu->parent_id) ? 'fw-bolder text-dark' : 'text-dark fw-medium ps-3' }}" style="font-size:{{ is_null($menu->parent_id) ? '14px' : '13px' }};">
-                                        @if($menu->icon)<i class="bi {{ $menu->icon }} me-1 text-muted"></i>@endif
-                                        {{ $menu->name }}
-                                    </span>
-                                    @if($menu->description)
-                                        <div class="text-muted ps-3" style="font-size:11px;">{{ Str::limit($menu->description, 50) }}</div>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if(is_null($menu->parent_id))
-                                        <span class="badge rounded-pill" style="background:#dbeafe;color:#1d4ed8;font-size:11px;">Cột tiêu đề</span>
-                                    @else
-                                        <span class="badge rounded-pill" style="background:#f3f4f6;color:#6b7280;font-size:11px;">
-                                            Liên kết của: {{ optional(\App\Models\FooterMenu::find($menu->parent_id))->name }}
-                                        </span>
-                                    @endif
-                                </td>
-                                <td style="font-size:12px;" class="text-muted font-monospace">{{ $menu->url ?: '—' }}</td>
-                                <td>
-                                    @if($menu->icon)
-                                        <span class="badge rounded-pill" style="background:#f3f4f6;color:#374151;font-size:11px;">
-                                            <i class="bi {{ $menu->icon }}"></i> {{ $menu->icon }}
-                                        </span>
-                                    @else
-                                        <span class="text-muted" style="font-size:12px;">—</span>
-                                    @endif
-                                </td>
-                                <td class="text-center fw-bold">{{ $menu->sort_order }}</td>
-                                <td class="text-center">
-                                    @if($menu->status == 1)
-                                        <span class="badge rounded-pill" style="background:#dcfce7;color:#166534;font-size:11px;">
-                                            <i class="bi bi-eye me-1"></i>Hiển thị
-                                        </span>
-                                    @else
-                                        <span class="badge rounded-pill" style="background:#fee2e2;color:#991b1b;font-size:11px;">
-                                            <i class="bi bi-eye-slash me-1"></i>Đang ẩn
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    <a href="{{ route('admin.footer_menus.edit', $menu->id) }}" class="neo-btn-sm me-1 text-decoration-none">
-                                        <i class="bi bi-pencil-fill"></i> SỬA
-                                    </a>
-                                    <form action="{{ route('admin.footer_menus.destroy', $menu->id) }}" method="POST" class="d-inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="neo-btn-sm bg-danger text-white border-0"
-                                                onclick="return confirm('Xóa mục này?')">
-                                            <i class="bi bi-trash3-fill"></i> XÓA
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8" class="text-center py-5 text-muted">
-                                    <i class="bi bi-layout-text-sidebar fs-2 mb-2 d-block opacity-25"></i>
-                                    Chưa có dữ liệu. Hãy thêm cột tiêu đề đầu tiên!
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+            @endforeach
         </div>
     </div>
+@endif
+
+{{-- MAIN TABLE --}}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <div>
+            <h2 class="admin-card-title"><i class="bi bi-layout-text-sidebar text-muted"></i> Danh sách Menu Chân trang</h2>
+            <p class="text-muted mb-0 mt-1" style="font-size:0.8rem;">Quản lý các cột và liên kết hiển thị ở footer website</p>
+        </div>
+        <a href="{{ route('admin.footer_menus.create') }}" class="btn-primary-admin">
+            <i class="bi bi-plus-lg"></i> Thêm mới
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th style="width:60px;">LOẠI</th>
+                    <th>TÊN HIỂN THỊ</th>
+                    <th>PHÂN LOẠI</th>
+                    <th>ĐƯỜNG DẪN</th>
+                    <th>ICON</th>
+                    <th class="text-center" style="width:80px;">THỨ TỰ</th>
+                    <th class="text-center" style="width:110px;">TRẠNG THÁI</th>
+                    <th class="text-center" style="width:160px;">HÀNH ĐỘNG</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($footerMenus as $menu)
+                    <tr style="{{ is_null($menu->parent_id) ? 'background:#fafbff;' : '' }}">
+                        <td class="text-center">
+                            @if(is_null($menu->parent_id))
+                                <span class="badge-status badge-processing" style="font-size:0.65rem;padding:3px 8px;">COL</span>
+                            @else
+                                <span class="text-muted" style="font-size:1rem; padding-left:4px;">└</span>
+                            @endif
+                        </td>
+                        <td>
+                            <span class="{{ is_null($menu->parent_id) ? 'fw-bold text-dark' : 'text-dark ps-3' }}"
+                                  style="font-size:{{ is_null($menu->parent_id) ? '0.9rem' : '0.85rem' }};">
+                                @if($menu->icon)<i class="bi {{ $menu->icon }} me-1 text-muted"></i>@endif
+                                {{ $menu->name }}
+                            </span>
+                            @if($menu->description)
+                                <div class="text-muted ps-3" style="font-size:0.75rem;">
+                                    {{ Str::limit($menu->description, 50) }}
+                                </div>
+                            @endif
+                        </td>
+                        <td>
+                            @if(is_null($menu->parent_id))
+                                <span class="badge-status badge-processing" style="font-size:0.72rem;">Cột tiêu đề</span>
+                            @else
+                                <span class="badge-status badge-inactive" style="font-size:0.72rem;">
+                                    Liên kết của: {{ optional(\App\Models\FooterMenu::find($menu->parent_id))->name }}
+                                </span>
+                            @endif
+                        </td>
+                        <td>
+                            <span class="text-muted font-monospace" style="font-size:0.78rem;">
+                                {{ $menu->url ?: '—' }}
+                            </span>
+                        </td>
+                        <td>
+                            @if($menu->icon)
+                                <span class="badge-status badge-inactive" style="font-size:0.72rem;">
+                                    <i class="bi {{ $menu->icon }}"></i> {{ $menu->icon }}
+                                </span>
+                            @else
+                                <span class="text-muted" style="font-size:0.85rem;">—</span>
+                            @endif
+                        </td>
+                        <td class="text-center fw-bold text-muted">{{ $menu->sort_order }}</td>
+                        <td class="text-center">
+                            @if($menu->status == 1)
+                                <span class="badge-status badge-active" style="font-size:0.72rem;">
+                                    <i class="bi bi-eye" style="font-size:0.65rem;"></i> Hiển thị
+                                </span>
+                            @else
+                                <span class="badge-status badge-cancelled" style="font-size:0.72rem;">
+                                    <i class="bi bi-eye-slash" style="font-size:0.65rem;"></i> Đang ẩn
+                                </span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a href="{{ route('admin.footer_menus.edit', $menu->id) }}" class="btn-sm-edit">
+                                    <i class="bi bi-pencil-fill"></i> Sửa
+                                </a>
+                                <form action="{{ route('admin.footer_menus.destroy', $menu->id) }}" method="POST"
+                                      class="d-inline-block" onsubmit="return confirm('Xóa mục này?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn-sm-delete">
+                                        <i class="bi bi-trash3-fill"></i> Xóa
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">
+                            <i class="bi bi-layout-text-sidebar fs-3 d-block mb-2 opacity-25"></i>
+                            Chưa có dữ liệu. Hãy thêm cột tiêu đề đầu tiên!
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    @if(method_exists($footerMenus, 'hasPages') && $footerMenus->hasPages())
+        <div class="d-flex justify-content-center mt-4 admin-pagination">
+            {{ $footerMenus->links('pagination::bootstrap-5') }}
+        </div>
+    @endif
 </div>
 @endsection
