@@ -155,18 +155,8 @@
                     <i class="bi bi-arrow-repeat text-muted"></i> Cập nhật trạng thái
                 </h2>
             </div>
-            @php
-                $sm = [
-                    'pending'    => ['Chờ xử lý',      'badge-pending'],
-                    'processing' => ['Đang chuẩn bị',  'badge-processing'],
-                    'shipping'   => ['Đang giao',       'badge-shipping'],
-                    'completed'  => ['Đã giao',         'badge-completed'],
-                    'cancelled'  => ['Đã hủy',          'badge-cancelled'],
-                ];
-                $s = $sm[$order->status] ?? [$order->status, 'badge-inactive'];
-            @endphp
             <div class="mb-3">
-                <span class="badge-status {{ $s[1] }}">{{ $s[0] }}</span>
+                <span class="badge-status {{ $order->status_badge }}">{{ $order->status_label }}</span>
             </div>
             <form action="{{ route('admin.orders.update', $order->id) }}" method="POST">
                 @csrf @method('PUT')

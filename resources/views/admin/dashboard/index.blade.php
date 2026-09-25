@@ -63,17 +63,7 @@
                         <td>{{ $order->user->name ?? 'Khách vãng lai' }}</td>
                         <td class="fw-bold">{{ number_format($order->total_amount ?? 0, 0, ',', '.') }}đ</td>
                         <td>
-                            @php
-                                $statusMap = [
-                                    'pending'    => ['Chờ xử lý',      'badge-pending'],
-                                    'processing' => ['Đang chuẩn bị',  'badge-processing'],
-                                    'shipping'   => ['Đang giao',       'badge-shipping'],
-                                    'completed'  => ['Đã giao',         'badge-completed'],
-                                    'cancelled'  => ['Đã hủy',          'badge-cancelled'],
-                                ];
-                                $s = $statusMap[$order->status] ?? [$order->status, 'badge-inactive'];
-                            @endphp
-                            <span class="badge-status {{ $s[1] }}">{{ $s[0] }}</span>
+                            <span class="badge-status {{ $order->status_badge }}">{{ $order->status_label }}</span>
                         </td>
                         <td class="text-center">
                             <a href="{{ route('admin.orders.show', $order->id) }}" class="btn-sm-edit">

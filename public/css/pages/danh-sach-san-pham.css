@@ -1,173 +1,94 @@
-.tieu-de-chinh {
-  font-size: 24px;
-  letter-spacing: 3px;
-  color: #000;
-}
+/* ===== DANH SÁCH SẢN PHẨM ===== */
 
+/* --- Legacy filter bar (kept for backward compat) --- */
 .thanh-loc-toi-gian {
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
   padding: 12px 0;
   background-color: transparent;
-  border-radius: 0;
-  box-shadow: none;
+}
+.loc-nhom { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.loc-tieu-de { font-weight: 800; font-size: 0.85rem; color: #1a1a1a; margin-right: 5px; letter-spacing: 0.5px; }
+.loc-chu-item { cursor: pointer; transition: all 0.2s ease; font-size: 0.9rem; color: #666; display: inline-flex; align-items: center; padding: 0; background-color: transparent; }
+.loc-chu-item:hover { color: #1a1a1a; }
+.loc-chu-item.active { font-weight: 700 !important; color: #1a1a1a !important; text-decoration: underline !important; text-underline-offset: 4px; background-color: transparent !important; }
+.bieu-tuong-mau-nho { width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 5px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1); }
+
+/* --- JS Pagination --- */
+.phan-trang-js { display: flex; justify-content: center; gap: 8px; margin-top: 2rem; }
+.phan-trang-js button { border: 1px solid #ddd; background: #fff; padding: 5px 12px; cursor: pointer; transition: 0.2s; border-radius: 4px; }
+.phan-trang-js button:hover { background: #f8f9fa; }
+.phan-trang-js button.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+.phan-trang-js button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* --- Product card variants --- */
+.khung-anh-discount { overflow: hidden; border-radius: 16px; transition: all 0.4s ease; position: relative; }
+.anh-san-pham { border-radius: 16px; object-fit: cover; height: 400px; width: 100%; transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.link-san-pham { display: block; transition: all 0.3s ease; }
+.link-san-pham:hover { transform: translateY(-8px); }
+.link-san-pham:hover .khung-anh-discount { box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12); }
+.link-san-pham:hover .anh-san-pham { transform: scale(1.05); }
+.nhan-discount { position: absolute; top: 12px; right: 12px; background-color: #e63946; color: #ffffff; padding: 5px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; z-index: 2; box-shadow: 0 4px 8px rgba(230, 57, 70, 0.3); }
+.ten-san-pham { font-size: 15px; color: #555; margin-top: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+.gia-san-pham { font-size: 17px; font-weight: 800; color: #1a1a1a; margin-top: 4px; }
+.mau-sac-vong-tron-men { width: 16px; height: 16px; border-radius: 50%; display: inline-block; cursor: pointer; border: 1px solid #eaeaea; transition: transform 0.2s ease; }
+.mau-sac-vong-tron-men:hover { transform: scale(1.3); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+/* ===== FILTER TOP BAR ===== */
+.filter-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb;
+  padding: 12px 0; margin-bottom: 32px; gap: 12px; flex-wrap: wrap;
+}
+.filter-tabs { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.filter-tab-btn { background: none; border: none; font-size: 0.9rem; font-weight: 500; color: #6b7280; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+.filter-tab-btn:hover { color: #111; }
+.filter-tab-btn.active { color: #111; font-weight: 700; }
+.filter-sort-dropdown { position: relative; }
+.filter-sort-dropdown select { appearance: none; border: none; background: none; font-size: 0.9rem; font-weight: 500; color: #111; cursor: pointer; padding: 6px 24px 6px 10px; border-radius: 6px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23111' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; }
+.filter-sort-dropdown select:focus { outline: none; }
+.filter-right { display: flex; align-items: center; gap: 12px; }
+.btn-open-filter { display: flex; align-items: center; gap: 6px; background: none; border: 1px solid #d1d5db; border-radius: 8px; padding: 7px 16px; font-size: 0.88rem; font-weight: 600; color: #111; cursor: pointer; transition: all 0.2s; }
+.btn-open-filter:hover { border-color: #111; }
+
+/* ===== FILTER DRAWER ===== */
+.filter-drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 1050; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+.filter-drawer-overlay.open { opacity: 1; visibility: visible; }
+.filter-drawer { position: fixed; top: 0; right: 0; width: 340px; max-width: 95vw; height: 100vh; background: #fff; z-index: 1060; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); box-shadow: -8px 0 30px rgba(0,0,0,0.1); }
+.filter-drawer.open { transform: translateX(0); }
+.filter-drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid #f3f4f6; font-size: 1.05rem; font-weight: 700; }
+.btn-close-drawer { background: none; border: 1px solid #e5e7eb; border-radius: 50%; width: 34px; height: 34px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.btn-close-drawer:hover { background: #f3f4f6; }
+.filter-drawer-body { flex: 1; overflow-y: auto; padding: 0 24px; }
+.filter-group { border-bottom: 1px solid #f3f4f6; padding: 18px 0; }
+.filter-group-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-size: 0.95rem; font-weight: 500; user-select: none; }
+.filter-group-header .toggle-icon { font-size: 1.1rem; color: #9ca3af; transition: transform 0.2s; }
+.filter-group.expanded .toggle-icon { transform: rotate(45deg); }
+.filter-group-content { display: none; margin-top: 14px; }
+.filter-group.expanded .filter-group-content { display: block; }
+.filter-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.filter-chip { padding: 5px 14px; border: 1.5px solid #e5e7eb; border-radius: 50rem; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; background: #fff; user-select: none; }
+.filter-chip:hover { border-color: #111; }
+.filter-chip.active { background: #111; color: #fff; border-color: #111; }
+.filter-color-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.filter-color-chip { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; font-size: 0.78rem; color: #6b7280; user-select: none; }
+.color-swatch { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #e5e7eb; transition: all 0.2s; }
+.filter-color-chip.active .color-swatch, .filter-color-chip:hover .color-swatch { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #111; }
+.filter-color-chip.active { color: #111; font-weight: 600; }
+.filter-drawer-footer { padding: 20px 24px; border-top: 1px solid #f3f4f6; display: flex; gap: 12px; }
+.btn-reset-filter { flex: 1; padding: 12px; border: 1.5px solid #e5e7eb; background: #fff; border-radius: 12px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+.btn-reset-filter:hover { border-color: #111; }
+.btn-apply-filter { flex: 2; padding: 12px; background: #FF6B6B; border: none; color: #fff; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+.btn-apply-filter:hover { background: #e55555; }
+
+/* ===== CATEGORY HERO ===== */
+.category-page-hero {
+  background-color: #F6F5F2;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(255,107,107,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 20%, rgba(78,205,196,0.07) 0%, transparent 55%);
 }
 
-.loc-nhom {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.loc-tieu-de {
-  font-weight: 800;
-  font-size: 0.85rem;
-  color: #1a1a1a;
-  margin-right: 5px;
-  letter-spacing: 0.5px;
-}
-
-.loc-chu-item {
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-  color: #666;
-  display: inline-flex;
-  align-items: center;
-  padding: 0;
-  background-color: transparent;
-  border-radius: 0;
-}
-
-.loc-chu-item:hover {
-  color: #1a1a1a;
-  transform: none;
-}
-
-.loc-chu-item.active {
-  font-weight: 700 !important;
-  color: #1a1a1a !important;
-  text-decoration: underline !important;
-  text-underline-offset: 4px;
-  background-color: transparent !important;
-  box-shadow: none;
-}
-
-.bieu-tuong-mau-nho {
-  width: 14px;
-  height: 14px;
-  display: inline-block;
-  border-radius: 50%;
-  margin-right: 5px;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
-}
-
-.phan-trang-js {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 2rem;
-}
-
-.phan-trang-js button {
-  border: 1px solid #ddd;
-  background: #fff;
-  padding: 5px 12px;
-  cursor: pointer;
-  transition: 0.2s;
-  border-radius: 4px;
-}
-
-.phan-trang-js button:hover {
-  background: #f8f9fa;
-}
-
-.phan-trang-js button.active {
-  background: #1a1a1a;
-  color: #fff;
-  border-color: #1a1a1a;
-}
-
-.phan-trang-js button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.khung-anh-discount {
-  overflow: hidden;
-  border-radius: 16px; 
-  transition: all 0.4s ease;
-  position: relative;
-}
-
-.anh-san-pham {
-  border-radius: 16px;
-  object-fit: cover;
-  height: 400px;
-  width: 100%;
-  transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.link-san-pham {
-  display: block;
-  transition: all 0.3s ease;
-}
-
-.link-san-pham:hover {
-  transform: translateY(-8px);
-}
-
-.link-san-pham:hover .khung-anh-discount {
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
-}
-
-.link-san-pham:hover .anh-san-pham {
-  transform: scale(1.05);
-}
-
-.nhan-discount {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background-color: #e63946;
-  color: #ffffff;
-  padding: 5px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: bold;
-  z-index: 2;
-  box-shadow: 0 4px 8px rgba(230, 57, 70, 0.3);
-}
-
-.ten-san-pham {
-  font-size: 15px;
-  color: #555;
-  margin-top: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 500;
-}
-
-.gia-san-pham {
-  font-size: 17px;
-  font-weight: 800;
-  color: #1a1a1a;
-  margin-top: 4px;
-}
-
-.mau-sac-vong-tron-men {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: inline-block;
-  cursor: pointer;
-  border: 1px solid #eaeaea;
-  transition: transform 0.2s ease;
-}
-
-.mau-sac-vong-tron-men:hover {
-  transform: scale(1.3);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
+/* ===== PRODUCT CARD CENTER ===== */
+.product-card-info-center { text-align: center; padding: 10px 6px 14px; }
+.product-color-dots-center { display: flex; justify-content: center; gap: 6px; margin-top: 6px; }

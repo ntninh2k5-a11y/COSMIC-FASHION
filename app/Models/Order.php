@@ -29,4 +29,28 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function getStatusMap()
+    {
+        return [
+            'pending'    => ['label' => 'Chờ xử lý',      'class' => 'badge-pending'],
+            'processing' => ['label' => 'Đang chuẩn bị',  'class' => 'badge-processing'],
+            'shipping'   => ['label' => 'Đang giao',       'class' => 'badge-shipping'],
+            'completed'  => ['label' => 'Đã giao',         'class' => 'badge-completed'],
+            'cancelled'  => ['label' => 'Đã hủy',         'class' => 'badge-cancelled'],
+            'paid'       => ['label' => 'Đã thanh toán',   'class' => 'badge-paid'],
+        ];
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        $map = $this->getStatusMap();
+        return $map[$this->status]['label'] ?? $this->status;
+    }
+
+    public function getStatusBadgeAttribute()
+    {
+        $map = $this->getStatusMap();
+        return $map[$this->status]['class'] ?? 'badge-inactive';
+    }
 }

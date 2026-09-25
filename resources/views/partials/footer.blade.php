@@ -1,11 +1,6 @@
 <footer class="footer-bg mt-5">
-    @php
-        $footerColumns = \App\Models\FooterMenu::whereNull('parent_id')
-            ->where('status', 1)
-            ->orderBy('sort_order')
-            ->with(['children' => fn($q) => $q->where('status',1)->orderBy('sort_order')])
-            ->get();
-    @endphp
+{{-- $footerColumns is provided by App\Http\ViewComposers\FooterComposer --}}
+
 
     <!-- Main Footer -->
     <div class="py-5">

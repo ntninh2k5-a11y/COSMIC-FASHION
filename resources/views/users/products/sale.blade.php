@@ -142,7 +142,7 @@
                      data-price="{{ $sp->sale_price }}"
                      data-discount-group="{{ $sp->discount_percent < 20 ? 'duoi-20' : ($sp->discount_percent <= 30 ? '20-30' : 'tren-30') }}">
                     <div class="sale-card h-100">
-                        @include('partials.product_card_php', ['sp' => $sp])
+                        @include('partials.product_card_php', ['sp' => $sp, 'alignLeft' => true])
                     </div>
                 </div>
             @endforeach

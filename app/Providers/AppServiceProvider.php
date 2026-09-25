@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use App\Http\ViewComposers\MenuComposer;
+use App\Http\ViewComposers\FooterComposer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Bind ViewComposers to their respective partials
+        View::composer('partials.menu', MenuComposer::class);
+        View::composer('partials.footer', FooterComposer::class);
     }
 }

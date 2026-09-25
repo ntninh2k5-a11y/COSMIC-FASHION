@@ -1,4 +1,4 @@
-@extends('users.profile.layout')
+﻿@extends('users.profile.layout')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/orders_user.css') }}">
@@ -28,19 +28,7 @@
                             <td>{{ $order->created_at->format('d/m/Y') }}</td>
                             <td class="fw-bolder" style="color: #ef4444;">{{ number_format($order->total_amount, 0, ',', '.') }}đ</td>
                             <td>
-                                @if($order->status == 'pending')
-                                    <span class="badge" style="background-color: #fef3c7; color: #92400e; padding: 8px 16px; border-radius: 20px; font-weight: 600;">Chờ xử lý</span>
-                                @elseif($order->status == 'processing')
-                                    <span class="badge" style="background-color: #e0f2fe; color: #075985; padding: 8px 16px; border-radius: 20px; font-weight: 600;">Đang chuẩn bị</span>
-                                @elseif($order->status == 'shipping')
-                                    <span class="badge" style="background-color: #dbeafe; color: #1e40af; padding: 8px 16px; border-radius: 20px; font-weight: 600;">Đang giao</span>
-                                @elseif($order->status == 'completed')
-                                    <span class="badge" style="background-color: #d1fae5; color: #065f46; padding: 8px 16px; border-radius: 20px; font-weight: 600;">Đã giao</span>
-                                @elseif($order->status == 'cancelled')
-                                    <span class="badge" style="background-color: #fee2e2; color: #991b1b; padding: 8px 16px; border-radius: 20px; font-weight: 600;">Đã hủy</span>
-                                @else
-                                    <span class="badge bg-secondary rounded-pill px-3 py-2">{{ $order->status }}</span>
-                                @endif
+                                <span class="badge-status {{ $order->status_badge }}">{{ $order->status_label }}</span>
                             </td>
                             <td class="text-center">
                                 <a href="{{ route('user.orders.show', $order->id) }}" class="btn btn-cosmic-soft btn-sm text-decoration-none">XEM</a>
@@ -89,3 +77,4 @@
     }
 </style>
 @endpush
+

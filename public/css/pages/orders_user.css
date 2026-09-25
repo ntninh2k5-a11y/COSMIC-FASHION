@@ -75,4 +75,22 @@
     background-color: #374151;
     color: #ffffff;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}/* ===== BADGES ===== */
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 50rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
+.badge-pending  { background: #fff8e1; color: #f59e0b; }
+.badge-processing { background: #e0f2fe; color: #0284c7; }
+.badge-shipping { background: #ede9fe; color: #7c3aed; }
+.badge-completed { background: #dcfce7; color: #16a34a; }
+.badge-cancelled { background: #fee2e2; color: #dc2626; }
+.badge-active   { background: #dcfce7; color: #16a34a; }
+.badge-inactive { background: #f3f4f6; color: #6b7280; }
+.badge-paid     { background: #dcfce7; color: #16a34a; }

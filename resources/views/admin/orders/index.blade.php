@@ -29,18 +29,7 @@
                         <td class="text-muted">{{ $order->created_at->format('d/m/Y') }}</td>
                         <td class="fw-bold">{{ number_format($order->total_amount, 0, ',', '.') }}đ</td>
                         <td>
-                            @php
-                                $sm = [
-                                    'pending'    => ['Chờ xử lý',      'badge-pending'],
-                                    'processing' => ['Đang chuẩn bị',  'badge-processing'],
-                                    'shipping'   => ['Đang giao',       'badge-shipping'],
-                                    'completed'  => ['Đã giao',         'badge-completed'],
-                                    'cancelled'  => ['Đã hủy',          'badge-cancelled'],
-                                    'paid'       => ['Đã thanh toán',   'badge-paid'],
-                                ];
-                                $s = $sm[$order->status] ?? [$order->status, 'badge-inactive'];
-                            @endphp
-                            <span class="badge-status {{ $s[1] }}">{{ $s[0] }}</span>
+                            <span class="badge-status {{ $order->status_badge }}">{{ $order->status_label }}</span>
                         </td>
                         <td class="text-center">
                             <a href="{{ route('admin.orders.show', $order->id) }}" class="btn-sm-edit">

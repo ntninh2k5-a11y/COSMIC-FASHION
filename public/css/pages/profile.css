@@ -1,0 +1,72 @@
+/* === INLINE EXTRACTED FROM PROFILE/LAYOUT.BLADE.PHP === */
+.profile-sidebar {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+.profile-user-info {
+    text-align: center;
+    padding: 0 20px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 20px;
+}
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #f0f4f8;
+    color: #5DADE2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+.profile-nav .nav-link {
+    color: #2D3436;
+    padding: 12px 24px;
+    border-left: 3px solid transparent;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.profile-nav .nav-link:hover, .profile-nav .nav-link.active {
+    background: #f8fbfd;
+    color: #5DADE2;
+    border-left-color: #5DADE2;
+}
+.profile-nav .nav-link i {
+    width: 24px;
+    margin-right: 10px;
+}
+.profile-content {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    padding: 30px;
+}
+.neo-input {
+    border: 1px solid #d1dde3;
+    border-radius: 8px;
+    padding: 10px 15px;
+}
+.neo-input:focus {
+    border-color: #5DADE2;
+    box-shadow: 0 0 0 3px rgba(93, 173, 226, 0.2);
+    outline: none;
+}
+.neo-btn {
+    background: #5DADE2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.neo-btn:hover {
+    background: #3498DB;
+    transform: translateY(-2px);
+}
