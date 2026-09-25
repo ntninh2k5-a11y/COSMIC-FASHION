@@ -230,14 +230,14 @@
     function themVaoGio() {
         @if(count($sizes) > 0)
             if(!sizeChon) {
-                alert('Vui lòng chọn Size!');
+                showErrorToast('Vui lòng chọn Kích thước (Size)!');
                 return;
             }
         @endif
         
         @if(count($colors) > 0)
             if(!mauChon) {
-                alert('Vui lòng chọn Màu sắc!');
+                showErrorToast('Vui lòng chọn Màu sắc!');
                 return;
             }
         @endif
@@ -264,7 +264,7 @@
                 variantId = matched.id;
             } else {
                 // Không tìm thấy variant → thông báo hết hàng
-                alert('Rất tiếc, phiên bản Size và Màu bạn chọn hiện đang hết hàng!');
+                showErrorToast('Rất tiếc, phiên bản Size và Màu bạn chọn hiện đang hết hàng!');
                 return;
             }
         }
@@ -293,15 +293,120 @@
         })
         .then(data => {
             if(data.success) {
-                alert('Thêm vào giỏ hàng thành công!');
+                // Lấy thông tin hiển thị
+                let variantText = [];
+                if (mauChon) variantText.push(document.getElementById('ten-mau-hien-thi').innerText);
+                if (sizeChon) variantText.push(sizeChon);
+                const variantStr = variantText.join(' / ');
+
+                showCartToast(sanPhamHienTai.name, sanPhamHienTai.image, variantStr, sanPhamHienTai.priceNum, soLuong);
                 window.dispatchEvent(new Event('cartUpdated')); 
             } else {
-                alert('Lỗi: ' + data.message);
+                showErrorToast(data.message);
             }
         })
         .catch(err => {
-            alert('Đã xảy ra lỗi: ' + err.message);
+            showErrorToast('Đã xảy ra lỗi: ' + err.message);
         });
+    }
+
+    function showCartToast(productName, productImage, variantText, priceNum, quantity) {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            container.style.position = 'fixed';
+            container.style.top = '100px';
+            container.style.right = '20px';
+            container.style.zIndex = '1050';
+            document.body.appendChild(container);
+        }
+
+        const priceText = new Intl.NumberFormat('vi-VN').format(priceNum) + 'đ';
+        const toast = document.createElement('div');
+        toast.className = 'neo-card bg-white mb-3 shadow-lg p-3 rounded-4';
+        toast.style.width = '350px';
+        toast.style.transition = 'all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+        toast.style.transform = 'translateX(120%)';
+        toast.style.opacity = '0';
+        
+        toast.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-3">
+                <h6 class="fw-bolder m-0 text-uppercase" style="letter-spacing: -0.5px;">
+                    <i class="bi bi-check-circle-fill text-success me-1"></i> Đã thêm vào giỏ
+                </h6>
+                <button type="button" class="btn-close" style="width: 10px; height: 10px;" aria-label="Close"></button>
+            </div>
+            <div class="d-flex gap-3 mb-3">
+                <img src="${productImage}" style="width: 70px; height: 70px; object-fit: cover;" class="border border-dark border-2 rounded-3 shadow-sm">
+                <div style="flex: 1; min-width: 0;">
+                    <div class="fw-bold text-truncate mb-1" style="font-size: 0.9rem;">${productName}</div>
+                    <div class="text-secondary mb-1 fw-medium" style="font-size: 0.8rem;">Phân loại: <span class="text-dark">${variantText}</span></div>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <div class="text-danger fw-bolder">${priceText}</div>
+                        <div class="fw-bold fs-6">x${quantity}</div>
+                    </div>
+                </div>
+            </div>
+            <a href="{{ route('cart') }}" class="neo-btn w-100 py-2 d-block text-center text-decoration-none rounded-3" style="font-size: 0.9rem;">XEM GIỎ HÀNG VÀ THANH TOÁN</a>
+        `;
+
+        container.appendChild(toast);
+
+        requestAnimationFrame(() => {
+            toast.style.transform = 'translateX(0)';
+            toast.style.opacity = '1';
+        });
+
+        const closeBtn = toast.querySelector('.btn-close');
+        closeBtn.onclick = () => removeToast(toast);
+
+        setTimeout(() => {
+            if(toast.parentElement) removeToast(toast);
+        }, 5000);
+    }
+
+    function showErrorToast(msg) {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            container.style.position = 'fixed';
+            container.style.top = '100px';
+            container.style.right = '20px';
+            container.style.zIndex = '1050';
+            document.body.appendChild(container);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = 'neo-card bg-white mb-3 shadow-lg p-3 border-danger rounded-4';
+        toast.style.width = '300px';
+        toast.style.transition = 'all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+        toast.style.transform = 'translateX(120%)';
+        toast.style.opacity = '0';
+        
+        toast.innerHTML = `
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
+                <h6 class="fw-bolder m-0 text-danger text-uppercase">Thông báo</h6>
+            </div>
+            <div class="fw-medium text-dark" style="font-size: 0.9rem;">${msg}</div>
+        `;
+
+        container.appendChild(toast);
+        requestAnimationFrame(() => {
+            toast.style.transform = 'translateX(0)';
+            toast.style.opacity = '1';
+        });
+        setTimeout(() => {
+            if(toast.parentElement) removeToast(toast);
+        }, 3000);
+    }
+
+    function removeToast(toast) {
+        toast.style.transform = 'translateX(120%)';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
     }
 </script>
 @endpush

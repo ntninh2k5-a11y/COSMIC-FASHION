@@ -39,19 +39,19 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Giá gốc <span class="text-danger">*</span></label>
-                                <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" 
+                                <input type="number" name="price" id="price-input" class="form-control @error('price') is-invalid @enderror" 
                                        value="{{ old('price', $product->price) }}" min="0" step="1000" required>
                                 @error('price') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Giá khuyến mãi</label>
-                                <input type="number" name="sale_price" class="form-control @error('sale_price') is-invalid @enderror" 
-                                       value="{{ old('sale_price', $product->sale_price) }}" min="0" step="1000">
+                                <input type="number" name="sale_price" id="sale-price-input" class="form-control bg-light @error('sale_price') is-invalid @enderror" 
+                                       value="{{ old('sale_price', $product->sale_price) }}" min="0" step="1000" readonly title="Tự động tính dựa trên Giá gốc và % Giảm giá">
                                 @error('sale_price') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">% Giảm giá</label>
-                                <input type="number" name="discount_percent" class="form-control @error('discount_percent') is-invalid @enderror" 
+                                <input type="number" name="discount_percent" id="discount-input" class="form-control @error('discount_percent') is-invalid @enderror" 
                                        value="{{ old('discount_percent', $product->discount_percent) }}" min="0" max="100">
                                 @error('discount_percent') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
@@ -219,5 +219,25 @@
         preview.src = URL.createObjectURL(event.target.files[0]);
         preview.style.display = 'block';
     }
+
+    // Auto calculate sale price
+    function calculateSalePrice() {
+        const priceInput = document.getElementById('price-input');
+        const discountInput = document.getElementById('discount-input');
+        const salePriceInput = document.getElementById('sale-price-input');
+        
+        let price = parseFloat(priceInput.value) || 0;
+        let discount = parseFloat(discountInput.value) || 0;
+        
+        if (price >= 0 && discount >= 0 && discount <= 100) {
+            let salePrice = price - (price * discount / 100);
+            salePriceInput.value = Math.round(salePrice);
+        } else {
+            salePriceInput.value = price;
+        }
+    }
+
+    document.getElementById('price-input').addEventListener('input', calculateSalePrice);
+    document.getElementById('discount-input').addEventListener('input', calculateSalePrice);
 </script>
 @endsection

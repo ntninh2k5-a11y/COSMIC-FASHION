@@ -14,9 +14,9 @@
             </div>
         </div>
     </a>
-    <div class="product-card-info">
+    <div class="product-card-info text-center">
         @if($sp->discount_percent > 0)
-            <div class="d-flex align-items-baseline gap-2 mb-1">
+            <div class="d-flex align-items-baseline justify-content-center gap-2 mb-1">
                 <span class="product-price-sale">{{ number_format($sp->discount_percent > 0 ? $sp->sale_price : $sp->price, 0, ',', '.') }}đ</span>
                 <del class="product-price-old">{{ number_format($sp->price, 0, ',', '.') }}đ</del>
             </div>
@@ -30,7 +30,7 @@
             $colors = $sp->variants ? $sp->variants->pluck('color')->filter()->unique()->values() : [];
         @endphp
         @if(count($colors) > 0)
-            <div class="product-color-dots d-flex gap-1 mt-1">
+            <div class="d-flex justify-content-center gap-1 mt-1">
                 @foreach($colors as $c)
                     <a href="{{ route('product.detail', $sp->id) }}?color={{ urlencode($c) }}"
                        class="color-dot"

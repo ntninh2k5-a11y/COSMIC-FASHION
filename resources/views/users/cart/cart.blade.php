@@ -60,8 +60,8 @@
 @section('content')
 <main class="py-5 bg-light" style="min-height: calc(100vh - 200px);">
     <div class="container">
-        <div class="khung-tieu-de-gio-hang mb-5 border-bottom border-dark border-2 pb-3">
-            <h2 class="tieu-de-chinh-gio-hang text-uppercase fw-bolder mb-2" style="letter-spacing: -0.5px;">Giỏ Hàng Của Bạn</h2>
+        <div class="khung-tieu-de-gio-hang mb-5 border-bottom pb-3">
+            <h2 class="tieu-de-chinh-gio-hang text-uppercase fw-bold mb-2" style="letter-spacing: -0.5px; color: #2D3436;">Giỏ Hàng Của Bạn</h2>
             <p class="tieu-de-phu-gio-hang text-secondary m-0 fw-bold">
                 Bạn đang có {{ $cartItems->sum('quantity') }} sản phẩm trong giỏ hàng
             </p>
@@ -69,16 +69,16 @@
 
         <div class="row">
             <div class="col-md-8 mb-5 mb-md-0">
-                <div class="danh-sach-sp-gio neo-card p-0 overflow-hidden">
+                <div class="danh-sach-sp-gio bg-white shadow-sm rounded-4 p-0 overflow-hidden border">
                     @if($cartItems->count() > 0)
                         @foreach($cartItems as $item)
-                            <div class="o-sp-gio d-flex align-items-center p-3 p-md-4 {{ !$loop->last ? 'border-bottom border-dark border-2' : '' }} bg-white" 
+                            <div class="o-sp-gio d-flex align-items-center p-3 p-md-4 {{ !$loop->last ? 'border-bottom' : '' }} bg-white" 
                                  data-id="{{ $item->id }}" 
                                  data-price="{{ $item->product->discount_percent > 0 ? $item->product->sale_price : $item->product->price }}">
                                  
                                 <img src="{{ asset($item->product->image_url ?? 'images/default.jpg') }}"
                                      alt="{{ $item->product->name }}"
-                                     class="anh-sp-gio border border-dark border-2 rounded-0 shadow-sm"
+                                     class="anh-sp-gio border rounded-3 shadow-sm"
                                      style="width: 100px; height: 100px; object-fit: cover;">
 
                                 <div class="thong-tin-sp-gio flex-grow-1 px-3 px-md-4">
@@ -99,10 +99,10 @@
                                 </div>
 
                                 <div class="dieu-chinh-sp-gio d-flex align-items-center justify-content-end">
-                                    <div class="tang-giam-so-luong d-flex align-items-center me-3 me-md-4 border border-dark border-2 rounded-0 shadow-sm">
+                                    <div class="tang-giam-so-luong d-flex align-items-center me-3 me-md-4 border rounded-3 shadow-sm">
                                         <button type="button"
                                                 onclick="capNhatSoLuong({{ $item->id }}, {{ $item->quantity - 1 }})"
-                                                class="nut-tang-giam border-0 border-end border-dark border-2 fs-5 fw-bold"
+                                                class="nut-tang-giam border-0 border-end fs-5"
                                                 {{ $item->quantity <= 1 ? 'disabled' : '' }}>
                                             -
                                         </button>
@@ -113,7 +113,7 @@
 
                                         <button type="button"
                                                 onclick="capNhatSoLuong({{ $item->id }}, {{ $item->quantity + 1 }})"
-                                                class="nut-tang-giam border-0 border-start border-dark border-2 fs-5 fw-bold">
+                                                class="nut-tang-giam border-0 border-start fs-5">
                                             +
                                         </button>
                                     </div>
@@ -124,7 +124,7 @@
 
                                     <button type="button"
                                             onclick="xoaSanPham({{ $item->id }})"
-                                            class="nut-xoa-sp btn btn-outline-dark border-2 rounded-0 shadow-sm p-0"
+                                            class="nut-xoa-sp btn btn-outline-danger border-0 rounded-3 shadow-sm p-0"
                                             title="Xóa sản phẩm">
                                         <img src="{{ asset('img_react/trash3.svg') }}" alt="Xóa" style="width: 16px;">
                                     </button>
@@ -145,8 +145,8 @@
             </div>
 
             <div class="col-md-4">
-                <div class="khung-tong-ket p-4 sticky-md-top neo-card bg-white" style="top: 20px;">
-                    <h3 class="tieu-de-tong-ket text-uppercase mb-4 fs-5 fw-bold border-bottom border-dark border-2 pb-3" style="letter-spacing: -0.5px;">
+                <div class="khung-tong-ket p-4 sticky-md-top bg-white shadow-sm rounded-4 border" style="top: 20px;">
+                    <h3 class="tieu-de-tong-ket text-uppercase mb-4 fs-5 fw-bold border-bottom pb-3" style="letter-spacing: -0.5px; color: #2D3436;">
                         Tổng Đơn Hàng
                     </h3>
 
@@ -159,7 +159,7 @@
                         </span>
                     </div>
 
-                    <div class="dong-tong-ket d-flex justify-content-between mb-3 border-bottom border-dark border-2 pb-3 text-secondary fw-medium">
+                    <div class="dong-tong-ket d-flex justify-content-between mb-3 border-bottom pb-3 text-secondary fw-medium">
                         <span class="chu-tong-ket">
                             Phí vận chuyển
                         </span>
@@ -182,7 +182,7 @@
                     </p>
 
                     <button id="btn-thanh-toan"
-                            class="neo-btn w-100"
+                            class="btn w-100 text-white fw-bold py-2 rounded-3 shadow-sm" style="background-color: #FF6B6B;"
                             {{ $cartItems->isEmpty() ? 'disabled' : '' }}>
                         TIẾN HÀNH THANH TOÁN
                     </button>
@@ -279,38 +279,36 @@
                 }
                 capNhatGiaoDienGioHang();
             } else {
-                alert(data.message || 'Không thể cập nhật giỏ hàng');
+                showGlobalToast(data.message || 'Không thể cập nhật giỏ hàng', 'error');
             }
         })
         .catch(error => {
-            alert('Có lỗi xảy ra khi cập nhật giỏ hàng');
+            showGlobalToast('Có lỗi xảy ra khi cập nhật giỏ hàng', 'error');
         });
     };
 
     window.xoaSanPham = function (id) {
-        if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
-            return;
-        }
-
-        fetch(`/gio-hang/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const itemRow = document.querySelector(`.o-sp-gio[data-id="${id}"]`);
-                if(itemRow) itemRow.remove();
-                capNhatGiaoDienGioHang();
-            } else {
-                alert(data.message || 'Không thể xóa sản phẩm');
-            }
-        })
-        .catch(error => {
-            alert('Có lỗi xảy ra khi xóa sản phẩm');
+        showConfirmToast('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?', function() {
+            fetch(`/gio-hang/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const itemRow = document.querySelector(`.o-sp-gio[data-id="${id}"]`);
+                    if(itemRow) itemRow.remove();
+                    capNhatGiaoDienGioHang();
+                } else {
+                    showGlobalToast(data.message || 'Không thể xóa sản phẩm', 'error');
+                }
+            })
+            .catch(error => {
+                showGlobalToast('Có lỗi xảy ra khi xóa sản phẩm', 'error');
+            });
         });
     };
 </script>

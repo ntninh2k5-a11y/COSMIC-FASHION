@@ -76,7 +76,7 @@ class ProfileController extends Controller
         }
 
         $user = User::with('profile')->findOrFail($userId);
-        $orders = Order::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
+        $orders = Order::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(10);
 
         return view('users.profile.orders', compact('user', 'orders'));
     }

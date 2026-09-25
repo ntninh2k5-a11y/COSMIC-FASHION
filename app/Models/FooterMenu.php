@@ -15,11 +15,25 @@ class FooterMenu extends Model
         'parent_id',
         'name',
         'url',
+        'icon',
+        'description',
+        'sort_order',
+        'is_static',
+        'type',
         'status'
+    ];
+
+    protected $casts = [
+        'is_static' => 'boolean',
     ];
 
     public function children()
     {
-        return $this->hasMany(FooterMenu::class, 'parent_id');
+        return $this->hasMany(FooterMenu::class, 'parent_id')->where('status', 1)->orderBy('sort_order');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(FooterMenu::class, 'parent_id');
     }
 }

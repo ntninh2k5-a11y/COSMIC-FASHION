@@ -55,4 +55,37 @@
             </table>
         </div>
     </div>
+
+    @if($orders->hasPages())
+        <div class="mt-4 d-flex justify-content-center custom-pagination">
+            {{ $orders->links('pagination::bootstrap-5') }}
+        </div>
+    @endif
 @endsection
+
+@push('styles')
+<style>
+    .custom-pagination .page-link {
+        color: #2D3436;
+        border: none;
+        background-color: #FAFAFA;
+        margin: 0 4px;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    .custom-pagination .page-item.active .page-link {
+        background-color: #FF6B6B;
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(255,107,107,0.3);
+    }
+    .custom-pagination .page-link:hover {
+        background-color: #f1f2f4;
+        color: #FF6B6B;
+    }
+    .custom-pagination .page-item.active .page-link:hover {
+        background-color: #FF6B6B;
+        color: #fff;
+    }
+</style>
+@endpush
