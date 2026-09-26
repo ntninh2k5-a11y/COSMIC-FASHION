@@ -69,15 +69,9 @@
                             <span class="text-muted"> / {{ $voucher->usageLimit ?? '∞' }}</span>
                         </td>
                         <td class="text-center">
-                            @if($voucher->isActive == 1)
-                                <span class="badge-status badge-active">
-                                    <i class="bi bi-circle-fill" style="font-size:0.5rem;"></i> Hoạt động
-                                </span>
-                            @else
-                                <span class="badge-status badge-inactive">
-                                    <i class="bi bi-circle-fill" style="font-size:0.5rem;"></i> Tạm dừng
-                                </span>
-                            @endif
+                            <span class="badge-status {{ $voucher->status_badge }}">
+                                <i class="bi bi-circle-fill" style="font-size:0.5rem;"></i> {{ $voucher->status_label }}
+                            </span>
                         </td>
                         <td class="text-center">
                             <div class="d-flex gap-2 justify-content-center">

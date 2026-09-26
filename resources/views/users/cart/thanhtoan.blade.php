@@ -35,11 +35,59 @@
                 <div class="bg-white p-4 shadow-sm rounded-4 border mb-4">
                     <h4 class="fw-bold text-uppercase mb-4 fs-5 border-bottom pb-3" style="letter-spacing: -0.5px; color: #2D3436;">THÔNG TIN GIAO HÀNG</h4>
                     
+                    @if($addresses->count() > 0)
+                    {{-- Chọn địa chỉ đã lưu --}}
+                    <div class="mb-4">
+                        <label class="fw-bold text-secondary mb-2" style="font-size: 0.85rem;">CHỌN ĐỊA CHỈ GIAO HÀNG</label>
+                        <select class="form-select rounded-3 py-2 border" id="address-selector" onchange="fillAddress(this)">
+                            @foreach($addresses as $addr)
+                            <option value="{{ $addr->id }}"
+                                    data-name="{{ $addr->receiver_name }}"
+                                    data-phone="{{ $addr->phone_number }}"
+                                    data-address="{{ $addr->receiver_address }}"
+                                    data-note="{{ $addr->note }}"
+                                    {{ $addr->is_default ? 'selected' : '' }}>
+                                {{ $addr->receiver_name }} — {{ $addr->receiver_address }}
+                                {{ $addr->is_default ? '(Mặc định)' : '' }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="p-3 rounded-3 mb-4" id="selected-address-card" style="background: #f8fffe; border: 1.5px solid #4ECDC4;">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-geo-alt-fill" style="color: #4ECDC4;"></i>
+                            <span class="fw-bold" id="display-name"></span>
+                            <span class="text-muted">|</span>
+                            <span class="text-muted" id="display-phone"></span>
+                        </div>
+                        <p class="mb-0 text-muted" style="font-size: 0.9rem;" id="display-address"></p>
+                    </div>
+
+                    <input type="hidden" name="fullname" id="input-fullname">
+                    <input type="hidden" name="customer_phone" id="input-phone">
+                    <input type="hidden" name="shipping_address" id="input-address">
+
+                    <div class="mb-4">
+                        <label class="fw-bold text-secondary mb-2" style="font-size: 0.85rem;">EMAIL</label>
+                        <input type="email" class="form-control rounded-3 py-2 border" name="email" required>
+                    </div>
+
+                    <div class="text-end mb-3">
+                        <a href="{{ route('user.addresses') }}" class="text-decoration-none small fw-semibold" style="color: #FF6B6B;">
+                            <i class="bi bi-plus-circle me-1"></i>Quản lý sổ địa chỉ
+                        </a>
+                    </div>
+                    @else
+                    {{-- Chưa có địa chỉ → nhập thủ công --}}
+                    <div class="alert border rounded-3 mb-4 d-flex align-items-center gap-2" style="background: #fff9f0; border-color: #ffe0b2 !important;">
+                        <i class="bi bi-info-circle text-warning"></i>
+                        <span style="font-size:0.85rem;">Bạn chưa lưu địa chỉ nào. <a href="{{ route('user.addresses') }}" class="fw-bold" style="color:#FF6B6B;">Thêm địa chỉ</a> để checkout nhanh hơn!</span>
+                    </div>
                     <div class="mb-4">
                         <label class="fw-bold text-secondary mb-2" style="font-size: 0.85rem;">HỌ VÀ TÊN</label>
                         <input type="text" class="form-control rounded-3 py-2 border" name="fullname" value="{{ session('user_name') }}" required>
                     </div>
-                    
                     <div class="row">
                         <div class="col-md-6 mb-4">
                             <label class="fw-bold text-secondary mb-2" style="font-size: 0.85rem;">SỐ ĐIỆN THOẠI</label>
@@ -50,15 +98,15 @@
                             <input type="email" class="form-control rounded-3 py-2 border" name="email" required>
                         </div>
                     </div>
-                    
                     <div class="mb-4">
                         <label class="fw-bold text-secondary mb-2" style="font-size: 0.85rem;">ĐỊA CHỈ NHẬN HÀNG</label>
                         <input type="text" class="form-control rounded-3 py-2 border" name="shipping_address" required>
                     </div>
-                    
+                    @endif
+
                     <div class="mb-4">
                         <label class="fw-bold text-secondary mb-2" style="font-size: 0.85rem;">GHI CHÚ ĐƠN HÀNG</label>
-                        <textarea class="form-control rounded-3 py-2 border" name="notes" rows="3"></textarea>
+                        <textarea class="form-control rounded-3 py-2 border" name="notes" rows="3" id="input-notes"></textarea>
                     </div>
                     
                     <h4 class="fw-bold text-uppercase mb-4 fs-5 border-bottom pb-3 mt-5" style="letter-spacing: -0.5px; color: #2D3436;">PHƯƠNG THỨC THANH TOÁN</h4>
@@ -80,15 +128,22 @@
                             <div class="d-flex align-items-center mb-4 pb-3 border-bottom border-light">
                                 <div class="position-relative">
                                     <img src="{{ asset($item->product->image_url ?? 'images/default.jpg') }}" alt="{{ $item->product->name }}" class="rounded-3 shadow-sm border" style="width: 65px; height: 65px; object-fit: cover;">
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill" style="background-color: #FF6B6B; font-size: 0.7rem;">
-                                        {{ $item->quantity }}
-                                    </span>
                                 </div>
                                 <div class="flex-grow-1 ms-3">
                                     <div class="fw-bold text-dark mb-1" style="font-size: 0.95rem; line-height: 1.3;">{{ $item->product->name }}</div>
                                     @if($item->variant)
-                                        <small class="text-secondary d-block">{{ isset($item->variant->color) ? ($colorNames[strtoupper($item->variant->color)] ?? $item->variant->color) : '' }} / {{ $item->variant->size }}</small>
+                                        @php
+                                            $hexCode = strtoupper($item->variant->color);
+                                            $colorName = $colorNames[$hexCode] ?? 'Màu';
+                                        @endphp
+                                        <div class="text-secondary mb-1 d-flex align-items-center" style="font-size: 0.85rem;">
+                                            <span class="d-inline-block rounded-circle border shadow-sm" style="width:14px; height:14px; background-color:{{ $hexCode }}; margin-right:6px;"></span>
+                                            <span>{{ $colorName }} ({{ $hexCode }})</span>
+                                            <span class="mx-2 text-light">|</span> 
+                                            <span>Size: {{ $item->variant->size }}</span>
+                                        </div>
                                     @endif
+                                    <div class="text-secondary fw-semibold mt-1" style="font-size: 0.85rem;">Số lượng: {{ $item->quantity }}</div>
                                 </div>
                                 <div class="text-end ms-2">
                                     <div class="fw-bold text-danger" style="font-size: 0.95rem;">{{ number_format(($item->product->discount_percent > 0 ? $item->product->sale_price : $item->product->price) * $item->quantity, 0, ',', '.') }}đ</div>
@@ -145,6 +200,31 @@
 
 @push('scripts')
 <script>
+    // Auto-fill address from selector
+    function fillAddress(sel) {
+        const opt = sel.options[sel.selectedIndex];
+        document.getElementById('display-name').textContent = opt.dataset.name;
+        document.getElementById('display-phone').textContent = opt.dataset.phone;
+        document.getElementById('display-address').textContent = opt.dataset.address;
+        document.getElementById('input-fullname').value = opt.dataset.name;
+        document.getElementById('input-phone').value = opt.dataset.phone;
+        document.getElementById('input-address').value = opt.dataset.address;
+        // Pre-fill note if address has one
+        const notesInput = document.getElementById('input-notes');
+        if (opt.dataset.note && !notesInput.value) {
+            notesInput.value = opt.dataset.note;
+        }
+    }
+
+    // Auto-fill default address on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const selector = document.getElementById('address-selector');
+        if (selector) {
+            fillAddress(selector);
+        }
+    });
+
+    // Prevent double submit
     document.getElementById('form-thanh-toan').addEventListener('submit', function() {
         let btn = document.querySelector('button[type="submit"]');
         btn.innerText = 'ĐANG XỬ LÝ...';

@@ -34,6 +34,9 @@
                     <a href="{{ route('user.orders') }}" class="nav-link {{ request()->routeIs('user.orders') ? 'active' : '' }}">
                         <i class="bi bi-bag"></i> Đơn hàng của tôi
                     </a>
+                    <a href="{{ route('user.addresses') }}" class="nav-link {{ request()->routeIs('user.addresses') ? 'active' : '' }}">
+                        <i class="bi bi-geo-alt"></i> Sổ địa chỉ
+                    </a>
                 </div>
             </div>
         </div>

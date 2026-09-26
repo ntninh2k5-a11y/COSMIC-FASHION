@@ -70,3 +70,138 @@
     background: #3498DB;
     transform: translateY(-2px);
 }
+
+/* ===== ADDRESS BOOK ===== */
+.btn-add-address {
+    background: #FF6B6B;
+    color: #fff;
+    border: none;
+    border-radius: 50rem;
+    padding: 8px 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.btn-add-address:hover {
+    background: #e55555;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+}
+
+.address-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.address-card {
+    border: 1.5px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s;
+    background: #fff;
+}
+.address-card:hover {
+    border-color: #e0e0e0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+.address-card.is-default {
+    border-color: #FF6B6B;
+    background: linear-gradient(135deg, #fff9f9 0%, #ffffff 100%);
+}
+
+.address-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #2D3436;
+}
+.address-divider {
+    color: #d1d5db;
+}
+.address-phone {
+    color: #636E72;
+    font-size: 0.9rem;
+}
+.address-default-badge {
+    background: #fff0f0;
+    color: #FF6B6B;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 50rem;
+    border: 1px solid #ffe0e0;
+}
+.address-text {
+    color: #636E72;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+.address-note {
+    color: #9ca3af;
+    font-size: 0.82rem;
+    font-style: italic;
+}
+
+.address-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #f3f4f6;
+    flex-wrap: wrap;
+}
+.btn-addr-edit, .btn-addr-default, .btn-addr-delete {
+    background: none;
+    border: 1.5px solid #e9ecef;
+    border-radius: 8px;
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    color: #2D3436;
+}
+.btn-addr-edit:hover { border-color: #5DADE2; color: #5DADE2; }
+.btn-addr-default:hover { border-color: #FF6B6B; color: #FF6B6B; }
+.btn-addr-delete { color: #dc3545; }
+.btn-addr-delete:hover { background: #fff5f5; border-color: #dc3545; }
+
+/* Modal */
+.address-modal-content {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+.address-modal-header {
+    border-bottom: 1px solid #f3f4f6;
+    padding: 20px 24px;
+}
+.address-modal-footer {
+    border-top: 1px solid #f3f4f6;
+    padding: 16px 24px;
+}
+.address-input {
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+.address-input:focus {
+    border-color: #FF6B6B;
+    box-shadow: 0 0 0 3px rgba(255,107,107,0.1);
+}
+.btn-save-address {
+    background: #FF6B6B;
+    color: #fff;
+    border: none;
+    border-radius: 50rem;
+    padding: 8px 24px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.btn-save-address:hover {
+    background: #e55555;
+    color: #fff;
+}

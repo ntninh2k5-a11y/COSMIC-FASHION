@@ -17,6 +17,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductDetailController;
 use App\Http\Controllers\SePayController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserAddressController;
 
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -80,6 +81,13 @@ Route::middleware([CheckAccountStatus::class])->group(function () {
     Route::post('/trang-ca-nhan', [ProfileController::class, 'update'])->name('user.profile.update');
     Route::get('/don-hang-cua-toi', [ProfileController::class, 'orders'])->name('user.orders');
     Route::get('/don-hang-cua-toi/{id}', [OrderController::class, 'show'])->name('user.orders.show');
+
+    // Địa chỉ
+    Route::get('/dia-chi', [UserAddressController::class, 'index'])->name('user.addresses');
+    Route::post('/dia-chi', [UserAddressController::class, 'store'])->name('user.addresses.store');
+    Route::put('/dia-chi/{id}', [UserAddressController::class, 'update'])->name('user.addresses.update');
+    Route::delete('/dia-chi/{id}', [UserAddressController::class, 'destroy'])->name('user.addresses.destroy');
+    Route::patch('/dia-chi/{id}/mac-dinh', [UserAddressController::class, 'setDefault'])->name('user.addresses.setDefault');
 });
 
 Route::middleware([CheckAccountStatus::class, CheckAdmin::class])
@@ -100,6 +108,7 @@ Route::middleware([CheckAccountStatus::class, CheckAdmin::class])
         Route::get('/users/{id}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{id}', [AdminUserController::class, 'update'])->name('users.update');
         Route::put('/users/{id}/lock', [AdminUserController::class, 'toggleLock'])->name('users.lock');
+        Route::delete('/users/{userId}/addresses/{addressId}', [AdminUserController::class, 'destroyAddress'])->name('users.addresses.destroy');
         
         Route::resource('footer_menus', AdminFooterMenuController::class);
         Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class);

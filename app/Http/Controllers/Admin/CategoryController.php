@@ -70,6 +70,13 @@ class CategoryController extends Controller
 
         $imagePath = $category->image_url;
 
+        if ($request->has('delete_image') && $request->delete_image == '1') {
+            if ($category->image_url && File::exists(public_path($category->image_url))) {
+                File::delete(public_path($category->image_url));
+            }
+            $imagePath = null;
+        }
+
         if ($request->hasFile('image')) {
             if ($category->image_url && File::exists(public_path($category->image_url))) {
                 File::delete(public_path($category->image_url));

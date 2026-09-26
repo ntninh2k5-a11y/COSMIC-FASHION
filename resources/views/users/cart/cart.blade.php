@@ -3,7 +3,7 @@
 @section('title', 'Giỏ Hàng - Cosmic Fashion')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/cart.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/pages/cart.css') }}">
 @endpush
 
 @section('content')
@@ -75,7 +75,7 @@
                                             onclick="xoaSanPham({{ $item->id }})"
                                             class="nut-xoa-sp btn btn-outline-danger border-0 rounded-3 shadow-sm p-0"
                                             title="Xóa sản phẩm">
-                                        <img src="{{ asset('img_react/trash3.svg') }}" alt="Xóa" style="width: 16px;">
+                                        <i class="bi bi-trash" style="font-size: 1rem;"></i>
                                     </button>
                                 </div>
                             </div>

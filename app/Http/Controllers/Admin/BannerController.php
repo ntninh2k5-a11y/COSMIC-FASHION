@@ -63,6 +63,13 @@ class BannerController extends Controller
         ]);
 
         $imagePath = $banner->image_url;
+        if ($request->has('delete_image') && $request->delete_image == '1') {
+            if ($banner->image_url && File::exists(public_path($banner->image_url))) {
+                File::delete(public_path($banner->image_url));
+            }
+            $imagePath = null;
+        }
+
         if ($request->hasFile('image')) {
             // Delete old image
             if (File::exists(public_path($banner->image_url))) {
@@ -96,3 +103,4 @@ class BannerController extends Controller
         return redirect()->route('admin.banners.index')->with('success', 'Xóa banner thành công!');
     }
 }
+

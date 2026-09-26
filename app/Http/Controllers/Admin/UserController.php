@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserAddress;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -26,8 +27,13 @@ class UserController extends Controller
             ]);
             $user->load('profile');
         }
+
+        $addresses = UserAddress::where('user_id', $id)
+            ->orderByDesc('is_default')
+            ->latest()
+            ->get();
         
-        return view('admin.users.edit', compact('user'));
+        return view('admin.users.edit', compact('user', 'addresses'));
     }
 
     public function update(Request $request,int $id)
@@ -74,5 +80,12 @@ class UserController extends Controller
         $user->save();
 
         return back()->with('success', 'Đã thay đổi trạng thái tài khoản!');
+    }
+
+    public function destroyAddress(int $userId, int $addressId)
+    {
+        $address = UserAddress::where('id', $addressId)->where('user_id', $userId)->firstOrFail();
+        $address->delete();
+        return back()->with('success', 'Đã xóa địa chỉ của người dùng!');
     }
 }

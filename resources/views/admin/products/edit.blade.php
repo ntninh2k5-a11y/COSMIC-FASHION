@@ -1,4 +1,4 @@
-@extends('admin.layouts.admin')
+﻿@extends('admin.layouts.admin')
 
 @section('content')
 <div class="container-fluid">
@@ -69,7 +69,13 @@
                             <label class="form-label">Ảnh sản phẩm</label>
                             @if($product->image_url)
                                 <div class="mb-2">
-                                    <img src="{{ asset($product->image_url) }}" alt="{{ $product->name }}" width="150" style="border-radius: 8px; object-fit: cover;">
+                                                                        <img src="{{ asset($product->image_url) }}" alt="{{ $product->name }}" width="150" style="border-radius: 8px; object-fit: cover; margin-bottom: 8px;">
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" value="1" id="delete_image" name="delete_image">
+                                        <label class="form-check-label text-danger" for="delete_image" style="font-size: 0.9rem;">
+                                            Xóa ảnh hiện tại
+                                        </label>
+                                    </div>
                                 </div>
                             @endif
                             <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" accept="image/*" onchange="previewImage(event)">
@@ -241,3 +247,4 @@
     document.getElementById('discount-input').addEventListener('input', calculateSalePrice);
 </script>
 @endsection
+

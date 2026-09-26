@@ -38,7 +38,7 @@ class OrderController extends Controller
     public function checkout(Request $request)
     {
         $colorNames = [
-            '#000000' => 'Đen', '#FFFFFF' => 'Trắng', '#000080' => 'Xanh Navy', '#F5F5DC' => 'Be',
+            '#000000' => 'Đen', '#FFFFFF' => 'Trắng', '#000080' => 'Xanh Navy', '#001F3F' => 'Xanh Navy', '#F5F5DC' => 'Be',
             '#808080' => 'Xám', '#ADD8E6' => 'Xanh nhạt', '#2F4F4F' => 'Xám đậm', '#8B4513' => 'Nâu',
             '#FF0000' => 'Đỏ', '#008000' => 'Xanh lá', '#D3D3D3' => 'Xám nhạt', '#A9A9A9' => 'Xám',
             '#4169E1' => 'Xanh dương', '#00008B' => 'Xanh đậm', '#FFB6C1' => 'Hồng', '#FFC0CB' => 'Hồng',
@@ -101,7 +101,12 @@ class OrderController extends Controller
 
         $total = $subtotal - $discountAmount;
 
-        return view('users.cart.thanhtoan', compact('cartItems', 'subtotal', 'total', 'colorNames', 'voucher', 'discountAmount'));
+        $addresses = \App\Models\UserAddress::where('user_id', $request->session()->get('user_id'))
+            ->orderByDesc('is_default')
+            ->latest()
+            ->get();
+
+        return view('users.cart.thanhtoan', compact('cartItems', 'subtotal', 'total', 'colorNames', 'voucher', 'discountAmount', 'addresses'));
     }
 
     public function store(Request $request)

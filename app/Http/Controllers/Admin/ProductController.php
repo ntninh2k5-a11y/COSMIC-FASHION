@@ -98,7 +98,7 @@ class ProductController extends Controller
         return view('admin.products.edit', compact('product', 'categories', 'sizes', 'colors'));
     }
 
-    public function update(Request $request,int $id)
+    public function update(Request $request, int $id)
     {
         $product = Product::findOrFail($id);
 
@@ -124,6 +124,15 @@ class ProductController extends Controller
 
         $data['slug'] = Str::slug($request->name);
 
+        // Xóa ảnh nếu tích checkbox
+        if ($request->has('delete_image') && $request->delete_image == '1') {
+            if ($product->image_url && file_exists(public_path($product->image_url))) {
+                unlink(public_path($product->image_url));
+            }
+            $data['image_url'] = null;
+        }
+
+        // Upload ảnh mới
         if ($request->hasFile('image')) {
             if ($product->image_url && file_exists(public_path($product->image_url))) {
                 unlink(public_path($product->image_url));

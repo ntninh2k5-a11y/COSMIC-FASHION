@@ -15,9 +15,8 @@
                 
                 @if($parent->children && $parent->children->where('status', 1)->count() > 0)
                 <div class="mega-menu-container">
-                    <div class="container py-5">
-                        <div class="mega-menu-grid">
-                            @foreach($parent->children->where('status', 1) as $child)
+                    <div class="mega-menu-grid">
+                        @foreach($parent->children->where('status', 1) as $child)
                             <div class="mega-col">
                                 <a href="{{ route('frontend.category.detail', $child->slug ?? '') }}" class="mega-col-title">
                                     @if($child->image_url)
@@ -42,7 +41,6 @@
                                 @endif
                             </div>
                             @endforeach
-                        </div>
                     </div>
                 </div>
                 @endif
