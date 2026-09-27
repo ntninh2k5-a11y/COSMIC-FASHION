@@ -18,6 +18,7 @@ use App\Http\Controllers\ProductDetailController;
 use App\Http\Controllers\SePayController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserAddressController;
+use App\Http\Controllers\PointTransactionController;
 
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -88,6 +89,10 @@ Route::middleware([CheckAccountStatus::class])->group(function () {
     Route::put('/dia-chi/{id}', [UserAddressController::class, 'update'])->name('user.addresses.update');
     Route::delete('/dia-chi/{id}', [UserAddressController::class, 'destroy'])->name('user.addresses.destroy');
     Route::patch('/dia-chi/{id}/mac-dinh', [UserAddressController::class, 'setDefault'])->name('user.addresses.setDefault');
+
+    // Đổi điểm
+    Route::get('/doi-diem', [PointTransactionController::class, 'index'])->name('user.points');
+    Route::post('/doi-diem', [PointTransactionController::class, 'redeem'])->name('user.points.redeem');
 });
 
 Route::middleware([CheckAccountStatus::class, CheckAdmin::class])

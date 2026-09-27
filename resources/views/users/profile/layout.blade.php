@@ -37,6 +37,9 @@
                     <a href="{{ route('user.addresses') }}" class="nav-link {{ request()->routeIs('user.addresses') ? 'active' : '' }}">
                         <i class="bi bi-geo-alt"></i> Sổ địa chỉ
                     </a>
+                    <a href="{{ route('user.points') }}" class="nav-link {{ request()->routeIs('user.points') ? 'active' : '' }}">
+                        <i class="bi bi-star"></i> Đổi điểm
+                    </a>
                 </div>
             </div>
         </div>
