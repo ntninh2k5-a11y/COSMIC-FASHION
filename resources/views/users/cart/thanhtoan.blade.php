@@ -153,18 +153,71 @@
                     </div>
 
                     <div class="mb-4 pb-4 border-bottom">
-                        <label class="fw-bold text-secondary mb-2" style="font-size: 0.85rem;">MÃ GIẢM GIÁ</label>
-                        <div class="d-flex gap-2">
-                            <input type="text" id="voucher-input" class="form-control rounded-3 border text-uppercase py-2" placeholder="Nhập mã giảm giá" value="{{ request('voucher_code') }}">
-                            <button type="button" class="btn text-white fw-bold px-4 rounded-3 shadow-sm" style="background-color: #4ECDC4;" onclick="applyVoucher()">ÁP DỤNG</button>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="fw-bold text-secondary mb-0" style="font-size: 0.85rem;">MÃ GIẢM GIÁ</label>
+                            <button type="button" class="btn btn-sm btn-link text-decoration-none text-primary fw-semibold p-0" data-bs-toggle="modal" data-bs-target="#voucherModal">
+                                <i class="bi bi-tags me-1"></i>Chọn Voucher
+                            </button>
                         </div>
+                        
+                        <div class="d-flex gap-2">
+                            <input type="text" id="voucher-input" class="form-control rounded-3 border text-uppercase py-2" placeholder="Nhập hoặc chọn mã giảm giá" value="{{ request('voucher_code') }}">
+                            <button type="button" class="btn text-white fw-bold px-4 rounded-3 shadow-sm flex-shrink-0" style="background-color: #4ECDC4;" onclick="applyDiscount()">ÁP DỤNG</button>
+                        </div>
+                        
                         @if(session('voucher_error'))
                             <div class="text-danger mt-2 fw-bold" style="font-size: 0.85rem;"><i class="bi bi-exclamation-circle me-1"></i>{{ session('voucher_error') }}</div>
                         @endif
                         @if($voucher)
-                            <div class="text-success mt-2 fw-bold" style="font-size: 0.85rem;"><i class="bi bi-check-circle me-1"></i>Đã áp dụng mã: {{ $voucher->code }} (-{{ number_format($discountAmount, 0, ',', '.') }}đ)</div>
+                            <div class="text-success mt-2 fw-bold" style="font-size: 0.85rem;">
+                                <i class="bi bi-check-circle me-1"></i>Đã áp dụng mã: {{ $voucher->code }}
+                                @if($voucher->discountType === 'percent')
+                                    (-{{ (float)$voucher->discountValue }}%, giảm {{ number_format($discountAmount, 0, ',', '.') }}đ)
+                                @else
+                                    (-{{ number_format($discountAmount, 0, ',', '.') }}đ)
+                                @endif
+                                <a href="javascript:void(0)" onclick="removeVoucher()" class="text-danger ms-2"><i class="bi bi-x-circle"></i> Bỏ</a>
+                            </div>
                         @endif
                     </div>
+
+                    {{-- SỬ DỤNG ĐIỂM TÍCH LŨY --}}
+                    @if($userPoints > 0)
+                    <div class="mb-4 pb-4 border-bottom">
+                        <label class="fw-bold text-secondary mb-2" style="font-size: 0.85rem;">
+                            <i class="bi bi-star-fill text-warning me-1"></i>SỬ DỤNG ĐIỂM TÍCH LŨY
+                        </label>
+                        
+                        <div class="card border-warning mb-3 shadow-sm rounded-3">
+                            <div class="card-body bg-warning bg-opacity-10 py-2 px-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-secondary fw-medium" style="font-size:0.9rem;">Điểm hiện có:</span>
+                                    <span class="fw-bold text-warning" style="font-size:1.1rem;">{{ number_format($userPoints) }} điểm</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-1">
+                                    <span class="text-secondary fw-medium" style="font-size:0.9rem;">Tương đương:</span>
+                                    <span class="fw-bold text-dark" style="font-size:1rem;">{{ number_format($userPoints * 1000, 0, ',', '.') }}đ</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <input type="number" id="points-input" class="form-control rounded-3 border py-2" placeholder="Nhập số điểm muốn dùng" min="0" max="{{ $userPoints }}" value="{{ $pointsUsed > 0 ? $pointsUsed : '' }}">
+                            <button type="button" class="btn text-white fw-bold px-4 rounded-3 shadow-sm flex-shrink-0" style="background-color: #f59e0b;" onclick="applyDiscount()">DÙNG</button>
+                        </div>
+                        
+                        <small class="text-muted d-block mt-2" style="font-size: 0.8rem;">1 điểm = 1.000đ. Áp dụng sau voucher.</small>
+
+                        @if($pointsUsed > 0)
+                            <div class="text-success mt-2 fw-bold" style="font-size: 0.85rem;">
+                                <i class="bi bi-check-circle me-1"></i>Đã dùng {{ number_format($pointsUsed) }} điểm (giảm {{ number_format($pointsDiscount, 0, ',', '.') }}đ)
+                                <a href="javascript:void(0)" onclick="removePoints()" class="text-danger ms-2"><i class="bi bi-x-circle"></i> Bỏ</a>
+                            </div>
+                        @endif
+                    </div>
+                    @endif
+
+                    <input type="hidden" name="points_used" value="{{ $pointsUsed }}">
 
                     <div>
                         <div class="d-flex justify-content-between mb-3 text-secondary fw-medium">
@@ -181,6 +234,12 @@
                                 <span class="fw-bold text-danger">-{{ number_format($discountAmount, 0, ',', '.') }}đ</span>
                             </div>
                         @endif
+                        @if($pointsDiscount > 0)
+                            <div class="d-flex justify-content-between mb-3 text-secondary fw-medium">
+                                <span><i class="bi bi-star-fill text-warning me-1"></i>Điểm tích lũy ({{ number_format($pointsUsed) }} điểm)</span>
+                                <span class="fw-bold text-danger">-{{ number_format($pointsDiscount, 0, ',', '.') }}đ</span>
+                            </div>
+                        @endif
                         
                         <div class="d-flex justify-content-between align-items-center border-top pt-4 mt-4 mb-4">
                             <span class="fw-bold text-uppercase" style="font-size: 1rem;">Thành tiền</span>
@@ -195,6 +254,73 @@
             </div>
         </div>
     </form>
+</div>
+
+<!-- Modal Chọn Voucher -->
+<div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="voucherModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold" id="voucherModalLabel"><i class="bi bi-ticket-perforated text-primary me-2"></i>Chọn mã giảm giá</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-3 pb-4">
+                @if(isset($availableVouchers) && $availableVouchers->count() > 0)
+                    <div class="d-flex flex-column gap-3">
+                        @foreach($availableVouchers as $v)
+                            @php
+                                $isValid = $subtotal >= $v->minOrderValue;
+                            @endphp
+                            <div class="card border {{ $isValid ? 'border-primary shadow-sm' : 'border-light bg-light opacity-75' }} rounded-3 position-relative overflow-hidden">
+                                <div class="row g-0">
+                                    <div class="col-4 text-white d-flex flex-column justify-content-center align-items-center p-2 text-center" style="background: {{ $isValid ? 'linear-gradient(135deg, #FF6B6B, #4ECDC4)' : '#a8b3b9' }}; border-right: 2px dashed rgba(255,255,255,0.5);">
+                                        <span class="fs-4 fw-bold">
+                                            @if($v->discountType === 'percent')
+                                                {{ (float)$v->discountValue }}%
+                                            @else
+                                                {{ number_format($v->discountValue/1000, 0, ',', '.') }}K
+                                            @endif
+                                        </span>
+                                        <span class="small opacity-75 text-uppercase fw-semibold" style="font-size: 0.7rem;">Giảm giá</span>
+                                    </div>
+                                    <div class="col-8 p-3">
+                                        <div class="d-flex justify-content-between align-items-start mb-1">
+                                            <span class="badge bg-light text-dark border fw-bold font-monospace">{{ $v->code }}</span>
+                                            @if($isValid)
+                                                <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 py-1 fw-bold shadow-sm" onclick="selectVoucher('{{ $v->code }}')">DÙNG</button>
+                                            @endif
+                                        </div>
+                                        <div class="small fw-medium text-dark mt-2 mb-1">
+                                            Đơn tối thiểu {{ number_format($v->minOrderValue, 0, ',', '.') }}đ
+                                            @if($v->discountType === 'percent' && $v->maxDiscountAmount)
+                                                <br><span class="text-secondary" style="font-size: 0.8rem;">(Tối đa {{ number_format($v->maxDiscountAmount, 0, ',', '.') }}đ)</span>
+                                            @endif
+                                        </div>
+                                        <div class="small text-muted" style="font-size: 0.75rem;">
+                                            HSD: {{ \Carbon\Carbon::parse($v->endDate)->format('d/m/Y') }}
+                                        </div>
+                                        @if(!$isValid)
+                                            <div class="small text-danger mt-1 fw-medium" style="font-size: 0.75rem;">
+                                                Mua thêm {{ number_format($v->minOrderValue - $subtotal, 0, ',', '.') }}đ để áp dụng
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                <!-- Dấu cắt khoét 2 bên -->
+                                <div style="position:absolute; width:16px; height:16px; background:#fff; border-radius:50%; top:50%; left:-8px; transform:translateY(-50%); z-index:2;"></div>
+                                <div style="position:absolute; width:16px; height:16px; background:#fff; border-radius:50%; top:50%; left:33.333%; transform:translate(-50%, -50%); z-index:2; border-right:1px solid #dee2e6;"></div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-ticket text-light" style="font-size: 3rem;"></i>
+                        <p class="mt-2 mb-0 fw-medium">Không có mã giảm giá nào phù hợp</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -232,13 +358,34 @@
         btn.style.opacity = '0.7';
     });
 
-    function applyVoucher() {
+    function applyDiscount() {
         let code = document.getElementById('voucher-input').value.trim();
-        if(code) {
-            window.location.href = "{{ route('checkout') }}?voucher_code=" + encodeURIComponent(code);
-        } else {
-            window.location.href = "{{ route('checkout') }}";
-        }
+        let pointsEl = document.getElementById('points-input');
+        let points = pointsEl ? pointsEl.value.trim() : '';
+        let params = [];
+        if (code) params.push('voucher_code=' + encodeURIComponent(code));
+        if (points && parseInt(points) > 0) params.push('use_points=' + encodeURIComponent(points));
+        let url = "{{ route('checkout') }}";
+        if (params.length > 0) url += '?' + params.join('&');
+        window.location.href = url;
+    }
+
+    function selectVoucher(code) {
+        document.getElementById('voucher-input').value = code;
+        var myModalEl = document.getElementById('voucherModal');
+        var modal = bootstrap.Modal.getInstance(myModalEl);
+        if(modal) modal.hide();
+        applyDiscount();
+    }
+
+    function removeVoucher() {
+        document.getElementById('voucher-input').value = '';
+        applyDiscount();
+    }
+
+    function removePoints() {
+        document.getElementById('points-input').value = '';
+        applyDiscount();
     }
 </script>
 @endpush

@@ -61,7 +61,7 @@ class OrderController extends Controller
         $discountAmount = 0;
         $voucher = null;
 
-        if ($request->has('voucher_code')) {
+        if ($request->has('voucher_code') && $request->voucher_code) {
             $voucherCode = strtoupper($request->voucher_code);
             $voucher = Voucher::where('code', $voucherCode)->first();
 
@@ -81,7 +81,7 @@ class OrderController extends Controller
                 return back()->with('voucher_error', 'Mã giảm giá đã hết lượt sử dụng.');
             }
             if ($subtotal < $voucher->minOrderValue) {
-                return back()->with('voucher_error', 'Đơn hàng chưa đạt giá trị tối thiểu ' . number_format($voucher->minOrderValue, 0, ',', '.') . 'đ để áp dụng mã này.');
+                return back()->with('voucher_error', 'Đơn hàng chưa đạt giá trị tối thiểu ' . number_format($voucher->minOrderValue, 0, ',', '.') . 'đ.');
             }
 
             if ($voucher->discountType === 'percent') {
@@ -99,14 +99,49 @@ class OrderController extends Controller
             }
         }
 
-        $total = $subtotal - $discountAmount;
+        // Tính điểm (voucher trước, điểm sau)
+        $afterVoucher = $subtotal - $discountAmount;
+        $pointsUsed = 0;
+        $pointsDiscount = 0;
+        $userPoints = 0;
 
-        $addresses = \App\Models\UserAddress::where('user_id', $request->session()->get('user_id'))
+        $userId = $request->session()->get('user_id');
+        if ($userId) {
+            $profile = \App\Models\UserProfile::where('user_id', $userId)->first();
+            $userPoints = $profile->loyalty_points ?? 0;
+        }
+
+        if ($request->has('use_points') && $request->use_points > 0 && $userPoints > 0) {
+            $pointsUsed = min((int) $request->use_points, $userPoints);
+            $pointsDiscount = $pointsUsed * 1000;
+            if ($pointsDiscount > $afterVoucher) {
+                $pointsDiscount = $afterVoucher;
+                $pointsUsed = (int) ceil($pointsDiscount / 1000);
+            }
+        }
+
+        $total = $afterVoucher - $pointsDiscount;
+
+        $addresses = \App\Models\UserAddress::where('user_id', $userId)
             ->orderByDesc('is_default')
             ->latest()
             ->get();
 
-        return view('users.cart.thanhtoan', compact('cartItems', 'subtotal', 'total', 'colorNames', 'voucher', 'discountAmount', 'addresses'));
+        $availableVouchers = Voucher::where('isActive', 1)
+            ->whereDate('startDate', '<=', now())
+            ->whereDate('endDate', '>=', now())
+            ->where(function($q) {
+                $q->whereNull('usageLimit')
+                  ->orWhereRaw('usageCount < usageLimit');
+            })
+            ->get();
+
+        return view('users.cart.thanhtoan', compact(
+            'cartItems', 'subtotal', 'total', 'colorNames',
+            'voucher', 'discountAmount', 'addresses',
+            'userPoints', 'pointsUsed', 'pointsDiscount',
+            'availableVouchers'
+        ));
     }
 
     public function store(Request $request)
@@ -120,6 +155,7 @@ class OrderController extends Controller
             'payment_method' => 'required|string|max:50',
             'subtotal_amount' => 'required|numeric|min:0',
             'voucher_code' => 'nullable|string|max:50',
+            'points_used' => 'nullable|integer|min:0',
             'cart_items' => 'required|array|min:1',
             'cart_items.*.product_id' => 'required|integer',
             'cart_items.*.quantity' => 'required|integer|min:1',
@@ -133,12 +169,13 @@ class OrderController extends Controller
             $discountAmount = 0;
             $voucherId = null;
 
+            // 1. Áp voucher trước
             if (!empty($validated['voucher_code'])) {
                 $voucher = Voucher::where('code', strtoupper($validated['voucher_code']))
                                   ->lockForUpdate()
                                   ->first();
 
-                if ($voucher && $voucher->isActive == 1 
+                if ($voucher && $voucher->isActive == 1
                     && Carbon::now()->between(Carbon::parse($voucher->startDate), Carbon::parse($voucher->endDate))
                     && (!$voucher->usageLimit || $voucher->usageCount < $voucher->usageLimit)
                     && $validated['subtotal_amount'] >= $voucher->minOrderValue) {
@@ -162,13 +199,32 @@ class OrderController extends Controller
                 }
             }
 
-            $finalAmount = $validated['subtotal_amount'] - $discountAmount;
+            // 2. Áp điểm sau voucher
+            $afterVoucher = $validated['subtotal_amount'] - $discountAmount;
+            $pointsUsed = 0;
+            $pointsDiscount = 0;
+
+            if (!empty($validated['points_used']) && $validated['points_used'] > 0 && $request->session()->has('user_id')) {
+                $userId = $request->session()->get('user_id');
+                $profile = \App\Models\UserProfile::where('user_id', $userId)->first();
+                $userBalance = $profile->loyalty_points ?? 0;
+
+                $pointsUsed = min((int) $validated['points_used'], $userBalance);
+                $pointsDiscount = $pointsUsed * 1000;
+
+                if ($pointsDiscount > $afterVoucher) {
+                    $pointsDiscount = $afterVoucher;
+                    $pointsUsed = (int) ceil($pointsDiscount / 1000);
+                }
+            }
+
+            $finalAmount = $afterVoucher - $pointsDiscount;
 
             $order = Order::create([
                 'user_id' => $request->session()->has('user_id') ? $request->session()->get('user_id') : null,
                 'order_code' => 'ORD-' . strtoupper(uniqid()),
                 'total_amount' => $finalAmount,
-                'discount_amount' => $discountAmount,
+                'discount_amount' => $discountAmount + $pointsDiscount,
                 'voucher_id' => $voucherId,
                 'status' => 'pending',
                 'payment_method' => $validated['payment_method'],
@@ -185,6 +241,17 @@ class OrderController extends Controller
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
                 ]);
+            }
+
+            // 3. Trừ điểm nếu sử dụng
+            if ($pointsUsed > 0 && $request->session()->has('user_id')) {
+                \App\Models\PointTransaction::deductPoints(
+                    $request->session()->get('user_id'),
+                    $pointsUsed,
+                    \App\Models\PointTransaction::TYPE_REDEEM,
+                    'Dùng ' . number_format($pointsUsed) . ' điểm cho đơn ' . $order->order_code . ' (giảm ' . number_format($pointsDiscount, 0, ',', '.') . 'đ)',
+                    $order->id
+                );
             }
 
             if ($request->session()->has('user_id')) {

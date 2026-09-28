@@ -92,7 +92,6 @@ Route::middleware([CheckAccountStatus::class])->group(function () {
 
     // Đổi điểm
     Route::get('/doi-diem', [PointTransactionController::class, 'index'])->name('user.points');
-    Route::post('/doi-diem', [PointTransactionController::class, 'redeem'])->name('user.points.redeem');
 });
 
 Route::middleware([CheckAccountStatus::class, CheckAdmin::class])
