@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Chi tiết sản phẩm - Cosmic Fashion')
 
@@ -348,7 +348,7 @@
                     </div>
                 </div>
             </div>
-            <a href="{{ route('cart') }}" class="neo-btn w-100 py-2 d-block text-center text-decoration-none rounded-3" style="font-size: 0.9rem;">XEM GIỎ HÀNG VÀ THANH TOÁN</a>
+            <a href="{{ route('cart') }}" class="btn text-white fw-bold w-100 py-2 d-block text-center text-decoration-none rounded-pill shadow-sm mt-3" style="background-color: #FF6B6B; font-size: 0.85rem; letter-spacing: 0.5px;">XEM GIỎ HÀNG VÀ THANH TOÁN</a>
         `;
 
         container.appendChild(toast);

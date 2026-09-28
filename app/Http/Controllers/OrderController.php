@@ -226,7 +226,7 @@ class OrderController extends Controller
                 'total_amount' => $finalAmount,
                 'discount_amount' => $discountAmount + $pointsDiscount,
                 'voucher_id' => $voucherId,
-                'status' => 'pending',
+                'status' => $finalAmount <= 0 ? 'paid' : 'pending',
                 'payment_method' => $validated['payment_method'],
                 'shipping_address' => $validated['shipping_address'],
                 'customer_phone' => $validated['customer_phone'],
@@ -263,6 +263,10 @@ class OrderController extends Controller
             session()->put('order', $order);
             session()->put('order_code', $order->order_code);
             session()->put('customer_phone', $order->customer_phone);
+
+            if ($finalAmount <= 0) {
+                return redirect()->route('checkout.success');
+            }
 
             return redirect()->route('payment.qr', ['order' => $order->id]);
         } catch (\Throwable $e) {

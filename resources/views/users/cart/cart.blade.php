@@ -82,10 +82,11 @@
                         @endforeach
                     @else
                         <div id="gio-hang-trong" class="text-center py-5 bg-white">
+                            <i class="bi bi-cart-x text-muted d-block mb-3" style="font-size: 3rem; opacity: 0.5;"></i>
                             <h5 class="text-secondary fw-bold mb-4">
                                 Giỏ hàng của bạn đang trống
                             </h5>
-                            <a href="{{ route('home') }}" class="neo-btn d-inline-block">
+                            <a href="{{ route('home') }}" class="btn text-white fw-bold px-4 py-2 rounded-pill shadow-sm" style="background-color: #FF6B6B; letter-spacing: 1px;">
                                 TIẾP TỤC MUA SẮM
                             </a>
                         </div>

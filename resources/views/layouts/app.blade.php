@@ -120,9 +120,9 @@
                     <h6 class="fw-bolder m-0 text-dark text-uppercase">Xác nhận</h6>
                 </div>
                 <div class="fw-medium text-dark mb-3" style="font-size: 0.9rem;">${msg}</div>
-                <div class="d-flex gap-2 justify-content-end">
-                    <button class="btn btn-outline-dark btn-sm rounded-3 px-3 fw-bold btn-huy">Hủy</button>
-                    <button class="btn btn-danger btn-sm rounded-3 px-3 fw-bold btn-xac-nhan">Đồng ý</button>
+                <div class="d-flex gap-2 justify-content-end mt-2">
+                    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-bold btn-huy" style="font-size: 0.8rem;">Hủy</button>
+                    <button class="btn text-white btn-sm rounded-pill px-3 fw-bold btn-xac-nhan" style="background-color: #FF6B6B; font-size: 0.8rem;">Đồng ý</button>
                 </div>
             `;
 

@@ -6,80 +6,77 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="neo-card">
-            <h4 class="fw-bolder mb-4 border-bottom border-dark border-2 pb-2">Tạo Mã Giảm Giá Mới</h4>
+    <div class="col-12 col-xl-8">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title"><i class="bi bi-ticket-perforated text-muted"></i> Tạo Mã Giảm Giá Mới</h2>
+            </div>
             
             <form action="{{ route('admin.vouchers.store') }}" method="POST">
                 @csrf
                 <div class="mb-4">
-                    <label class="fw-bolder mb-2 text-dark">MÃ VOUCHER (CODE)</label>
-                    <input type="text" name="code" class="form-control neo-input text-uppercase" required>
+                    <label class="form-label fw-semibold">MÃ VOUCHER (CODE)</label>
+                    <input type="text" name="code" class="form-control text-uppercase" required>
                     @error('code')
-                        <div class="text-danger mt-1 fw-bold">{{ $message }}</div>
+                        <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-4">
-                        <label class="fw-bolder mb-2 text-dark">LOẠI GIẢM GIÁ</label>
-                        <select name="discountType" class="form-select neo-input" required>
+                        <label class="form-label fw-semibold">LOẠI GIẢM GIÁ</label>
+                        <select name="discountType" class="form-select" required>
                             <option value="percent">Theo phần trăm (%)</option>
                             <option value="fixed">Số tiền cố định (VNĐ)</option>
                         </select>
                     </div>
                     <div class="col-md-6 mb-4">
-                        <label class="fw-bolder mb-2 text-dark">MỨC GIẢM GIÁ</label>
-                        <input type="number" name="discountValue" class="form-control neo-input" min="0" required>
+                        <label class="form-label fw-semibold">MỨC GIẢM GIÁ</label>
+                        <input type="number" name="discountValue" class="form-control" min="0" required>
                         @error('discountValue')
-                            <div class="text-danger mt-1 fw-bold">{{ $message }}</div>
+                            <div class="text-danger small mt-1">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-4">
-                        <label class="fw-bolder mb-2 text-dark">ĐƠN TỐI THIỂU (VNĐ)</label>
-                        <input type="number" name="minOrderValue" class="form-control neo-input" value="0" min="0">
+                        <label class="form-label fw-semibold">ĐƠN TỐI THIỂU (VNĐ)</label>
+                        <input type="number" name="minOrderValue" class="form-control" value="0" min="0">
                     </div>
                     <div class="col-md-6 mb-4">
-                        <label class="fw-bolder mb-2 text-dark">GIẢM TỐI ĐA (VNĐ - Tùy chọn)</label>
-                        <input type="number" name="maxDiscountAmount" class="form-control neo-input" min="0">
+                        <label class="form-label fw-semibold">GIẢM TỐI ĐA (VNĐ - Tùy chọn)</label>
+                        <input type="number" name="maxDiscountAmount" class="form-control" min="0">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4 mb-4">
-                        <label class="fw-bolder mb-2 text-dark">SỐ LƯỢNG MÃ</label>
-                        <input type="number" name="usageLimit" class="form-control neo-input" min="1">
+                        <label class="form-label fw-semibold">SỐ LƯỢNG MÃ</label>
+                        <input type="number" name="usageLimit" class="form-control" min="1">
+                        <small class="text-muted mt-1 d-block">Bỏ trống nếu không giới hạn.</small>
                     </div>
                     <div class="col-md-4 mb-4">
-                        <label class="fw-bolder mb-2 text-dark">NGÀY BẮT ĐẦU</label>
-                        <input type="date" name="startDate" class="form-control neo-input" required>
-                        @error('startDate')
-                            <div class="text-danger mt-1 fw-bold">{{ $message }}</div>
-                        @enderror
+                        <label class="form-label fw-semibold">NGÀY BẮT ĐẦU</label>
+                        <input type="date" name="startDate" class="form-control" required>
                     </div>
                     <div class="col-md-4 mb-4">
-                        <label class="fw-bolder mb-2 text-dark">NGÀY KẾT THÚC</label>
-                        <input type="date" name="endDate" class="form-control neo-input" required>
-                        @error('endDate')
-                            <div class="text-danger mt-1 fw-bold">{{ $message }}</div>
-                        @enderror
+                        <label class="form-label fw-semibold">NGÀY KẾT THÚC</label>
+                        <input type="date" name="endDate" class="form-control" required>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label class="fw-bolder mb-2 text-dark">TRẠNG THÁI</label>
-                    <select name="isActive" class="form-select neo-input" required>
-                        <option value="1">Kích hoạt</option>
+                    <label class="form-label fw-semibold">TRẠNG THÁI</label>
+                    <select name="isActive" class="form-select">
+                        <option value="1">Hoạt động</option>
                         <option value="0">Tạm dừng</option>
                     </select>
                 </div>
 
-                <div class="d-flex justify-content-end gap-2">
-                    <a href="{{ route('admin.vouchers.index') }}" class="neo-btn bg-secondary text-white text-decoration-none">HỦY</a>
-                    <button type="submit" class="neo-btn border-0">TẠO VOUCHER</button>
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="{{ route('admin.vouchers.index') }}" class="btn-outline-admin text-muted">HỦY BỎ</a>
+                    <button type="submit" class="btn-primary-admin px-4"><i class="bi bi-plus-lg"></i> TẠO MỚI</button>
                 </div>
             </form>
         </div>
