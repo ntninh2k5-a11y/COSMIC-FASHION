@@ -4,19 +4,19 @@
 
 @section('content')
 
-<main class="py-5 bg-white">
+<main class="py-5">
     <div class="container">
 
-        <div class="text-center mb-5 mt-3 p-4" style="background-color: #F6F5F2;">
-            <h2 class="fw-bold text-uppercase mb-2" style="letter-spacing: 1px;">
+        <div class="category-hero text-center mb-5 mt-3 position-relative overflow-hidden">
+            <h2 class="fw-bold text-uppercase mb-2 section-heading" style="letter-spacing: 1px;">
                 Kết quả tìm kiếm
             </h2>
-            <p class="text-secondary mb-0">
-                Tìm thấy <strong>{{ $ketQuaLoc->count() }}</strong> sản phẩm cho từ khóa "{{ $tuKhoa }}"
+            <p class="text-secondary mt-3 mb-0" style="font-size: 1.05rem;">
+                Tìm thấy <strong>{{ $ketQuaLoc->count() }}</strong> sản phẩm cho từ khóa "<span class="text-dark fw-bold">{{ $tuKhoa }}</span>"
             </p>
         </div>
 
-        <div class="row g-4 mb-5">
+        <div class="row g-4 mb-5 luoi-san-pham">
 
             @forelse($ketQuaLoc as $item)
                 <div class="col-6 col-md-3">

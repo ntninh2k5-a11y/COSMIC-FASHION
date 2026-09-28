@@ -50,7 +50,7 @@ class OrderController extends Controller
             ->get();
 
         if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Giỏ hàng của bạn đang trống.');
+            return redirect()->route('cart')->with('error', 'Giỏ hàng của bạn đang trống.');
         }
 
         $subtotal = $cartItems->sum(function ($item) {

@@ -15,7 +15,7 @@
             <small class="fw-bold" style="font-size: 0.7rem; color: #555; letter-spacing: 0.5px;">CREATE YOUR ACCOUNT</small>
         </div>
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('register', [], false) }}">
             @csrf
 
             <div class="mb-3">

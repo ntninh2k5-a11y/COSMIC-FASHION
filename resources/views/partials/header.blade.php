@@ -62,7 +62,7 @@
                                 @endif
                                 <li>
                                     <a class="dropdown-item py-2" href="{{ route('user.profile') }}">
-                                        Trang cá nhân
+                                        <i class="bi bi-person me-1"></i> Trang cá nhân
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider m-0"></li>
@@ -70,7 +70,7 @@
                                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                         @csrf
                                         <button type="submit" class="dropdown-item py-2 text-danger border-0 bg-transparent btn-logout">
-                                            Đăng xuất
+                                            <i class="bi bi-box-arrow-right me-1"></i> Đăng xuất
                                         </button>
                                     </form>
                                 </li>
