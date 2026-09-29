@@ -48,6 +48,9 @@
             </a>
 
             <div class="sidebar-section-label" style="margin-top:8px;">Hệ thống</div>
+            <a href="{{ route('admin.reports.index') }}" class="sidebar-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+                <i class="bi bi-bar-chart-line"></i> Báo cáo thống kê
+            </a>
             <a href="{{ route('admin.users.index') }}" class="sidebar-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                 <i class="bi bi-people"></i> Tài khoản
             </a>

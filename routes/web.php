@@ -122,6 +122,11 @@ Route::middleware([CheckAccountStatus::class, CheckAdmin::class])
         Route::get('/featured', [App\Http\Controllers\Admin\FeaturedProductController::class, 'index'])->name('featured.index');
         Route::post('/featured/{id}/toggle', [App\Http\Controllers\Admin\FeaturedProductController::class, 'toggle'])->name('featured.toggle');
         Route::post('/featured/update-order', [App\Http\Controllers\Admin\FeaturedProductController::class, 'updateOrder'])->name('featured.updateOrder');
+
+        // Báo cáo thống kê
+        Route::get('/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/export-csv', [App\Http\Controllers\Admin\ReportController::class, 'exportCSV'])->name('reports.export.csv');
+        Route::get('/reports/export-pdf', [App\Http\Controllers\Admin\ReportController::class, 'exportPDF'])->name('reports.export.pdf');
     });
 
 Route::get('/thanh-toan-qr/{order}/status', [OrderController::class, 'paymentStatus'])
