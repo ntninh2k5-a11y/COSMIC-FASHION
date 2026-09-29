@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductView;
+use Illuminate\Http\Request;
 
 class ProductDetailController extends Controller
 {
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         $product = Product::with('variants')->findOrFail($id);
+
+        // Ghi nhận lượt xem sản phẩm
+        ProductView::recordView($product->id, $request->session()->get('user_id'));
 
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)

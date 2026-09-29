@@ -110,28 +110,55 @@
             </div>
         </div>
 
+        {{-- === SẢN PHẨM ĐƯỢC XEM NHIỀU NHẤT — Carousel === --}}
         <div class="mb-5 pt-4">
-            <h2 class="fw-bold mb-4 section-heading">
-                Giảm giá
-            </h2>
-
-            <div class="row g-4 mb-5">
-                @forelse($khoSanPhamGiamGia as $sp)
-                    <div class="col-6 col-md-3">
-                        @include('partials.product_card_php', ['sp' => $sp])
-                    </div>
-                @empty
-                    <div class="text-center w-100 text-secondary">
-                        Chưa có sản phẩm giảm giá nào.
-                    </div>
-                @endforelse
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold section-heading mb-0">
+                    <i class="bi bi-fire text-danger"></i> Được xem nhiều nhất
+                </h2>
+                {{-- Carousel navigation arrows --}}
+                <div class="d-flex gap-2">
+                    <button class="btn-carousel-nav" type="button" data-bs-target="#mostViewedCarousel" data-bs-slide="prev" aria-label="Trước">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button class="btn-carousel-nav" type="button" data-bs-target="#mostViewedCarousel" data-bs-slide="next" aria-label="Sau">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
             </div>
 
-            <div class="text-center">
-                <a href="{{ route('shop.sale') }}" class="btn btn-outline-secondary rounded-0 px-4 py-2 btn-view-all">
-                    Xem tất cả các mặt hàng giảm giá
-                </a>
+            @if($sanPhamXemNhieu->count() > 0)
+            <div id="mostViewedCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+                <div class="carousel-inner">
+                    @foreach($sanPhamXemNhieu->chunk(4) as $chunkIndex => $chunk)
+                    <div class="carousel-item {{ $chunkIndex === 0 ? 'active' : '' }}">
+                        <div class="row g-4">
+                            @foreach($chunk as $sp)
+                            <div class="col-6 col-md-3">
+                                @include('partials.product_card_php', ['sp' => $sp])
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
+                {{-- Indicators --}}
+                @if($sanPhamXemNhieu->count() > 4)
+                <div class="d-flex justify-content-center gap-2 mt-4">
+                    @foreach($sanPhamXemNhieu->chunk(4) as $i => $chunk)
+                    <button type="button" data-bs-target="#mostViewedCarousel" data-bs-slide-to="{{ $i }}"
+                        class="carousel-dot {{ $i === 0 ? 'active' : '' }}" aria-label="Slide {{ $i + 1 }}"></button>
+                    @endforeach
+                </div>
+                @endif
             </div>
+            @else
+                <div class="text-center w-100 text-secondary py-5">
+                    <i class="bi bi-eye fs-1 d-block mb-3 opacity-25"></i>
+                    Chưa có dữ liệu lượt xem.
+                </div>
+            @endif
         </div>
 
     </div>

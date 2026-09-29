@@ -117,6 +117,11 @@ Route::middleware([CheckAccountStatus::class, CheckAdmin::class])
         Route::resource('footer_menus', AdminFooterMenuController::class);
         Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class);
         Route::resource('banners', App\Http\Controllers\Admin\BannerController::class);
+
+        // Sản phẩm nổi bật
+        Route::get('/featured', [App\Http\Controllers\Admin\FeaturedProductController::class, 'index'])->name('featured.index');
+        Route::post('/featured/{id}/toggle', [App\Http\Controllers\Admin\FeaturedProductController::class, 'toggle'])->name('featured.toggle');
+        Route::post('/featured/update-order', [App\Http\Controllers\Admin\FeaturedProductController::class, 'updateOrder'])->name('featured.updateOrder');
     });
 
 Route::get('/thanh-toan-qr/{order}/status', [OrderController::class, 'paymentStatus'])

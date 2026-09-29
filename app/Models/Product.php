@@ -18,7 +18,13 @@ class Product extends Model
         'discount_percent',
         'description',
         'image_url',
-        'status'
+        'status',
+        'is_featured',
+        'featured_order',
+    ];
+
+    protected $casts = [
+        'is_featured' => 'boolean',
     ];
 
     public function category()
@@ -29,5 +35,10 @@ class Product extends Model
     public function variants()
     {
         return $this->hasMany(ProductVariant::class);
+    }
+
+    public function views()
+    {
+        return $this->hasMany(ProductView::class);
     }
 }

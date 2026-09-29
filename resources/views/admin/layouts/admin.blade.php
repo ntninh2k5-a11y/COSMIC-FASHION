@@ -35,6 +35,9 @@
             <a href="{{ route('admin.banners.index') }}" class="sidebar-link {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}">
                 <i class="bi bi-images"></i> Banner
             </a>
+            <a href="{{ route('admin.featured.index') }}" class="sidebar-link {{ request()->routeIs('admin.featured.*') ? 'active' : '' }}">
+                <i class="bi bi-fire"></i> Sản phẩm nổi bật
+            </a>
 
             <div class="sidebar-section-label" style="margin-top:8px;">Giao dịch</div>
             <a href="{{ route('admin.orders.index') }}" class="sidebar-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
