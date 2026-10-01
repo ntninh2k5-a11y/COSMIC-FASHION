@@ -10,19 +10,38 @@ use Illuminate\Support\Facades\DB;
 
 class FeaturedProductController extends Controller
 {
-   
+    /**
+     * Trang quản lý sản phẩm nổi bật.
+     */
     public function index(Request $request)
     {
-    
+        // Lấy lượt xem theo product_id
         $viewCounts = ProductView::select('product_id', DB::raw('COUNT(*) as view_count'))
             ->groupBy('product_id')
             ->pluck('view_count', 'product_id');
 
-        $tab = $request->query('tab', 'all');
+        // Lọc theo tab
+        $tab = $request->query('tab', 'carousel');
 
+        // === Tính 12 sản phẩm đang thực sự hiển thị trên carousel ===
+        $carouselProducts = $this->getCarouselProducts($viewCounts);
+        $carouselIds = $carouselProducts->pluck('id')->toArray();
+
+        // Đếm số ghim tay và tự động
+        $pinnedCount = Product::where('is_featured', true)->where('status', 1)->count();
+        $autoCount = count($carouselIds) - $pinnedCount;
+        $totalViews = ProductView::count();
+
+        // Query theo tab
         $query = Product::with('category')->where('status', 1);
 
-        if ($tab === 'featured') {
+        if ($tab === 'carousel') {
+            // Hiển thị đúng 12 sản phẩm đang trên carousel, đúng thứ tự
+            if (!empty($carouselIds)) {
+                $query->whereIn('id', $carouselIds)
+                    ->orderByRaw('FIELD(id, ' . implode(',', $carouselIds) . ')');
+            }
+        } elseif ($tab === 'pinned') {
             $query->where('is_featured', true)->orderBy('featured_order', 'asc');
         } elseif ($tab === 'top-views') {
             $topIds = ProductView::select('product_id', DB::raw('COUNT(*) as vc'))
@@ -40,11 +59,60 @@ class FeaturedProductController extends Controller
 
         $products = $query->paginate(15);
 
-        // Đếm featured
-        $featuredCount = Product::where('is_featured', true)->where('status', 1)->count();
-        $totalViews = ProductView::count();
+        return view('admin.featured.index', compact(
+            'products', 'viewCounts', 'tab',
+            'pinnedCount', 'autoCount', 'totalViews',
+            'carouselIds'
+        ));
+    }
 
-        return view('admin.featured.index', compact('products', 'viewCounts', 'tab', 'featuredCount', 'totalViews'));
+    /**
+     * Lấy đúng 12 sản phẩm đang hiển thị trên carousel trang chủ.
+     * Logic giống hệt HomeController.
+     */
+    private function getCarouselProducts($viewCounts)
+    {
+        // Ưu tiên 1: Ghim tay
+        $pinned = Product::where('status', 1)
+            ->where('is_featured', true)
+            ->orderBy('featured_order', 'asc')
+            ->get();
+
+        $remaining = 12 - $pinned->count();
+        $excludeIds = $pinned->pluck('id')->toArray();
+
+        // Ưu tiên 2: Xem nhiều nhất
+        $topViewed = collect();
+        if ($remaining > 0) {
+            $topIds = ProductView::select('product_id', DB::raw('COUNT(*) as vc'))
+                ->whereNotIn('product_id', $excludeIds)
+                ->groupBy('product_id')
+                ->orderByDesc('vc')
+                ->limit($remaining)
+                ->pluck('product_id');
+
+            if ($topIds->isNotEmpty()) {
+                $topViewed = Product::where('status', 1)
+                    ->whereIn('id', $topIds)
+                    ->get()
+                    ->sortBy(fn($p) => array_search($p->id, $topIds->toArray()))
+                    ->values();
+            }
+        }
+
+        // Ưu tiên 3: Mới nhất
+        $stillRemaining = 12 - $pinned->count() - $topViewed->count();
+        $newest = collect();
+        if ($stillRemaining > 0) {
+            $allExclude = array_merge($excludeIds, $topViewed->pluck('id')->toArray());
+            $newest = Product::where('status', 1)
+                ->whereNotIn('id', $allExclude)
+                ->orderBy('id', 'desc')
+                ->take($stillRemaining)
+                ->get();
+        }
+
+        return $pinned->concat($topViewed)->concat($newest);
     }
 
     /**
@@ -55,10 +123,9 @@ class FeaturedProductController extends Controller
         $product = Product::findOrFail($id);
 
         if (!$product->is_featured) {
-            // Đếm sản phẩm featured hiện tại
             $currentFeatured = Product::where('is_featured', true)->count();
             if ($currentFeatured >= 12) {
-                return back()->with('warning', 'Tối đa 12 sản phẩm nổi bật. Hãy bỏ bớt sản phẩm khác trước.');
+                return back()->with('warning', 'Tối đa 12 sản phẩm ghim tay. Hãy bỏ bớt sản phẩm khác trước.');
             }
 
             $maxOrder = Product::where('is_featured', true)->max('featured_order') ?? 0;
@@ -71,12 +138,12 @@ class FeaturedProductController extends Controller
 
         $product->save();
 
-        $status = $product->is_featured ? 'đánh dấu nổi bật' : 'bỏ nổi bật';
+        $status = $product->is_featured ? 'ghim lên carousel' : 'bỏ ghim';
         return back()->with('success', "Đã {$status} sản phẩm \"{$product->name}\".");
     }
 
     /**
-     * Cập nhật thứ tự hiển thị (drag & drop hoặc manual).
+     * Cập nhật thứ tự hiển thị.
      */
     public function updateOrder(Request $request)
     {

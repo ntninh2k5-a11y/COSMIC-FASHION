@@ -32,7 +32,7 @@ use App\Http\Middleware\CheckAdmin;
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
-Route::post('dang-xuat', [LoginController::class, 'logout'])->name('logout');
+Route::match(['get', 'post'], 'dang-xuat', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);

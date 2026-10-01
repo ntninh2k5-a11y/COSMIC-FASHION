@@ -72,13 +72,17 @@
         <div class="admin-topbar">
             <h1 class="admin-topbar-title">@yield('page-title', 'Dashboard')</h1>
             <div class="admin-topbar-right">
+                @php $adminUser = \App\Models\User::find(session('user_id')); @endphp
                 <div class="admin-topbar-user">
-                    <div class="admin-topbar-avatar">{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</div>
-                    <span>{{ Auth::user()->name ?? 'Admin' }}</span>
+                    <div class="admin-topbar-avatar">{{ strtoupper(substr($adminUser->name ?? 'A', 0, 1)) }}</div>
+                    <span>{{ $adminUser->name ?? 'Admin' }}</span>
                 </div>
-                <a class="btn-admin-logout" href="{{ route('logout') }}">
-                    <i class="bi bi-box-arrow-right"></i> Đăng xuất
-                </a>
+                <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn-admin-logout">
+                        <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                    </button>
+                </form>
             </div>
         </div>
 

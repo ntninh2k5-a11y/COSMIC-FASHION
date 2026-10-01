@@ -19,7 +19,7 @@
 <body>
     <header>
         @include('partials.header')
-        @if(!request()->is('login', 'register', 'gio-hang*', 'thanh-toan*', 'dat-hang-thanh-cong'))
+        @if(!request()->is('login', 'register', 'email/verify*', 'gio-hang*', 'thanh-toan*', 'dat-hang-thanh-cong'))
             @include('partials.menu')
         @endif
     </header>

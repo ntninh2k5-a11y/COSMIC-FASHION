@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 class VerificationController extends Controller
 {
+    /**
+     * Hiển thị trang xác thực email.
+     */
     public function show(Request $request)
     {
         $userId = $request->session()->get('user_id');
@@ -19,13 +22,16 @@ class VerificationController extends Controller
         $user = User::find($userId);
 
         if ($user && $user->hasVerifiedEmail()) {
-            return redirect('/');
+            return redirect('/')->with('success', 'Email đã được xác thực!');
         }
 
         return view('auth.verify');
     }
 
-    public function verify(Request $request,string $id,string $hash)
+    /**
+     * Xác thực email từ link trong mail.
+     */
+    public function verify(Request $request, string $id, string $hash)
     {
         $user = User::findOrFail($id);
 
@@ -37,9 +43,20 @@ class VerificationController extends Controller
             $user->markEmailAsVerified();
         }
 
-        return redirect('/')->with('success', 'Xác thực email thành công!');
+        // Đảm bảo user đã đăng nhập session
+        if (!$request->session()->has('user_id')) {
+            $request->session()->regenerate();
+            $request->session()->put('user_id', $user->id);
+            $request->session()->put('user_role', $user->role);
+            $request->session()->put('user_name', $user->name);
+        }
+
+        return redirect('/')->with('success', 'Xác thực email thành công! Chào mừng bạn đến với Cosmic Fashion.');
     }
 
+    /**
+     * Gửi lại email xác thực.
+     */
     public function resend(Request $request)
     {
         $userId = $request->session()->get('user_id');
@@ -51,13 +68,13 @@ class VerificationController extends Controller
         $user = User::find($userId);
 
         if ($user && $user->hasVerifiedEmail()) {
-            return redirect('/');
+            return redirect('/')->with('success', 'Email đã được xác thực!');
         }
 
         if ($user) {
             $user->sendEmailVerificationNotification();
         }
 
-        return back()->with('success', 'Link xác thực mới đã được gửi vào email của bạn.');
+        return back()->with('success', 'Email xác thực mới đã được gửi! Vui lòng kiểm tra hộp thư.');
     }
 }

@@ -10,10 +10,8 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    // 1. Hiển thị form đăng ký
     public function showRegistrationForm(Request $request)
     {
-        // Chặn người đã có Session (đã đăng nhập) vào lại trang đăng ký
         if ($request->session()->has('user_id')) {
             return redirect('/');
         }
@@ -21,10 +19,8 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
-    // 2. Xử lý lưu dữ liệu khi bấm nút Đăng ký
     public function register(Request $request)
     {
-        // Bước 1: Kiểm tra tính hợp lệ của dữ liệu form
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -35,22 +31,26 @@ class RegisterController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // Bước 2: Tạo người dùng mới trong Database
+        // Tạo user mới (chưa verify email)
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user', 
+            'role' => 'user',
             'status' => 'active',
         ]);
 
-        // Bước 3: Đăng nhập tự động ngay sau khi đăng ký thành công
+        // Đăng nhập session
         $request->session()->regenerate();
         $request->session()->put('user_id', $user->id);
         $request->session()->put('user_role', $user->role);
-        $request->session()->put('user_name', $user->name); // Quan trọng để hiện tên trên Header
+        $request->session()->put('user_name', $user->name);
 
-        // Bước 4: Chuyển hướng về trang chủ
-        return redirect('/')->with('success', 'Đăng ký tài khoản thành công!');
+        // Gửi email xác thực ngay lập tức
+        $user->sendEmailVerificationNotification();
+
+        // Redirect đến trang xác thực email (KHÔNG về trang chủ)
+        return redirect()->route('verification.notice')
+            ->with('success', 'Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.');
     }
 }
