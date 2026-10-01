@@ -16,6 +16,7 @@ class Cart extends Model
         'product_id',
         'variant_id',
         'quantity',
+        'image_url',
     ];
 
     protected $casts = [

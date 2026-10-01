@@ -10,7 +10,7 @@ class ProductDetailController extends Controller
 {
     public function show(Request $request, int $id)
     {
-        $product = Product::with('variants')->findOrFail($id);
+        $product = Product::with(['variants', 'images'])->findOrFail($id);
 
         // Ghi nhận lượt xem sản phẩm
         ProductView::recordView($product->id, $request->session()->get('user_id'));

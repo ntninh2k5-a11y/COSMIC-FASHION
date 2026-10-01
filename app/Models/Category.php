@@ -32,4 +32,13 @@ class Category extends Model
     {
         return $this->belongsTo(Category::class, 'parent_id');
     }
+
+    public function getAllDescendantIds()
+    {
+        $ids = [$this->id];
+        foreach ($this->children as $child) {
+            $ids = array_merge($ids, $child->getAllDescendantIds());
+        }
+        return $ids;
+    }
 }

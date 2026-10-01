@@ -41,4 +41,9 @@ class Product extends Model
     {
         return $this->hasMany(ProductView::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('order');
+    }
 }

@@ -54,8 +54,11 @@ class ProductController extends Controller
 
     public function byCategory(int $categoryId, string $view)
     {
+        $category = \App\Models\Category::find($categoryId);
+        $allCategoryIds = $category ? $category->getAllDescendantIds() : [$categoryId];
+
         $products = Product::with('variants')
-            ->where('category_id', $categoryId)
+            ->whereIn('category_id', $allCategoryIds)
             ->where('status', 1)
             ->get();
 

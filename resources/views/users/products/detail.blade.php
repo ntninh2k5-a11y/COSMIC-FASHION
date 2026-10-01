@@ -21,29 +21,34 @@
         <div class="row g-4">
             
             <div class="col-md-6 mb-4 mb-md-0">
-                <div class="d-flex gap-2">
-                    <div class="d-none d-md-flex flex-column gap-2" style="width: 64px; flex-shrink: 0;">
-                        <div class="khung-thumb dang-chon">
-                            <img src="{{ asset($product->image_url ?? 'images/default.jpg') }}" class="w-100 h-100" style="object-fit: cover;" alt="thumb">
-                        </div>
-                        <div class="khung-thumb">
-                            <img src="{{ asset($product->image_url ?? 'images/default.jpg') }}" class="w-100 h-100" style="object-fit: cover;" alt="thumb">
-                        </div>
-                        <div class="khung-thumb">
-                            <img src="{{ asset($product->image_url ?? 'images/default.jpg') }}" class="w-100 h-100" style="object-fit: cover;" alt="thumb">
-                        </div>
-                        <div class="khung-thumb">
-                            <img src="{{ asset($product->image_url ?? 'images/default.jpg') }}" class="w-100 h-100" style="object-fit: cover;" alt="thumb">
-                        </div>
+                @php
+                    $allImages = collect([['url' => $product->image_url]]);
+                    if ($product->images && $product->images->count() > 0) {
+                        foreach($product->images as $img) {
+                            $allImages->push(['url' => $img->image_url]);
+                        }
+                    }
+                    // If only 1 image, duplicate it a bit to show the feature for now, or just show whatever is there.
+                    if ($allImages->count() == 1) {
+                        for($i=0; $i<3; $i++) $allImages->push(['url' => $product->image_url]);
+                    }
+                @endphp
+                <div class="d-flex gap-2 align-items-stretch">
+                    <div class="d-none d-md-flex flex-column gap-2" style="width: 100px; flex-shrink: 0;" id="productThumbnails">
+                        @foreach($allImages as $index => $img)
+                            <div class="khung-thumb {{ $index === 0 ? 'dang-chon' : '' }} w-100" style="flex: 1; height: 0; cursor: pointer; border-radius: 12px; overflow: hidden; border: 2px solid transparent;" onclick="changeMainImage({{ $index }}, '{{ asset($img['url']) }}', this)">
+                                <img src="{{ asset($img['url']) }}" class="w-100 h-100" style="object-fit: cover;" alt="thumb {{ $index }}">
+                            </div>
+                        @endforeach
                     </div>
                     
-                    <div class="khung-anh-chinh flex-grow-1 position-relative">
+                    <div class="khung-anh-chinh flex-grow-1 position-relative rounded overflow-hidden">
                         @if($product->discount_percent > 0)
                             <span class="position-absolute top-0 end-0 m-2 badge bg-danger rounded-1" style="z-index: 10; font-size: 0.85rem;">
                                 -{{ $product->discount_percent }}%
                             </span>
                         @endif
-                        <img src="{{ asset($product->image_url ?? 'images/default.jpg') }}" class="anh-cover" alt="{{ $product->name }}">
+                        <img src="{{ asset($allImages[0]['url']) }}" id="mainProductImage" class="anh-cover w-100" style="object-fit: cover; transition: opacity 0.3s ease-in-out;" alt="{{ $product->name }}">
                     </div>
                 </div>
             </div>
@@ -51,23 +56,23 @@
             <div class="col-md-6 d-flex flex-column">
                 
 
-                <div class="d-flex align-items-baseline gap-2 mb-1">
+                <div class="d-flex align-items-baseline gap-2 mb-2">
                     @if($product->discount_percent > 0)
-                        <div class="gia-sp">{{ number_format($product->sale_price, 0, ',', '.') }}đ</div>
-                        <del class="text-secondary fs-5">{{ number_format($product->price, 0, ',', '.') }}đ</del>
+                        <div class="gia-sp fw-bolder text-danger" style="font-size: 2rem;">{{ number_format($product->sale_price, 0, ",", ".") }}đ</div>
+                        <del class="text-secondary" style="font-size: 1.2rem;">{{ number_format($product->price, 0, ",", ".") }}đ</del>
+                        <span class="badge bg-danger rounded-1 ms-1 px-2 py-1" style="font-size: 0.9rem;">-{{ $product->discount_percent }}%</span>
                     @else
-                        <div class="gia-sp">{{ number_format($product->price, 0, ',', '.') }}đ</div>
+                        <div class="gia-sp fw-bolder text-danger" style="font-size: 2rem;">{{ number_format($product->price, 0, ",", ".") }}đ</div>
                     @endif
                 </div>
                 
-                <h1 class="tieu-de-sp mb-1">{{ $product->name }}</h1>
-                <div class="sku-sp mb-4">Mã SP: SP{{ str_pad($product->id, 5, '0', STR_PAD_LEFT) }}</div>
-
+                <h1 class="tieu-de-sp mb-4 text-dark" style="font-size: 1.6rem; font-weight: 500;">{{ $product->name }}</h1>
+                
                 @if(count($colors) > 0)
                     <div class="mb-4">
-                        <div class="d-flex align-items-center mb-2">
-                            <span class="text-dark" style="font-size: 0.95rem;">Màu sắc: </span>
-                            <span class="ms-1 fw-bold text-dark" id="ten-mau-hien-thi"></span>
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="text-dark" style="font-size: 1rem;">Màu sắc: </span>
+                            <span class="ms-1 text-dark" id="ten-mau-hien-thi"></span>
                         </div>
                         <div class="d-flex gap-2 flex-wrap align-items-center">
                             @foreach($colors as $color)
@@ -84,12 +89,11 @@
 
                 @if(count($sizes) > 0)
                     <div class="mb-4">
-                        <div class="d-flex justify-content-between align-items-end mb-2">
+                        <div class="d-flex justify-content-between align-items-end mb-3">
                             <div>
-                                <span class="text-dark" style="font-size: 0.95rem;">Kích thước: </span>
-                                <span class="ms-1 fw-bold text-dark" id="ten-size-hien-thi"></span>
+                                <span class="text-dark" style="font-size: 1rem;">Kích thước: </span>
+                                <span class="ms-1 text-dark" id="ten-size-hien-thi"></span>
                             </div>
-                            <a href="#" class="text-decoration-none" style="font-size: 0.85rem; color: #4b5563;">Hướng dẫn chọn size</a>
                         </div>
                         <div class="d-flex gap-2 flex-wrap">
                             @foreach($sizes as $size)
@@ -101,26 +105,18 @@
                     </div>
                 @endif
 
-                <div class="d-flex gap-3 align-items-center mb-3">
-                    <div class="khung-so-luong">
-                        <button onclick="thayDoiSoLuong(-1)" class="nut-so-luong fs-5">-</button>
-                        <div id="hien-thi-so-luong" class="so-luong-hien-thi">1</div>
-                        <button onclick="thayDoiSoLuong(1)" class="nut-so-luong fs-5">+</button>
+                <div class="d-flex gap-3 align-items-center mt-3 mb-5">
+                    <div class="khung-so-luong bg-white border rounded-pill py-2 px-3 d-flex align-items-center justify-content-between shadow-sm" style="width: 140px; height: 52px;">
+                        <button onclick="thayDoiSoLuong(-1)" class="nut-so-luong fs-4 border-0 bg-transparent text-secondary d-flex align-items-center justify-content-center" style="width:30px;">-</button>
+                        <div id="hien-thi-so-luong" class="so-luong-hien-thi fw-medium fs-5">1</div>
+                        <button onclick="thayDoiSoLuong(1)" class="nut-so-luong fs-4 border-0 bg-transparent text-secondary d-flex align-items-center justify-content-center" style="width:30px;">+</button>
                     </div>
                     
-                    <button onclick="themVaoGio()" class="nut-them-gio flex-grow-1 h-100 d-flex align-items-center justify-content-center gap-2" style="height: 48px;">
+                    <button onclick="themVaoGio()" class="nut-them-gio flex-grow-1 h-100 d-flex align-items-center justify-content-center gap-2 text-white fw-medium border-0 rounded-pill shadow-sm" style="height: 52px; background-color: #FF6B6B; font-size: 1.1rem; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                         Thêm vào giỏ 
                         <i class="bi bi-bag"></i>
                     </button>
                 </div>
-                
-                <div class="text-center mb-4">
-                    <a href="#" class="text-decoration-none" style="font-size: 0.85rem; color: #5046e5;">
-                        <i class="bi bi-shop me-1"></i>
-                        Xem cửa hàng còn sản phẩm
-                    </a>
-                </div>
-
                 <div class="border-top pt-3">
                     <div class="d-flex align-items-center gap-1 fw-bold mb-3" style="font-size: 0.9rem;">
                         COSMIC cam kết <i class="bi bi-check-circle-fill" style="color:#10b981;"></i>
@@ -269,10 +265,23 @@
             }
         }
 
+        const currentImageUrl = document.getElementById('mainProductImage').src;
+        // Chuyển URL tuyệt đối thành relative path (bỏ đi phần domain của asset())
+        // Hoặc gửi nguyên cục cũng được, nhưng tốt nhất gửi URL đầy đủ
+        // Tuy nhiên `asset` trả về URL tuyệt đối, khi hiện lại ở giỏ hàng,
+        // nếu gắn `asset(image_url)` vào URL tuyệt đối thì sẽ bị lỗi
+        // Nên dùng URL tương đối.
+        const originUrl = window.location.origin;
+        let relativeImg = currentImageUrl;
+        if(currentImageUrl.startsWith(originUrl)) {
+            relativeImg = currentImageUrl.replace(originUrl + '/', '');
+        }
+
         const payload = {
             product_id: sanPhamHienTai.id,
             variant_id: variantId,
-            quantity: soLuong
+            quantity: soLuong,
+            image_url: relativeImg
         };
 
         fetch('/them-vao-gio', {
@@ -299,7 +308,8 @@
                 if (sizeChon) variantText.push(sizeChon);
                 const variantStr = variantText.join(' / ');
 
-                showCartToast(sanPhamHienTai.name, sanPhamHienTai.image, variantStr, sanPhamHienTai.priceNum, soLuong);
+                const currentImageUrl = document.getElementById('mainProductImage').src;
+                showCartToast(sanPhamHienTai.name, currentImageUrl, variantStr, sanPhamHienTai.priceNum, soLuong);
                 window.dispatchEvent(new Event('cartUpdated')); 
             } else {
                 showErrorToast(data.message);
@@ -407,6 +417,27 @@
         toast.style.transform = 'translateX(120%)';
         toast.style.opacity = '0';
         setTimeout(() => toast.remove(), 300);
+    }
+
+    // --- LOGIC SLIDER ẢNH ---
+    const thumbnails = document.querySelectorAll('#productThumbnails .khung-thumb');
+    const mainImage = document.getElementById('mainProductImage');
+
+    function changeMainImage(index, url, thumbElement) {
+        // Cập nhật ảnh chính với hiệu ứng fade
+        mainImage.style.opacity = '0';
+        setTimeout(() => {
+            mainImage.src = url;
+            mainImage.style.opacity = '1';
+        }, 150); // Đợi mờ 1 nửa mới đổi src
+        
+        // Đổi class dang-chon
+        thumbnails.forEach(t => t.classList.remove('dang-chon'));
+        if (thumbElement) {
+            thumbElement.classList.add('dang-chon');
+        } else if (thumbnails[index]) {
+            thumbnails[index].classList.add('dang-chon');
+        }
     }
 </script>
 @endpush

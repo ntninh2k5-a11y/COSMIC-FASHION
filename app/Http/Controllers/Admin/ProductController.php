@@ -78,6 +78,20 @@ class ProductController extends Controller
             }
         }
 
+        // --- XỬ LÝ ẢNH GALLERY (Nhiều ảnh) ---
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $index => $galleryImage) {
+                $galleryImageName = time() . '_' . rand(100,999) . '_' . Str::slug($request->name) . '.' . $galleryImage->getClientOriginalExtension();
+                $galleryImage->move(public_path('uploads/products'), $galleryImageName);
+                
+                \App\Models\ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_url'  => 'uploads/products/' . $galleryImageName,
+                    'order'      => $index + 1
+                ]);
+            }
+        }
+
         return redirect()->route('admin.products.index')
                          ->with('success', 'Thêm sản phẩm thành công!');
     }
@@ -158,6 +172,31 @@ class ProductController extends Controller
                         'stock_quantity'  => $variant['stock_quantity'] ?? 0,
                     ]);
                 }
+            }
+        }
+
+        // Xoá ảnh gallery cũ nếu chọn
+        if ($request->has('delete_gallery') && $request->delete_gallery == '1') {
+            foreach ($product->images as $img) {
+                if (file_exists(public_path($img->image_url))) {
+                    unlink(public_path($img->image_url));
+                }
+            }
+            $product->images()->delete();
+        }
+
+        // Upload gallery mới
+        if ($request->hasFile('gallery_images')) {
+            $currentMaxOrder = $product->images()->max('order') ?? 0;
+            foreach ($request->file('gallery_images') as $index => $galleryImage) {
+                $galleryImageName = time() . '_' . rand(100,999) . '_' . Str::slug($request->name) . '.' . $galleryImage->getClientOriginalExtension();
+                $galleryImage->move(public_path('uploads/products'), $galleryImageName);
+                
+                \App\Models\ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_url'  => 'uploads/products/' . $galleryImageName,
+                    'order'      => $currentMaxOrder + $index + 1
+                ]);
             }
         }
 

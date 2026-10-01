@@ -59,13 +59,19 @@
                     </div>
 
                     <div class="col-md-4">
-                        <div class="mb-3">
-                            <label class="form-label">Ảnh sản phẩm</label>
+                        <div class="p-3 border rounded mb-3 bg-light">
+                            <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-image"></i> Ảnh sản phẩm CHÍNH</h6>
                             <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" accept="image/*" onchange="previewImage(event)">
                             @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             <div class="mt-3">
-                                <img id="preview" src="#" style="max-width: 100%; display: none; border-radius: 8px;">
+                                <img id="preview" src="#" style="max-width: 100%; display: none; border-radius: 8px; border: 1px solid #ddd;">
                             </div>
+                        </div>
+
+                        <div class="p-3 border rounded mb-3 bg-light">
+                            <h6 class="fw-bold mb-3 text-secondary"><i class="bi bi-images"></i> Ảnh sản phẩm PHỤ (Gallery)</h6>
+                            <input type="file" name="gallery_images[]" class="form-control" accept="image/*" multiple>
+                            <small class="text-muted d-block mt-1">Có thể chọn nhiều ảnh cùng lúc để làm ảnh phụ.</small>
                         </div>
 
                         <div class="mb-3">

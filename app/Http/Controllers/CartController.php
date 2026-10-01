@@ -73,6 +73,7 @@ class CartController extends Controller
                 },
             ],
             'quantity' => 'required|integer|min:1',
+            'image_url' => 'nullable|string',
         ]);
 
         $userId = $request->session()->get('user_id');
@@ -87,6 +88,7 @@ class CartController extends Controller
         $cartItem = Cart::where('user_id', $userId)
             ->where('product_id', $validated['product_id'])
             ->where('variant_id', $validated['variant_id'])
+            ->where('image_url', $request->input('image_url')) // Khác ảnh thì xem như là 1 mục khác trong giỏ hàng
             ->first();
 
         if ($cartItem) {
@@ -97,6 +99,7 @@ class CartController extends Controller
                 'product_id' => $validated['product_id'],
                 'variant_id' => $validated['variant_id'] ?? null,
                 'quantity' => $validated['quantity'],
+                'image_url' => $request->input('image_url'),
             ]);
         }
 

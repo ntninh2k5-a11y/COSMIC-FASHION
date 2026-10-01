@@ -25,7 +25,7 @@
                                  data-id="{{ $item->id }}" 
                                  data-price="{{ $item->product->discount_percent > 0 ? $item->product->sale_price : $item->product->price }}">
                                  
-                                <img src="{{ asset($item->product->image_url ?? 'images/default.jpg') }}"
+                                <img src="{{ asset($item->image_url ?? $item->product->image_url ?? 'images/default.jpg') }}"
                                      alt="{{ $item->product->name }}"
                                      class="anh-sp-gio border rounded-3 shadow-sm"
                                      style="width: 100px; height: 100px; object-fit: cover;">

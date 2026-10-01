@@ -28,6 +28,7 @@
             <input type="hidden" name="cart_items[{{ $index }}][variant_id]" value="{{ $item->variant_id }}">
             <input type="hidden" name="cart_items[{{ $index }}][quantity]" value="{{ $item->quantity }}">
             <input type="hidden" name="cart_items[{{ $index }}][price]" value="{{ $item->product->discount_percent > 0 ? $item->product->sale_price : $item->product->price }}">
+            <input type="hidden" name="cart_items[{{ $index }}][image_url]" value="{{ $item->image_url }}">
         @endforeach
 
         <div class="row g-4">
@@ -127,7 +128,7 @@
                         @foreach($cartItems as $item)
                             <div class="d-flex align-items-center mb-4 pb-3 border-bottom border-light">
                                 <div class="position-relative">
-                                    <img src="{{ asset($item->product->image_url ?? 'images/default.jpg') }}" alt="{{ $item->product->name }}" class="rounded-3 shadow-sm border" style="width: 65px; height: 65px; object-fit: cover;">
+                                    <img src="{{ asset($item->image_url ?? $item->product->image_url ?? 'images/default.jpg') }}" alt="{{ $item->product->name }}" class="rounded-3 shadow-sm border" style="width: 65px; height: 65px; object-fit: cover;">
                                 </div>
                                 <div class="flex-grow-1 ms-3">
                                     <div class="fw-bold text-dark mb-1" style="font-size: 0.95rem; line-height: 1.3;">{{ $item->product->name }}</div>

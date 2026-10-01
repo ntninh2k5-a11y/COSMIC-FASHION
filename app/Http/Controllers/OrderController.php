@@ -161,6 +161,7 @@ class OrderController extends Controller
             'cart_items.*.quantity' => 'required|integer|min:1',
             'cart_items.*.price' => 'required|numeric|min:0',
             'cart_items.*.variant_id' => 'nullable|integer',
+            'cart_items.*.image_url' => 'nullable|string',
         ]);
 
         DB::beginTransaction();
@@ -240,6 +241,7 @@ class OrderController extends Controller
                     'variant_id' => $item['variant_id'] ?? null,
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
+                    'image_url' => $item['image_url'] ?? null,
                 ]);
             }
 

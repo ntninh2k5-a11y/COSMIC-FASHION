@@ -32,7 +32,7 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center gap-3">
-                                        <img src="{{ $item->product && $item->product->image_url ? asset($item->product->image_url) : 'https://via.placeholder.com/50' }}"
+                                        <img src="{{ asset($item->image_url ?? ($item->product->image_url ?? 'images/default.jpg')) }}"
                                              style="width:52px;height:52px;object-fit:cover;border-radius:10px;border:1px solid #f0f0f0;"
                                              alt="">
                                         <div>

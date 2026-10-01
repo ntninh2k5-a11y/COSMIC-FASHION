@@ -50,7 +50,7 @@
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center gap-3">
-                                    <img src="{{ $item->product && $item->product->image_url ? asset($item->product->image_url) : 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=100' }}" 
+                                    <img src="{{ asset($item->image_url ?? ($item->product->image_url ?? 'images/default.jpg')) }}" 
                                          alt="" 
                                          style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #f0f0f0;">
                                     <div class="fw-bolder text-dark">{{ $item->product ? $item->product->name : 'Sản phẩm' }}</div>

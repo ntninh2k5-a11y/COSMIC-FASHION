@@ -29,9 +29,11 @@ class CategoryController extends Controller
     {
         $category = Category::where('slug', $slug)->where('status', 1)->firstOrFail();
         
+        $allCategoryIds = $category->getAllDescendantIds();
+
         if ($category->id == 10 || $category->slug === 'sale' || $category->slug === 'uu-dai-dac-biet') {
             $saleProducts = Product::with('variants')
-                ->where('category_id', $category->id)
+                ->whereIn('category_id', $allCategoryIds)
                 ->where('status', 1)
                 ->get();
 
@@ -43,7 +45,7 @@ class CategoryController extends Controller
         }
 
         $products = Product::with('variants')
-            ->where('category_id', $category->id)
+            ->whereIn('category_id', $allCategoryIds)
             ->where('status', 1)
             ->get();
 
