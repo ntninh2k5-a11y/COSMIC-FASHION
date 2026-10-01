@@ -47,6 +47,10 @@
     </div>
     @endif
 
+    <div class="container-fluid px-0">
+        <div style="height: 1px; background-color: #eaeaea; margin-top: -3rem; margin-bottom: 3rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"></div>
+    </div>
+
     <div class="container">
 
         <div class="row mb-5 g-1">
