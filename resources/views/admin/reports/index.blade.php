@@ -3,6 +3,16 @@
 @section('page-title', 'Báo cáo & Thống kê')
 @section('content')
 
+@push('styles')
+<style>
+    .active-filter {
+        background-color: #FF6B6B;
+        border-color: #FF6B6B;
+        color: #fff !important;
+        box-shadow: 0 4px 10px rgba(255,107,107,0.3);
+    }
+</style>
+@endpush
 {{-- DATE RANGE FILTER --}}
 <div class="admin-card" style="padding:16px 24px;">
     <form method="GET" action="{{ route('admin.reports.index') }}" class="d-flex align-items-center gap-3 flex-wrap">
@@ -17,11 +27,21 @@
         <button type="submit" class="btn-primary-admin"><i class="bi bi-funnel"></i> Lọc</button>
 
         {{-- Quick filters --}}
+        @php
+            $today = \Carbon\Carbon::today()->toDateString();
+            $sevenDaysAgo = \Carbon\Carbon::today()->subDays(6)->toDateString();
+            $monthStart = \Carbon\Carbon::today()->startOfMonth()->toDateString();
+            $yearStart = \Carbon\Carbon::today()->startOfYear()->toDateString();
+        @endphp
         <div class="d-flex gap-2 ms-auto">
-            <a href="{{ route('admin.reports.index', ['from' => now()->toDateString(), 'to' => now()->toDateString()]) }}" class="btn-outline-admin" style="font-size:0.8rem;padding:6px 14px;">Hôm nay</a>
-            <a href="{{ route('admin.reports.index', ['from' => now()->subDays(7)->toDateString(), 'to' => now()->toDateString()]) }}" class="btn-outline-admin" style="font-size:0.8rem;padding:6px 14px;">7 ngày</a>
-            <a href="{{ route('admin.reports.index', ['from' => now()->startOfMonth()->toDateString(), 'to' => now()->toDateString()]) }}" class="btn-outline-admin" style="font-size:0.8rem;padding:6px 14px;">Tháng này</a>
-            <a href="{{ route('admin.reports.index', ['from' => now()->startOfYear()->toDateString(), 'to' => now()->toDateString()]) }}" class="btn-outline-admin" style="font-size:0.8rem;padding:6px 14px;">Năm nay</a>
+            <a href="{{ route('admin.reports.index', ['from' => $today, 'to' => $today]) }}"
+               class="btn-outline-admin {{ ($from == $today && $to == $today) ? 'active-filter' : '' }}" style="font-size:0.8rem;padding:6px 14px;">Hôm nay</a>
+            <a href="{{ route('admin.reports.index', ['from' => $sevenDaysAgo, 'to' => $today]) }}"
+               class="btn-outline-admin {{ ($from == $sevenDaysAgo && $to == $today) ? 'active-filter' : '' }}" style="font-size:0.8rem;padding:6px 14px;">7 ngày</a>
+            <a href="{{ route('admin.reports.index', ['from' => $monthStart, 'to' => $today]) }}"
+               class="btn-outline-admin {{ ($from == $monthStart && $to == $today) ? 'active-filter' : '' }}" style="font-size:0.8rem;padding:6px 14px;">Tháng này</a>
+            <a href="{{ route('admin.reports.index', ['from' => $yearStart, 'to' => $today]) }}"
+               class="btn-outline-admin {{ ($from == $yearStart && $to == $today) ? 'active-filter' : '' }}" style="font-size:0.8rem;padding:6px 14px;">Năm nay</a>
         </div>
     </form>
 </div>

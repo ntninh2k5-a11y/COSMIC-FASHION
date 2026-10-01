@@ -37,6 +37,10 @@
                                 <span class="badge-status badge-admin">
                                     <i class="bi bi-shield-check" style="font-size:0.7rem;"></i> Quản trị viên
                                 </span>
+                            @elseif($user->isStaff())
+                                <span class="badge-status badge-processing">
+                                    <i class="bi bi-person-badge" style="font-size:0.7rem;"></i> Nhân viên
+                                </span>
                             @else
                                 <span class="badge-status badge-inactive">
                                     <i class="bi bi-person" style="font-size:0.7rem;"></i> Khách hàng

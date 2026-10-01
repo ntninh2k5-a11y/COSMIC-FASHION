@@ -43,20 +43,24 @@
             <a href="{{ route('admin.orders.index') }}" class="sidebar-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
                 <i class="bi bi-receipt"></i> Đơn hàng
             </a>
+            @if(session('user_role') === 'admin')
             <a href="{{ route('admin.vouchers.index') }}" class="sidebar-link {{ request()->routeIs('admin.vouchers.*') ? 'active' : '' }}">
                 <i class="bi bi-ticket-perforated"></i> Voucher
             </a>
+            @endif
 
             <div class="sidebar-section-label" style="margin-top:8px;">Hệ thống</div>
             <a href="{{ route('admin.reports.index') }}" class="sidebar-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
                 <i class="bi bi-bar-chart-line"></i> Báo cáo thống kê
             </a>
+            @if(session('user_role') === 'admin')
             <a href="{{ route('admin.users.index') }}" class="sidebar-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                 <i class="bi bi-people"></i> Tài khoản
             </a>
             <a href="{{ route('admin.footer_menus.index') }}" class="sidebar-link {{ request()->routeIs('admin.footer_menus.*') ? 'active' : '' }}">
                 <i class="bi bi-layout-text-sidebar"></i> Chân trang
             </a>
+            @endif
         </nav>
 
         <div class="sidebar-footer">
@@ -76,6 +80,11 @@
                 <div class="admin-topbar-user">
                     <div class="admin-topbar-avatar">{{ strtoupper(substr($adminUser->name ?? 'A', 0, 1)) }}</div>
                     <span>{{ $adminUser->name ?? 'Admin' }}</span>
+                    @if(session('user_role') === 'admin')
+                        <span class="badge-status badge-completed" style="font-size:0.65rem;">Admin</span>
+                    @elseif(session('user_role') === 'staff')
+                        <span class="badge-status badge-processing" style="font-size:0.65rem;">Staff</span>
+                    @endif
                 </div>
                 <form action="{{ route('logout') }}" method="POST" class="d-inline">
                     @csrf

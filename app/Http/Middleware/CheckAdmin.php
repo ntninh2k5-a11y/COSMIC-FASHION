@@ -8,10 +8,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckAdmin
 {
+    /**
+     * Cho phép admin và staff truy cập khu vực quản trị.
+     */
     public function handle(Request $request, Closure $next): Response
     {
-        // Kiểm tra Session thay vì Auth::check()
-        if ($request->session()->has('user_id') && $request->session()->get('user_role') === 'admin') {
+        $role = $request->session()->get('user_role');
+
+        if ($request->session()->has('user_id') && in_array($role, ['admin', 'staff'])) {
             return $next($request);
         }
 

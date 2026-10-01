@@ -62,8 +62,8 @@ class LoginController extends Controller
                     ->with('success', 'Vui lòng xác thực email để tiếp tục. Chúng tôi đã gửi email xác thực cho bạn.');
             }
 
-            // Admin → dashboard
-            if ($user->role === 'admin') {
+            // Admin hoặc Staff → dashboard
+            if (in_array($user->role, ['admin', 'staff'])) {
                 return redirect('/admin/dashboard');
             }
 

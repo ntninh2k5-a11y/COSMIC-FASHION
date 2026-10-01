@@ -51,7 +51,7 @@ class GoogleLoginController extends Controller
             $request->session()->put('user_name', $user->name);
             $request->session()->put('user_role', $user->role);
 
-            if ($user->role === 'admin') {
+            if (in_array($user->role, ['admin', 'staff'])) {
                 return redirect('/admin/dashboard');
             }
             

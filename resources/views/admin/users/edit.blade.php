@@ -63,6 +63,7 @@
                         <label class="form-label fw-semibold">Vai trò</label>
                         <select name="role" class="form-select">
                             <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>Khách hàng</option>
+                            <option value="staff" {{ $user->role == 'staff' ? 'selected' : '' }}>Nhân viên</option>
                             <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Quản trị viên</option>
                         </select>
                     </div>

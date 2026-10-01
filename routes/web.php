@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\FooterMenuController as AdminFooterMenuController
 
 use App\Http\Middleware\CheckAccountStatus;
 use App\Http\Middleware\CheckAdmin;
+use App\Http\Middleware\CheckAdminOnly;
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
@@ -99,6 +100,7 @@ Route::middleware([CheckAccountStatus::class, CheckAdmin::class])
     ->name('admin.')
     ->group(function () {
         
+        // === Cả Admin & Staff đều truy cập được ===
         Route::get('/dashboard', [AdminHomeController::class, 'index'])->name('dashboard');
         
         Route::resource('categories', AdminCategoryController::class);
@@ -108,14 +110,6 @@ Route::middleware([CheckAccountStatus::class, CheckAdmin::class])
         Route::get('/orders/{id}', [AdminOrderController::class, 'show'])->name('orders.show');
         Route::put('/orders/{id}', [AdminOrderController::class, 'update'])->name('orders.update');
 
-        Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
-        Route::get('/users/{id}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
-        Route::put('/users/{id}', [AdminUserController::class, 'update'])->name('users.update');
-        Route::put('/users/{id}/lock', [AdminUserController::class, 'toggleLock'])->name('users.lock');
-        Route::delete('/users/{userId}/addresses/{addressId}', [AdminUserController::class, 'destroyAddress'])->name('users.addresses.destroy');
-        
-        Route::resource('footer_menus', AdminFooterMenuController::class);
-        Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class);
         Route::resource('banners', App\Http\Controllers\Admin\BannerController::class);
 
         // Sản phẩm nổi bật
@@ -123,10 +117,22 @@ Route::middleware([CheckAccountStatus::class, CheckAdmin::class])
         Route::post('/featured/{id}/toggle', [App\Http\Controllers\Admin\FeaturedProductController::class, 'toggle'])->name('featured.toggle');
         Route::post('/featured/update-order', [App\Http\Controllers\Admin\FeaturedProductController::class, 'updateOrder'])->name('featured.updateOrder');
 
-        // Báo cáo thống kê
+        // Báo cáo thống kê (Admin + Staff)
         Route::get('/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/export-csv', [App\Http\Controllers\Admin\ReportController::class, 'exportCSV'])->name('reports.export.csv');
         Route::get('/reports/export-pdf', [App\Http\Controllers\Admin\ReportController::class, 'exportPDF'])->name('reports.export.pdf');
+
+        // === Chỉ Admin mới truy cập được ===
+        Route::middleware([CheckAdminOnly::class])->group(function () {
+            Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+            Route::get('/users/{id}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+            Route::put('/users/{id}', [AdminUserController::class, 'update'])->name('users.update');
+            Route::put('/users/{id}/lock', [AdminUserController::class, 'toggleLock'])->name('users.lock');
+            Route::delete('/users/{userId}/addresses/{addressId}', [AdminUserController::class, 'destroyAddress'])->name('users.addresses.destroy');
+            
+            Route::resource('footer_menus', AdminFooterMenuController::class);
+            Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class);
+        });
     });
 
 Route::get('/thanh-toan-qr/{order}/status', [OrderController::class, 'paymentStatus'])

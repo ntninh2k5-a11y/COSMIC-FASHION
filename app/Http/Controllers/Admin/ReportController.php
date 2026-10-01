@@ -19,7 +19,8 @@ class ReportController extends Controller
      */
     public function index(Request $request)
     {
-        $from = $request->query('from', now()->startOfMonth()->toDateString());
+        // Mặc định: 30 ngày gần nhất (thay vì đầu tháng hiện tại)
+        $from = $request->query('from', now()->subDays(30)->toDateString());
         $to   = $request->query('to', now()->toDateString());
 
         $fromDate = \Carbon\Carbon::parse($from)->startOfDay();

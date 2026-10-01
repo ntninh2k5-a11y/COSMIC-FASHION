@@ -42,7 +42,7 @@ class UserController extends Controller
         
         $request->validate([
             'name' => 'required|string|max:255',
-            'role' => 'required|in:admin,user',
+            'role' => 'required|in:admin,staff,user',
             'full_name' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
             'date_of_birth' => 'nullable|date',
