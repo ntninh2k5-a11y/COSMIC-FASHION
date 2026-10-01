@@ -27,21 +27,23 @@
         <button type="submit" class="btn-primary-admin"><i class="bi bi-funnel"></i> Lọc</button>
 
         {{-- Quick filters --}}
-        @php
+                @php
             $today = \Carbon\Carbon::today()->toDateString();
             $sevenDaysAgo = \Carbon\Carbon::today()->subDays(6)->toDateString();
             $monthStart = \Carbon\Carbon::today()->startOfMonth()->toDateString();
             $yearStart = \Carbon\Carbon::today()->startOfYear()->toDateString();
+            
+            $reqRange = request('range');
         @endphp
         <div class="d-flex gap-2 ms-auto">
-            <a href="{{ route('admin.reports.index', ['from' => $today, 'to' => $today]) }}"
-               class="btn-outline-admin {{ ($from == $today && $to == $today) ? 'active-filter' : '' }}" style="font-size:0.8rem;padding:6px 14px;">Hôm nay</a>
-            <a href="{{ route('admin.reports.index', ['from' => $sevenDaysAgo, 'to' => $today]) }}"
-               class="btn-outline-admin {{ ($from == $sevenDaysAgo && $to == $today) ? 'active-filter' : '' }}" style="font-size:0.8rem;padding:6px 14px;">7 ngày</a>
-            <a href="{{ route('admin.reports.index', ['from' => $monthStart, 'to' => $today]) }}"
-               class="btn-outline-admin {{ ($from == $monthStart && $to == $today) ? 'active-filter' : '' }}" style="font-size:0.8rem;padding:6px 14px;">Tháng này</a>
-            <a href="{{ route('admin.reports.index', ['from' => $yearStart, 'to' => $today]) }}"
-               class="btn-outline-admin {{ ($from == $yearStart && $to == $today) ? 'active-filter' : '' }}" style="font-size:0.8rem;padding:6px 14px;">Năm nay</a>
+            <a href="{{ route('admin.reports.index', ['from' => $today, 'to' => $today, 'range' => 'today']) }}"
+               class="btn-outline-admin {{ $reqRange == 'today' ? 'active-filter' : (empty($reqRange) && $from == $today && $to == $today ? 'active-filter' : '') }}" style="font-size:0.8rem;padding:6px 14px;">Hôm nay</a>
+            <a href="{{ route('admin.reports.index', ['from' => $sevenDaysAgo, 'to' => $today, 'range' => '7days']) }}"
+               class="btn-outline-admin {{ $reqRange == '7days' ? 'active-filter' : (empty($reqRange) && $from == $sevenDaysAgo && $to == $today ? 'active-filter' : '') }}" style="font-size:0.8rem;padding:6px 14px;">7 ngày</a>
+            <a href="{{ route('admin.reports.index', ['from' => $monthStart, 'to' => $today, 'range' => 'month']) }}"
+               class="btn-outline-admin {{ $reqRange == 'month' ? 'active-filter' : (empty($reqRange) && $from == $monthStart && $to == $today && $monthStart != $today ? 'active-filter' : '') }}" style="font-size:0.8rem;padding:6px 14px;">Tháng này</a>
+            <a href="{{ route('admin.reports.index', ['from' => $yearStart, 'to' => $today, 'range' => 'year']) }}"
+               class="btn-outline-admin {{ $reqRange == 'year' ? 'active-filter' : (empty($reqRange) && $from == $yearStart && $to == $today && $yearStart != $today ? 'active-filter' : '') }}" style="font-size:0.8rem;padding:6px 14px;">Năm nay</a>
         </div>
     </form>
 </div>
@@ -311,29 +313,29 @@
     // --- Revenue Line Chart ---
     const revCtx = document.getElementById('revenueChart').getContext('2d');
     new Chart(revCtx, {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: {!! json_encode($revenueByDay->pluck('date')->map(fn($d) => \Carbon\Carbon::parse($d)->format('d/m'))) !!},
             datasets: [{
                 label: 'Doanh thu (VNĐ)',
                 data: {!! json_encode($revenueByDay->pluck('revenue')) !!},
                 borderColor: '#FF6B6B',
-                backgroundColor: 'rgba(255,107,107,0.08)',
+                backgroundColor: 'rgba(255,107,107,0.7)',
                 fill: true,
                 tension: 0.4,
                 pointRadius: 4,
                 pointBackgroundColor: '#FF6B6B',
-                borderWidth: 2.5,
+                borderWidth: 1,
             }, {
                 label: 'Số đơn',
                 data: {!! json_encode($revenueByDay->pluck('order_count')) !!},
                 borderColor: '#4ECDC4',
-                backgroundColor: 'rgba(78,205,196,0.08)',
+                backgroundColor: 'rgba(78,205,196,0.7)',
                 fill: true,
                 tension: 0.4,
                 pointRadius: 4,
                 pointBackgroundColor: '#4ECDC4',
-                borderWidth: 2.5,
+                borderWidth: 1,
                 yAxisID: 'y1',
             }]
         },
@@ -344,7 +346,7 @@
             plugins: { legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 12 }, usePointStyle: true } } },
             scales: {
                 y: { beginAtZero: true, ticks: { callback: v => v >= 1000000 ? (v/1000000)+'M' : v >= 1000 ? (v/1000)+'K' : v } },
-                y1: { position: 'right', beginAtZero: true, grid: { display: false } },
+                y1: { position: 'right', beginAtZero: true, grid: { display: false }, ticks: { stepSize: 1, precision: 0 } },
                 x: { ticks: { font: { size: 11 } } }
             }
         }
