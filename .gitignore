@@ -1,39 +1,75 @@
-
 *.log
+
 .DS_Store
+
 Thumbs.db
 
+
+
 /vendor
+
 /node_modules
+
 /public/build
+
 /public/hot
 
 
+
+
+
 .env
+
 .env.backup
+
 .env.production
+
 /auth.json
+
 /storage/*.key
 
+
+
 /.fleet
+
 /.idea
+
 /.nova
+
 /.vscode
+
 /.zed
+
 .phpactor.json
+
 .phpunit.result.cache
+
 .phpunit.cache
+
 Homestead.json
+
 Homestead.yaml
 
+
+
 /public/storage
+
 /storage/pail
+
 /storage/framework/cache/*
+
 /storage/framework/sessions/*
+
 /storage/framework/views/*
 
+
+
 /database/database.sqlite
+
 /database/database.sqlite-journal
 
-# /public/uploads/*
+
+
+/public/uploads/*
+
 !/public/uploads/.gitignore
