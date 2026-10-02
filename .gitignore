@@ -1,22 +1,20 @@
-# Bỏ qua các file log và hệ điều hành
+
 *.log
 .DS_Store
 Thumbs.db
 
-# Bỏ qua thư viện và node_modules (những thứ có thể cài lại bằng lệnh)
 /vendor
 /node_modules
 /public/build
 /public/hot
 
-# Bỏ qua các file môi trường và thông tin bảo mật
+
 .env
 .env.backup
 .env.production
 /auth.json
 /storage/*.key
 
-# Bỏ qua cache và cấu hình IDE/Editor
 /.fleet
 /.idea
 /.nova
@@ -28,21 +26,14 @@ Thumbs.db
 Homestead.json
 Homestead.yaml
 
-# Bỏ qua các file cache và dữ liệu sinh ra trong quá trình chạy Laravel
 /public/storage
 /storage/pail
 /storage/framework/cache/*
 /storage/framework/sessions/*
 /storage/framework/views/*
 
-# -----------------------------------------------------
-# CẤU HÌNH RIÊNG CHO DỰ ÁN COSMIC FASHION CỦA NINH
-# -----------------------------------------------------
-
-# 1. Bỏ qua file Database cục bộ (tránh lộ/ghi đè dữ liệu thật)
 /database/database.sqlite
 /database/database.sqlite-journal
 
-# 2. Bỏ qua toàn bộ ảnh upload test, NHƯNG giữ lại thư mục gốc để code không bị lỗi
-/public/uploads/*
+# /public/uploads/*
 !/public/uploads/.gitignore

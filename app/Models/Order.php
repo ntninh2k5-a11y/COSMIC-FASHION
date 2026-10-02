@@ -35,10 +35,10 @@ class Order extends Model
         return [
             'pending'    => ['label' => 'Chờ xử lý',      'class' => 'badge-pending'],
             'processing' => ['label' => 'Đang chuẩn bị',  'class' => 'badge-processing'],
-            'shipping'   => ['label' => 'Đang giao',       'class' => 'badge-shipping'],
-            'completed'  => ['label' => 'Đã giao',         'class' => 'badge-completed'],
+            'shipping'   => ['label' => 'Đang giao hàng', 'class' => 'badge-shipping'],
+            'completed'  => ['label' => 'Hoàn thành',     'class' => 'badge-completed'],
             'cancelled'  => ['label' => 'Đã hủy',         'class' => 'badge-cancelled'],
-            'paid'       => ['label' => 'Đã thanh toán',   'class' => 'badge-paid'],
+            'paid'       => ['label' => 'Đã thanh toán',  'class' => 'badge-paid'],
         ];
     }
 

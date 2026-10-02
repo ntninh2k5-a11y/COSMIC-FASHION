@@ -6,7 +6,7 @@
 @section('content')
 <div class="row g-4">
     <div class="col-lg-8">
-        <div class="neo-card">
+        <div class="admin-card">
             <div class="d-flex align-items-center gap-3 mb-1">
                 <h4 class="fw-bolder m-0">Chỉnh sửa mục footer</h4>
                 @if(is_null($footerMenu->parent_id))
@@ -24,7 +24,7 @@
                 <div class="row g-4">
                     <div class="col-md-8">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">TÊN HIỂN THỊ <span class="text-danger">*</span></label>
-                        <input type="text" name="name" class="form-control neo-input" required
+                        <input type="text" name="name" class="form-control " required
                                value="{{ old('name', $footerMenu->name) }}">
                         @error('name')
                             <div class="text-danger mt-1" style="font-size:12px;">{{ $message }}</div>
@@ -33,13 +33,13 @@
 
                     <div class="col-md-4">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">THỨ TỰ HIỂN THỊ</label>
-                        <input type="number" name="sort_order" class="form-control neo-input" min="0"
+                        <input type="number" name="sort_order" class="form-control " min="0"
                                value="{{ old('sort_order', $footerMenu->sort_order) }}">
                     </div>
 
                     <div class="col-12">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">THUỘC CỘT TIÊU ĐỀ (CHA)</label>
-                        <select name="parent_id" class="form-select neo-input">
+                        <select name="parent_id" class="form-select ">
                             <option value="">— Tạo thành Cột tiêu đề mới —</option>
                             @foreach($footerColumns as $col)
                                 <option value="{{ $col->id }}" {{ $footerMenu->parent_id == $col->id ? 'selected' : '' }}>
@@ -51,7 +51,7 @@
 
                     <div class="col-md-6">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">LOẠI LIÊN KẾT</label>
-                        <select name="type" class="form-select neo-input">
+                        <select name="type" class="form-select ">
                             <option value="default" {{ old('type', $footerMenu->type) == 'default' ? 'selected' : '' }}>Mặc định (Text/Link)</option>
                             <option value="social" {{ old('type', $footerMenu->type) == 'social' ? 'selected' : '' }}>Mạng xã hội (Nút tròn nhỏ)</option>
                             <option value="payment" {{ old('type', $footerMenu->type) == 'payment' ? 'selected' : '' }}>Thanh toán (Nút vuông nhỏ)</option>
@@ -60,7 +60,7 @@
 
                     <div class="col-md-6">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">TRẠNG THÁI</label>
-                        <select name="status" class="form-select neo-input" required>
+                        <select name="status" class="form-select " required>
                             <option value="1" {{ $footerMenu->status == 1 ? 'selected' : '' }}>✅ Hiển thị</option>
                             <option value="0" {{ $footerMenu->status == 0 ? 'selected' : '' }}>❌ Đang ẩn</option>
                         </select>
@@ -68,7 +68,7 @@
 
                     <div class="col-12">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">ĐƯỜNG DẪN (URL)</label>
-                        <input type="text" name="url" class="form-control neo-input" id="url-field"
+                        <input type="text" name="url" class="form-control " id="url-field"
                                value="{{ old('url', $footerMenu->url) }}"
                                placeholder="https://... hoặc /duong-dan hoặc #">
                     </div>
@@ -98,14 +98,14 @@
                     <div class="col-md-6">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">ICON (Bootstrap Icons)</label>
                         <div class="input-group">
-                            <span class="input-group-text neo-input" id="icon-preview" style="border-right:none; background:#f9fafb; min-width:42px; justify-content:center;">
+                            <span class="input-group-text " id="icon-preview" style="border-right:none; background:#f9fafb; min-width:42px; justify-content:center;">
                                 @if($footerMenu->icon)
                                     <i class="bi {{ $footerMenu->icon }}" style="color:#FF6B6B;"></i>
                                 @else
                                     <i class="bi bi-link-45deg text-muted"></i>
                                 @endif
                             </span>
-                            <input type="text" name="icon" class="form-control neo-input" id="icon-input"
+                            <input type="text" name="icon" class="form-control " id="icon-input"
                                    style="border-left:none;"
                                    value="{{ old('icon', $footerMenu->icon) }}"
                                    placeholder="bi-house, bi-telephone...">
@@ -117,20 +117,16 @@
 
                     <div class="col-12">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">MÔ TẢ NGẮN</label>
-                        <textarea name="description" class="form-control neo-input" rows="2"
+                        <textarea name="description" class="form-control " rows="2"
                                   placeholder="Mô tả ngắn hiển thị dưới tiêu đề cột...">{{ old('description', $footerMenu->description) }}</textarea>
                     </div>
                 </div>
 
                 <hr class="my-4">
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <a href="{{ route('admin.footer_menus.index') }}" class="btn btn-outline-dark rounded-3 px-4 fw-bold" style="font-size:13px;">
-                        ← Quay lại
-                    </a>
-                    <button type="submit" class="neo-btn border-0">
-                        <i class="bi bi-save me-1"></i> CẬP NHẬT
-                    </button>
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="{{ route('admin.footer_menus.index') }}" class="btn-outline-admin text-muted">HỦY BỎ</a>
+                    <button type="submit" class="btn-primary-admin px-4"><i class="bi bi-check2"></i> CẬP NHẬT</button>
                 </div>
             </form>
         </div>
@@ -138,7 +134,7 @@
 
     {{-- Sidebar --}}
     <div class="col-lg-4">
-        <div class="neo-card" style="background:#0f172a; color:#e2e8f0;">
+        <div class="admin-card" style="background:#0f172a; color:#e2e8f0;">
             <h6 class="fw-bolder mb-3" style="color:#4ECDC4; font-size:11px; letter-spacing:1px; text-transform:uppercase;">
                 <i class="bi bi-eye me-1"></i> Preview Icon nhanh
             </h6>

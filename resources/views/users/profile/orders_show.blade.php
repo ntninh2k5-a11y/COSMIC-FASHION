@@ -16,19 +16,7 @@
             <p class="mb-3"><strong class="me-2" style="color: #6b7280;">Địa chỉ giao hàng:</strong> <span class="fw-medium text-dark">{{ $order->shipping_address ?? 'Không có' }}</span></p>
             <p class="mb-3"><strong class="me-2" style="color: #6b7280;">Số điện thoại:</strong> <span class="fw-medium text-dark">{{ $order->customer_phone ?? 'Không có' }}</span></p>
             <p class="mb-0"><strong class="me-2" style="color: #6b7280;">Trạng thái:</strong> 
-                @if($order->status == 'pending')
-                    <span class="badge" style="background-color: #fef3c7; color: #92400e; padding: 6px 14px; border-radius: 20px; font-weight: 600;">Chờ xử lý</span>
-                @elseif($order->status == 'processing')
-                    <span class="badge" style="background-color: #e0f2fe; color: #075985; padding: 6px 14px; border-radius: 20px; font-weight: 600;">Đang chuẩn bị</span>
-                @elseif($order->status == 'shipping')
-                    <span class="badge" style="background-color: #dbeafe; color: #1e40af; padding: 6px 14px; border-radius: 20px; font-weight: 600;">Đang giao</span>
-                @elseif($order->status == 'completed')
-                    <span class="badge" style="background-color: #d1fae5; color: #065f46; padding: 6px 14px; border-radius: 20px; font-weight: 600;">Đã giao</span>
-                @elseif($order->status == 'cancelled')
-                    <span class="badge" style="background-color: #fee2e2; color: #991b1b; padding: 6px 14px; border-radius: 20px; font-weight: 600;">Đã hủy</span>
-                @else
-                    <span class="badge bg-secondary rounded-pill px-3 py-2">{{ $order->status }}</span>
-                @endif
+                <span class="badge-status {{ $order->status_badge }}">{{ $order->status_label }}</span>
             </p>
         </div>
     </div>

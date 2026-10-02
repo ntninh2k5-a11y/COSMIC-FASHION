@@ -6,8 +6,8 @@
 @section('content')
 <div class="row g-4">
     <div class="col-lg-8">
-        <div class="neo-card">
-            <h4 class="fw-bolder mb-1">Thêm mục mới</h4>
+        <div class="admin-card">
+            <div class="admin-card-header"><h2 class="admin-card-title"><i class="bi bi-layout-text-sidebar text-muted"></i> Thêm mục mới</h2></div>
             <p class="text-muted mb-4" style="font-size:13px;">Tạo cột tiêu đề mới hoặc thêm liên kết vào cột có sẵn.</p>
 
             <form action="{{ route('admin.footer_menus.store') }}" method="POST">
@@ -16,7 +16,7 @@
                 <div class="row g-4">
                     <div class="col-md-8">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">TÊN HIỂN THỊ <span class="text-danger">*</span></label>
-                        <input type="text" name="name" class="form-control neo-input" required
+                        <input type="text" name="name" class="form-control " required
                                placeholder="Ví dụ: Hỗ trợ khách hàng" value="{{ old('name') }}">
                         @error('name')
                             <div class="text-danger mt-1" style="font-size:12px;">{{ $message }}</div>
@@ -25,13 +25,13 @@
 
                     <div class="col-md-4">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">THỨ TỰ HIỂN THỊ</label>
-                        <input type="number" name="sort_order" class="form-control neo-input" value="{{ old('sort_order', 0) }}" min="0">
+                        <input type="number" name="sort_order" class="form-control " value="{{ old('sort_order', 0) }}" min="0">
                         <div class="text-muted mt-1" style="font-size:11px;">Số nhỏ → hiển thị trước</div>
                     </div>
 
                     <div class="col-12">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">THUỘC CỘT TIÊU ĐỀ (CHA)</label>
-                        <select name="parent_id" class="form-select neo-input">
+                        <select name="parent_id" class="form-select ">
                             <option value="">— Tạo thành Cột tiêu đề mới —</option>
                             @foreach($footerColumns as $col)
                                 <option value="{{ $col->id }}" {{ old('parent_id') == $col->id ? 'selected' : '' }}>
@@ -44,7 +44,7 @@
 
                     <div class="col-md-6">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">LOẠI LIÊN KẾT</label>
-                        <select name="type" class="form-select neo-input">
+                        <select name="type" class="form-select ">
                             <option value="default" {{ old('type') == 'default' ? 'selected' : '' }}>Mặc định (Text/Link)</option>
                             <option value="social" {{ old('type') == 'social' ? 'selected' : '' }}>Mạng xã hội (Nút tròn nhỏ)</option>
                             <option value="payment" {{ old('type') == 'payment' ? 'selected' : '' }}>Thanh toán (Nút vuông nhỏ)</option>
@@ -53,7 +53,7 @@
 
                     <div class="col-md-6">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">TRẠNG THÁI</label>
-                        <select name="status" class="form-select neo-input" required>
+                        <select name="status" class="form-select " required>
                             <option value="1" {{ old('status', '1') == '1' ? 'selected' : '' }}>✅ Hiển thị</option>
                             <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>❌ Đang ẩn</option>
                         </select>
@@ -62,7 +62,7 @@
                     <div class="col-12">
 
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">ĐƯỜNG DẪN (URL)</label>
-                        <input type="text" name="url" class="form-control neo-input" value="{{ old('url', '#') }}"
+                        <input type="text" name="url" class="form-control " value="{{ old('url', '#') }}"
                                id="url-field"
                                placeholder="https://... hoặc /duong-dan hoặc #">
                     </div>
@@ -92,10 +92,10 @@
                     <div class="col-md-6">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">ICON (Bootstrap Icons)</label>
                         <div class="input-group">
-                            <span class="input-group-text neo-input" id="icon-preview" style="border-right:none; background:#f9fafb; min-width:42px; justify-content:center;">
+                            <span class="input-group-text " id="icon-preview" style="border-right:none; background:#f9fafb; min-width:42px; justify-content:center;">
                                 <i class="bi bi-link-45deg text-muted"></i>
                             </span>
-                            <input type="text" name="icon" class="form-control neo-input" id="icon-input"
+                            <input type="text" name="icon" class="form-control " id="icon-input"
                                    style="border-left:none;"
                                    placeholder="bi-house, bi-telephone, bi-instagram..." value="{{ old('icon') }}">
                         </div>
@@ -106,7 +106,7 @@
 
                     <div class="col-12">
                         <label class="fw-bolder mb-2 text-dark" style="font-size:12px; letter-spacing:0.5px;">MÔ TẢ NGẮN (chỉ hiển thị dưới tiêu đề cột)</label>
-                        <textarea name="description" class="form-control neo-input" rows="2"
+                        <textarea name="description" class="form-control " rows="2"
                                   placeholder="Ví dụ: Chúng tôi hỗ trợ 24/7 qua điện thoại và email...">{{ old('description') }}</textarea>
                         <div class="text-muted mt-1" style="font-size:11px;">Tùy chọn. Chỉ dùng cho cột tiêu đề, không dùng cho liên kết thường.</div>
                     </div>
@@ -114,13 +114,9 @@
 
                 <hr class="my-4">
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <a href="{{ route('admin.footer_menus.index') }}" class="btn btn-outline-dark rounded-3 px-4 fw-bold" style="font-size:13px;">
-                        ← Quay lại
-                    </a>
-                    <button type="submit" class="neo-btn border-0">
-                        <i class="bi bi-save me-1"></i> LƯU THÔNG TIN
-                    </button>
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="{{ route('admin.footer_menus.index') }}" class="btn-outline-admin text-muted">HỦY BỎ</a>
+                    <button type="submit" class="btn-primary-admin px-4"><i class="bi bi-check2"></i> LƯU THÔNG TIN</button>
                 </div>
             </form>
         </div>
@@ -128,7 +124,7 @@
 
     {{-- Sidebar help --}}
     <div class="col-lg-4">
-        <div class="neo-card mb-4" style="background:#f8fafc;">
+        <div class="admin-card mb-4" style="background:#f8fafc;">
             <h6 class="fw-bolder mb-3"><i class="bi bi-info-circle-fill text-primary me-2"></i>Hướng dẫn</h6>
             <div style="font-size:13px; line-height:1.8; color:#64748b;">
                 <p><strong class="text-dark">Cột tiêu đề:</strong> Để trống mục "Thuộc cột cha". Đây sẽ là tiêu đề nhóm (vd: Hỗ trợ KH).</p>
@@ -137,7 +133,7 @@
             </div>
         </div>
 
-        <div class="neo-card" style="background:#0f172a; color:#e2e8f0;">
+        <div class="admin-card" style="background:#0f172a; color:#e2e8f0;">
             <h6 class="fw-bolder mb-3" style="color:#4ECDC4; font-size:11px; letter-spacing:1px; text-transform:uppercase;">
                 <i class="bi bi-eye me-1"></i> Preview Icon phổ biến
             </h6>

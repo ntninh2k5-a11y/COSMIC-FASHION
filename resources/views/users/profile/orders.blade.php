@@ -31,18 +31,7 @@
                         <span class="fw-bold" style="color:#FF6B6B;">{{ number_format($order->total_amount, 0, ',', '.') }}đ</span>
                     </td>
                     <td style="padding:14px 16px; border-bottom:1px solid #f0f2f5; font-size:0.875rem;">
-                        @php
-                            $sm = [
-                                'pending'    => ['Chờ xử lý', 'background:#fff8e1; color:#f59e0b;'],
-                                'processing' => ['Đang chuẩn bị', 'background:#e0f2fe; color:#0284c7;'],
-                                'shipping'   => ['Đang giao', 'background:#ede9fe; color:#7c3aed;'],
-                                'completed'  => ['Đã giao', 'background:#dcfce7; color:#16a34a;'],
-                                'cancelled'  => ['Đã hủy', 'background:#fee2e2; color:#dc2626;'],
-                                'paid'       => ['Đã thanh toán', 'background:#dcfce7; color:#16a34a;'],
-                            ];
-                            $s = $sm[$order->status] ?? [$order->status, 'background:#f3f4f6; color:#6b7280;'];
-                        @endphp
-                        <span style="display:inline-flex; align-items:center; padding:5px 12px; border-radius:50rem; font-size:0.75rem; font-weight:600; {{ $s[1] }}">{{ $s[0] }}</span>
+                        <span class="badge-status {{ $order->status_badge }}">{{ $order->status_label }}</span>
                     </td>
                     <td style="padding:14px 16px; border-bottom:1px solid #f0f2f5; font-size:0.875rem; text-align:center;">
                         <a href="{{ route('user.orders.show', $order->id) }}" class="text-decoration-none fw-semibold" style="display:inline-flex; align-items:center; gap:4px; padding:5px 14px; background:#fff; border:1.5px solid #e9ecef; border-radius:8px; font-size:0.8rem; color:#2D3436; transition:all 0.18s;">

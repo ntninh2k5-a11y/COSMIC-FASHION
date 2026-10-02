@@ -11,22 +11,48 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category')->orderBy('id', 'desc')->paginate(10);
-        return view('admin.products.index', compact('products'));
+        $query = Product::with('category')->orderBy('id', 'desc');
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $products = $query->paginate(10)->appends($request->all());
+        $categories = Category::where('status', 1)->get();
+
+        return view('admin.products.index', compact('products', 'categories'));
     }
 
     public function create()
     {
         $categories = Category::where('status', 1)->get();
-        $sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+
+        // Size quần áo + Size giày (số)
+        $sizes = ['S', 'M', 'L', 'XL', 'XXL', '38', '39', '40', '41', '42', '43', '44'];
+
+        // Bảng màu đầy đủ (15 màu)
         $colors = [
-            'Đen'       => '#000000',
-            'Trắng'     => '#FFFFFF',
-            'Xanh Navy' => '#001F3F',
-            'Be'        => '#F5F5DC',
-            'Xám'       => '#808080',
+            'Đen'        => '#000000',
+            'Trắng'      => '#FFFFFF',
+            'Xanh Navy'  => '#001F3F',
+            'Be'         => '#F5F5DC',
+            'Xám'        => '#808080',
+            'Đỏ'         => '#DC2626',
+            'Hồng'       => '#EC4899',
+            'Xanh Dương' => '#2563EB',
+            'Xanh Lá'    => '#16A34A',
+            'Vàng'       => '#EAB308',
+            'Cam'        => '#EA580C',
+            'Tím'        => '#7C3AED',
+            'Nâu'        => '#92400E',
+            'Kem'        => '#FFFDD0',
+            'Xanh Rêu'   => '#556B2F',
         ];
 
         return view('admin.products.create', compact('categories', 'sizes', 'colors'));
@@ -44,7 +70,7 @@ class ProductController extends Controller
             'image'            => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
             'status'           => 'required|boolean',
             'variants'         => 'nullable|array',
-            'variants.*.size'  => 'required_with:variants|in:S,M,L,XL,XXL',
+            'variants.*.size'  => 'required_with:variants|in:S,M,L,XL,XXL,38,39,40,41,42,43,44',
             'variants.*.color' => 'required_with:variants',
             'variants.*.stock_quantity' => 'required_with:variants|integer|min:0',
         ]);
@@ -100,13 +126,27 @@ class ProductController extends Controller
     {
         $product = Product::with('variants')->findOrFail($id);
         $categories = Category::where('status', 1)->get();
-        $sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+
+        // Size quần áo + Size giày (số)
+        $sizes = ['S', 'M', 'L', 'XL', 'XXL', '38', '39', '40', '41', '42', '43', '44'];
+
+        // Bảng màu đầy đủ (15 màu)
         $colors = [
-            'Đen'       => '#000000',
-            'Trắng'     => '#FFFFFF',
-            'Xanh Navy' => '#001F3F',
-            'Be'        => '#F5F5DC',
-            'Xám'       => '#808080',
+            'Đen'        => '#000000',
+            'Trắng'      => '#FFFFFF',
+            'Xanh Navy'  => '#001F3F',
+            'Be'         => '#F5F5DC',
+            'Xám'        => '#808080',
+            'Đỏ'         => '#DC2626',
+            'Hồng'       => '#EC4899',
+            'Xanh Dương' => '#2563EB',
+            'Xanh Lá'    => '#16A34A',
+            'Vàng'       => '#EAB308',
+            'Cam'        => '#EA580C',
+            'Tím'        => '#7C3AED',
+            'Nâu'        => '#92400E',
+            'Kem'        => '#FFFDD0',
+            'Xanh Rêu'   => '#556B2F',
         ];
 
         return view('admin.products.edit', compact('product', 'categories', 'sizes', 'colors'));
@@ -126,7 +166,7 @@ class ProductController extends Controller
             'image'            => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
             'status'           => 'required|boolean',
             'variants'         => 'nullable|array',
-            'variants.*.size'  => 'required_with:variants|in:S,M,L,XL,XXL',
+            'variants.*.size'  => 'required_with:variants|in:S,M,L,XL,XXL,38,39,40,41,42,43,44',
             'variants.*.color' => 'required_with:variants',
             'variants.*.stock_quantity' => 'required_with:variants|integer|min:0',
         ]);

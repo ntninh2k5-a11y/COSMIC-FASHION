@@ -163,11 +163,11 @@
                 <div class="mb-3">
                     <label class="form-label">Trạng thái mới</label>
                     <select name="status" class="form-select">
-                        <option value="pending"    {{ $order->status == 'pending'    ? 'selected' : '' }}>Chờ xử lý</option>
-                        <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Đang chuẩn bị</option>
-                        <option value="shipping"   {{ $order->status == 'shipping'   ? 'selected' : '' }}>Đang giao hàng</option>
-                        <option value="completed"  {{ $order->status == 'completed'  ? 'selected' : '' }}>Hoàn thành</option>
-                        <option value="cancelled"  {{ $order->status == 'cancelled'  ? 'selected' : '' }}>Đã hủy</option>
+                        @foreach(app(\App\Models\Order::class)->getStatusMap() as $key => $info)
+                            <option value="{{ $key }}" {{ $order->status == $key ? 'selected' : '' }}>
+                                {{ $info['label'] }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
                 <button type="submit" class="btn-primary-admin w-100 justify-content-center">

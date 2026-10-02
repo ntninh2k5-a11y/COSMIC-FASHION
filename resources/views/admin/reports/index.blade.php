@@ -355,7 +355,7 @@
     // --- Order Status Pie ---
     const statusCtx = document.getElementById('statusChart').getContext('2d');
     const statusData = {!! json_encode($ordersByStatus) !!};
-    const statusLabels = { pending: 'Chờ xử lý', processing: 'Đang chuẩn bị', shipping: 'Đang giao', completed: 'Hoàn thành', cancelled: 'Đã hủy', paid: 'Đã thanh toán' };
+    const statusLabels = { pending: 'Chờ xử lý', processing: 'Đang chuẩn bị', shipping: 'Đang giao hàng', completed: 'Hoàn thành', cancelled: 'Đã hủy', paid: 'Đã thanh toán' };
     const statusColors = { pending: '#f59e0b', processing: '#0284c7', shipping: '#7c3aed', completed: '#16a34a', cancelled: '#dc2626', paid: '#059669' };
     new Chart(statusCtx, {
         type: 'doughnut',

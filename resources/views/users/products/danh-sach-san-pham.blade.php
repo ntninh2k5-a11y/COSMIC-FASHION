@@ -76,11 +76,20 @@
                     <div class="filter-group-content">
                         <div class="filter-chips" id="drawer-kich-co">
                             <span class="filter-chip active" onclick="chonKichCoDrawer('Tất cả', this)">Tất cả</span>
+                            {{-- Size quần áo --}}
                             <span class="filter-chip" onclick="chonKichCoDrawer('S', this)">S</span>
                             <span class="filter-chip" onclick="chonKichCoDrawer('M', this)">M</span>
                             <span class="filter-chip" onclick="chonKichCoDrawer('L', this)">L</span>
                             <span class="filter-chip" onclick="chonKichCoDrawer('XL', this)">XL</span>
                             <span class="filter-chip" onclick="chonKichCoDrawer('XXL', this)">XXL</span>
+                            {{-- Size giày --}}
+                            <span class="filter-chip" onclick="chonKichCoDrawer('38', this)">38</span>
+                            <span class="filter-chip" onclick="chonKichCoDrawer('39', this)">39</span>
+                            <span class="filter-chip" onclick="chonKichCoDrawer('40', this)">40</span>
+                            <span class="filter-chip" onclick="chonKichCoDrawer('41', this)">41</span>
+                            <span class="filter-chip" onclick="chonKichCoDrawer('42', this)">42</span>
+                            <span class="filter-chip" onclick="chonKichCoDrawer('43', this)">43</span>
+                            <span class="filter-chip" onclick="chonKichCoDrawer('44', this)">44</span>
                         </div>
                     </div>
                 </div>
@@ -105,8 +114,8 @@
                                 <div class="color-swatch" style="background-color: #FFFFFF; border-color: #d1d5db;"></div>
                                 <span>Trắng</span>
                             </div>
-                            <div class="filter-color-chip" onclick="chonMauDrawer('#000080', this)">
-                                <div class="color-swatch" style="background-color: #000080;"></div>
+                            <div class="filter-color-chip" onclick="chonMauDrawer('#001F3F', this)">
+                                <div class="color-swatch" style="background-color: #001F3F;"></div>
                                 <span>Navy</span>
                             </div>
                             <div class="filter-color-chip" onclick="chonMauDrawer('#F5F5DC', this)">
@@ -116,6 +125,46 @@
                             <div class="filter-color-chip" onclick="chonMauDrawer('#808080', this)">
                                 <div class="color-swatch" style="background-color: #808080;"></div>
                                 <span>Xám</span>
+                            </div>
+                            <div class="filter-color-chip" onclick="chonMauDrawer('#DC2626', this)">
+                                <div class="color-swatch" style="background-color: #DC2626;"></div>
+                                <span>Đỏ</span>
+                            </div>
+                            <div class="filter-color-chip" onclick="chonMauDrawer('#EC4899', this)">
+                                <div class="color-swatch" style="background-color: #EC4899;"></div>
+                                <span>Hồng</span>
+                            </div>
+                            <div class="filter-color-chip" onclick="chonMauDrawer('#2563EB', this)">
+                                <div class="color-swatch" style="background-color: #2563EB;"></div>
+                                <span>Xanh Dương</span>
+                            </div>
+                            <div class="filter-color-chip" onclick="chonMauDrawer('#16A34A', this)">
+                                <div class="color-swatch" style="background-color: #16A34A;"></div>
+                                <span>Xanh Lá</span>
+                            </div>
+                            <div class="filter-color-chip" onclick="chonMauDrawer('#EAB308', this)">
+                                <div class="color-swatch" style="background-color: #EAB308;"></div>
+                                <span>Vàng</span>
+                            </div>
+                            <div class="filter-color-chip" onclick="chonMauDrawer('#EA580C', this)">
+                                <div class="color-swatch" style="background-color: #EA580C;"></div>
+                                <span>Cam</span>
+                            </div>
+                            <div class="filter-color-chip" onclick="chonMauDrawer('#7C3AED', this)">
+                                <div class="color-swatch" style="background-color: #7C3AED;"></div>
+                                <span>Tím</span>
+                            </div>
+                            <div class="filter-color-chip" onclick="chonMauDrawer('#92400E', this)">
+                                <div class="color-swatch" style="background-color: #92400E;"></div>
+                                <span>Nâu</span>
+                            </div>
+                            <div class="filter-color-chip" onclick="chonMauDrawer('#FFFDD0', this)">
+                                <div class="color-swatch" style="background-color: #FFFDD0; border-color: #d1d5db;"></div>
+                                <span>Kem</span>
+                            </div>
+                            <div class="filter-color-chip" onclick="chonMauDrawer('#556B2F', this)">
+                                <div class="color-swatch" style="background-color: #556B2F;"></div>
+                                <span>Xanh Rêu</span>
                             </div>
                         </div>
                     </div>

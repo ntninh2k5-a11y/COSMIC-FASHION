@@ -180,7 +180,7 @@ class ReportController extends Controller
                     ->orderBy('id', 'desc')
                     ->get();
                 foreach ($orders as $order) {
-                    $statusMap = ['pending'=>'Chờ xử lý','processing'=>'Đang chuẩn bị','shipping'=>'Đang giao','completed'=>'Hoàn thành','cancelled'=>'Đã hủy','paid'=>'Đã thanh toán'];
+                    $statusMap = collect(app(\App\Models\Order::class)->getStatusMap())->mapWithKeys(fn($v, $k) => [$k => $v['label']])->toArray();
                     fputcsv($file, [
                         $order->order_code,
                         $order->user->name ?? 'Khách vãng lai',

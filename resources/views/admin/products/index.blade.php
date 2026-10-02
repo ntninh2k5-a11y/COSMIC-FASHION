@@ -4,9 +4,26 @@
 @section('content')
 
 <div class="admin-card">
-    <div class="admin-card-header">
-        <h2 class="admin-card-title"><i class="bi bi-bag text-muted"></i> Danh sách sản phẩm</h2>
-        <a href="{{ route('admin.products.create') }}" class="btn-primary-admin">
+    <div class="admin-card-header d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <h2 class="admin-card-title mb-0"><i class="bi bi-bag text-muted"></i> Danh sách sản phẩm</h2>
+        
+        <form method="GET" action="{{ route('admin.products.index') }}" class="d-flex align-items-center gap-2 flex-grow-1 mx-md-3" style="max-width: 500px;">
+            <select name="category_id" class="form-select form-select-sm" style="border-radius: 8px;">
+                <option value="">-- Tất cả danh mục --</option>
+                @foreach($categories as $cat)
+                    <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>
+                        {{ $cat->name }}
+                    </option>
+                @endforeach
+            </select>
+            <input type="text" name="search" value="{{ request('search') }}" class="form-control form-control-sm" placeholder="Tìm tên sản phẩm..." style="border-radius: 8px;">
+            <button type="submit" class="btn btn-sm text-white" style="background-color: #FF6B6B; border: none; border-radius: 8px; padding: 4px 12px;">Lọc</button>
+            @if(request()->hasAny(['category_id', 'search']))
+                <a href="{{ route('admin.products.index') }}" class="btn btn-sm btn-light" style="border-radius: 8px; border: 1px solid #ddd;">Xóa</a>
+            @endif
+        </form>
+
+        <a href="{{ route('admin.products.create') }}" class="btn-primary-admin" style="white-space: nowrap;">
             <i class="bi bi-plus-lg"></i> Thêm sản phẩm
         </a>
     </div>
