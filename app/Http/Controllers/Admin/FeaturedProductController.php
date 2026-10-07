@@ -115,9 +115,7 @@ class FeaturedProductController extends Controller
         return $pinned->concat($topViewed)->concat($newest);
     }
 
-    /**
-     * Bật/tắt trạng thái nổi bật cho sản phẩm.
-     */
+    
     public function toggle(Request $request, int $id)
     {
         $product = Product::findOrFail($id);
