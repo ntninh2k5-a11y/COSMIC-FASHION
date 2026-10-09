@@ -117,13 +117,13 @@ Route::middleware([CheckAccountStatus::class, CheckAdmin::class])
         Route::post('/featured/{id}/toggle', [App\Http\Controllers\Admin\FeaturedProductController::class, 'toggle'])->name('featured.toggle');
         Route::post('/featured/update-order', [App\Http\Controllers\Admin\FeaturedProductController::class, 'updateOrder'])->name('featured.updateOrder');
 
-        // Báo cáo thống kê (Admin + Staff)
-        Route::get('/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
-        Route::get('/reports/export-csv', [App\Http\Controllers\Admin\ReportController::class, 'exportCSV'])->name('reports.export.csv');
-        Route::get('/reports/export-pdf', [App\Http\Controllers\Admin\ReportController::class, 'exportPDF'])->name('reports.export.pdf');
-
         // === Chỉ Admin mới truy cập được ===
         Route::middleware([CheckAdminOnly::class])->group(function () {
+            // Báo cáo thống kê
+            Route::get('/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+            Route::get('/reports/export-csv', [App\Http\Controllers\Admin\ReportController::class, 'exportCSV'])->name('reports.export.csv');
+            Route::get('/reports/export-pdf', [App\Http\Controllers\Admin\ReportController::class, 'exportPDF'])->name('reports.export.pdf');
+
             Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
             Route::get('/users/{id}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
             Route::put('/users/{id}', [AdminUserController::class, 'update'])->name('users.update');

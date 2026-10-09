@@ -181,12 +181,13 @@ class ReportController extends Controller
                     ->get();
                 foreach ($orders as $order) {
                     $statusMap = collect(app(\App\Models\Order::class)->getStatusMap())->mapWithKeys(fn($v, $k) => [$k => $v['label']])->toArray();
+                    $payMapCSV = ['bank' => 'Chuyển khoản', 'cod' => 'COD (Thanh toán khi nhận hàng)'];
                     fputcsv($file, [
                         $order->order_code,
                         $order->user->name ?? 'Khách vãng lai',
                         $order->total_amount,
                         $statusMap[$order->status] ?? $order->status,
-                        strtoupper($order->payment_method ?? 'COD'),
+                        $payMapCSV[$order->payment_method] ?? strtoupper($order->payment_method ?? 'COD'),
                         $order->created_at->format('d/m/Y H:i'),
                     ]);
                 }

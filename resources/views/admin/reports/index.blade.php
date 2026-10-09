@@ -400,7 +400,7 @@
     // --- Payment Methods Pie ---
     const payCtx = document.getElementById('paymentChart').getContext('2d');
     const payData = {!! json_encode($paymentMethods) !!};
-    const payLabels = { bank_transfer: 'Chuyển khoản', cod: 'COD', momo: 'MoMo', vnpay: 'VNPay' };
+    const payLabels = { bank: 'Chuyển khoản', cod: 'Thanh toán khi nhận hàng (COD)', momo: 'MoMo', vnpay: 'VNPay' };
     new Chart(payCtx, {
         type: 'doughnut',
         data: {

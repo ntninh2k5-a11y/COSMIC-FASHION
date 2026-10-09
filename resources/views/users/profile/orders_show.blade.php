@@ -15,9 +15,13 @@
             <p class="mb-3"><strong class="me-2" style="color: #6b7280;">Ngày đặt:</strong> <span class="fw-medium text-dark">{{ $order->created_at->format('d/m/Y H:i') }}</span></p>
             <p class="mb-3"><strong class="me-2" style="color: #6b7280;">Địa chỉ giao hàng:</strong> <span class="fw-medium text-dark">{{ $order->shipping_address ?? 'Không có' }}</span></p>
             <p class="mb-3"><strong class="me-2" style="color: #6b7280;">Số điện thoại:</strong> <span class="fw-medium text-dark">{{ $order->customer_phone ?? 'Không có' }}</span></p>
-            <p class="mb-0"><strong class="me-2" style="color: #6b7280;">Trạng thái:</strong> 
+            <p class="mb-3"><strong class="me-2" style="color: #6b7280;">Trạng thái:</strong> 
                 <span class="badge-status {{ $order->status_badge }}">{{ $order->status_label }}</span>
             </p>
+            @php
+                $payMap = ['bank' => 'Chuyển khoản ngân hàng', 'cod' => 'Thanh toán khi nhận hàng (COD)'];
+            @endphp
+            <p class="mb-0"><strong class="me-2" style="color: #6b7280;">Thanh toán:</strong> <span class="fw-medium text-dark">{{ $payMap[$order->payment_method] ?? strtoupper($order->payment_method ?? 'N/A') }}</span></p>
         </div>
     </div>
 

@@ -15,6 +15,7 @@
                     <th>KHÁCH HÀNG</th>
                     <th>NGÀY ĐẶT</th>
                     <th>TỔNG TIỀN</th>
+                    <th>THANH TOÁN</th>
                     <th>TRẠNG THÁI</th>
                     <th class="text-center">HÀNH ĐỘNG</th>
                 </tr>
@@ -29,6 +30,13 @@
                         <td class="text-muted">{{ $order->created_at->format('d/m/Y') }}</td>
                         <td class="fw-bold">{{ number_format($order->total_amount, 0, ',', '.') }}đ</td>
                         <td>
+                            @if($order->payment_method === 'cod')
+                                <span class="badge-status badge-pending"><i class="bi bi-truck" style="font-size:0.6rem;"></i> COD</span>
+                            @else
+                                <span class="badge-status badge-processing"><i class="bi bi-bank" style="font-size:0.6rem;"></i> Bank</span>
+                            @endif
+                        </td>
+                        <td>
                             <span class="badge-status {{ $order->status_badge }}">{{ $order->status_label }}</span>
                         </td>
                         <td class="text-center">
@@ -39,7 +47,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">
+                        <td colspan="7" class="text-center py-5 text-muted">
                             <i class="bi bi-inbox fs-3 d-block mb-2"></i>
                             Chưa có đơn hàng nào.
                         </td>

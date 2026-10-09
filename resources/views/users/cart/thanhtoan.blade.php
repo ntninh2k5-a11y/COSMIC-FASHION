@@ -111,10 +111,16 @@
                     </div>
                     
                     <h4 class="fw-bold text-uppercase mb-4 fs-5 border-bottom pb-3 mt-5" style="letter-spacing: -0.5px; color: #2D3436;">PHƯƠNG THỨC THANH TOÁN</h4>
-                    <div class="form-check p-3 border rounded-3 d-flex align-items-center mb-2" style="background-color: #FAFAFA; transition: all 0.2s;">
+                    <div class="form-check p-3 border rounded-3 d-flex align-items-center mb-2" style="background-color: #FAFAFA; transition: all 0.2s;" onclick="this.querySelector('input').checked=true">
                         <input class="form-check-input ms-0 me-3 mt-0" type="radio" name="payment_method" id="bank" value="bank" checked style="width: 18px; height: 18px; accent-color: #FF6B6B;">
                         <label class="form-check-label fw-bold text-dark w-100" for="bank" style="cursor: pointer;">
                             <i class="bi bi-bank me-2 text-primary" style="font-size: 1.2rem;"></i> Chuyển khoản ngân hàng
+                        </label>
+                    </div>
+                    <div class="form-check p-3 border rounded-3 d-flex align-items-center mb-2" style="background-color: #FAFAFA; transition: all 0.2s;" onclick="this.querySelector('input').checked=true">
+                        <input class="form-check-input ms-0 me-3 mt-0" type="radio" name="payment_method" id="cod" value="cod" style="width: 18px; height: 18px; accent-color: #FF6B6B;">
+                        <label class="form-check-label fw-bold text-dark w-100" for="cod" style="cursor: pointer;">
+                            <i class="bi bi-truck me-2 text-success" style="font-size: 1.2rem;"></i> Thanh toán khi nhận hàng (COD)
                         </label>
                     </div>
                 </div>

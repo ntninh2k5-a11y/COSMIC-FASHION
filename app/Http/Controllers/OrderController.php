@@ -264,6 +264,12 @@ class OrderController extends Controller
                 return redirect()->route('checkout.success');
             }
 
+            // COD → chuyển thẳng đến trang thành công (trạng thái pending)
+            if ($validated['payment_method'] === 'cod') {
+                return redirect()->route('checkout.success');
+            }
+
+            // Bank → chuyển đến trang quét QR
             return redirect()->route('payment.qr', ['order' => $order->id]);
         } catch (\Throwable $e) {
             DB::rollBack();
@@ -285,7 +291,9 @@ class OrderController extends Controller
             return redirect()->route('home');
         }
 
-        if ($order->status !== 'paid') {
+        // COD (pending) hoặc đã thanh toán (paid) → hiển thị trang thành công
+        $allowedStatuses = ['paid', 'pending'];
+        if (!in_array($order->status, $allowedStatuses)) {
             return redirect()->route('payment.qr', ['order' => $order->id])
                 ->with('error', 'Đơn hàng chưa được xác nhận thanh toán.');
         }
@@ -293,7 +301,9 @@ class OrderController extends Controller
         $orderCode = $order->order_code;
         $name = $order->user ? $order->user->name : 'Khách hàng';
         $phone = $order->customer_phone;
-        $payment = $order->payment_method === 'bank' ? 'Chuyển khoản ngân hàng' : 'Thanh toán khi nhận hàng (COD)';
+        $payment = $order->payment_method === 'cod'
+            ? 'Thanh toán khi nhận hàng (COD)'
+            : ($order->payment_method === 'bank' ? 'Chuyển khoản ngân hàng' : $order->payment_method);
 
         return view('users.cart.thanhcong', compact('orderCode', 'name', 'phone', 'payment'));
     }

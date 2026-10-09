@@ -136,7 +136,10 @@
                 <div class="d-flex justify-content-between">
                     <span class="text-muted" style="font-size:0.85rem;">Thanh toán:</span>
                     <span class="fw-bold text-dark" style="font-size:0.85rem;">
-                        {{ strtoupper($order->payment_method ?? 'COD') }}
+                        @php
+                            $payMap = ['bank' => 'Chuyển khoản', 'cod' => 'COD (Nhận hàng trả tiền)'];
+                        @endphp
+                        {{ $payMap[$order->payment_method] ?? strtoupper($order->payment_method ?? 'N/A') }}
                     </span>
                 </div>
                 @if($order->notes)
