@@ -8,9 +8,7 @@ use Illuminate\Http\Request;
 
 class PointTransactionController extends Controller
 {
-    /**
-     * Trang đổi điểm — hiển thị số dư + hướng dẫn + lịch sử
-     */
+    
     public function index()
     {
         $userId = session('user_id');
