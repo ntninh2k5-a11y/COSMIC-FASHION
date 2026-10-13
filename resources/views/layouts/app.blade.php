@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ asset('css/partials/menu.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/partials/header.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/partials/footer.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('css/chatbot.css') }}?v={{ time() }}">
     @stack('styles')
 </head>
 <body>
@@ -145,6 +146,11 @@
             };
         }
     </script>
+    
+    {{-- Chatbot AI Widget --}}
+    @include('partials.chatbot')
+    <script src="{{ asset('js/chatbot.js') }}?v={{ time() }}"></script>
+
     @stack('scripts')
 </body>
 </html>

@@ -12,6 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->validateCsrfTokens(except: [
+            'chatbot/*',
+        ]);
+
         $middleware->alias([
             'admin' => \App\Http\Middleware\CheckAdmin::class,
             'check.status' => \App\Http\Middleware\CheckAccountStatus::class,

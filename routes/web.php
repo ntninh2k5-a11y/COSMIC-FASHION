@@ -19,6 +19,7 @@ use App\Http\Controllers\SePayController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\PointTransactionController;
+use App\Http\Controllers\ChatbotController;
 
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -64,6 +65,10 @@ Route::get('/uu-dai', [ProductController::class, 'sale'])->name('products.sale')
 
 Route::get('/gio-hang/count', [CartController::class, 'count'])->name('cart.count');
 Route::post('/them-vao-gio', [CartController::class, 'store'])->name('cart.store');
+
+// Chatbot AI Routes
+Route::post('/chatbot/send', [ChatbotController::class, 'sendMessage'])->name('chatbot.send');
+Route::post('/chatbot/clear', [ChatbotController::class, 'clearHistory'])->name('chatbot.clear');
 
 Route::middleware([CheckAccountStatus::class])->group(function () {
     

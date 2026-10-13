@@ -1,0 +1,538 @@
+:root {
+    --cb-primary: #004d40;
+    --cb-primary-hover: #00362c;
+    --cb-primary-light: #e0f2f1;
+    --cb-bg-body: #f4f7f6;
+    --cb-text-main: #1f2937;
+    --cb-text-muted: #6b7280;
+    --cb-border-color: #e5e7eb;
+    --cb-shadow: 0 12px 36px rgba(0, 0, 0, 0.16);
+    --cb-radius: 20px;
+    --cb-font-serif: 'Playfair Display', Georgia, serif;
+    --cb-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Nút kích hoạt mở Chat (Floating Button) */
+.cb-launcher-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--cb-primary);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 77, 64, 0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background-color 0.2s ease;
+}
+
+.cb-launcher-btn:hover {
+    transform: scale(1.08);
+    background-color: var(--cb-primary-hover);
+    box-shadow: 0 8px 25px rgba(0, 77, 64, 0.5);
+}
+
+.cb-launcher-btn:active {
+    transform: scale(0.95);
+}
+
+.cb-launcher-btn i {
+    font-size: 26px;
+    transition: transform 0.2s ease;
+}
+
+/* Badge thông báo trên launcher */
+.cb-launcher-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 13px;
+    height: 13px;
+    background-color: #10b981;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+}
+
+/* Hộp thoại Chatbot Popup */
+.cb-widget-window {
+    position: fixed;
+    bottom: 96px;
+    right: 24px;
+    width: 375px;
+    max-width: calc(100vw - 32px);
+    height: 570px;
+    max-height: calc(100vh - 120px);
+    background-color: #ffffff;
+    border-radius: var(--cb-radius);
+    box-shadow: var(--cb-shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1050;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.96);
+    transform-origin: bottom right;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: var(--cb-font-sans);
+    border: 1px solid rgba(0, 77, 64, 0.12);
+}
+
+.cb-widget-window.cb-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* Header của hộp Chat */
+.cb-header {
+    background-color: var(--cb-primary);
+    color: #ffffff;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.cb-header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--cb-font-serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    margin: 0;
+}
+
+.cb-header-title .cb-sparkle {
+    font-size: 1.15rem;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6));
+}
+
+.cb-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cb-header-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.85);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+}
+
+.cb-header-btn:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
+.cb-header-btn:active {
+    transform: scale(0.92);
+}
+
+/* Thân chat (Messages Container) */
+.cb-body {
+    flex: 1;
+    background-color: var(--cb-bg-body);
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scroll-behavior: smooth;
+}
+
+/* Tùy chỉnh thanh cuộn tinh tế */
+.cb-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cb-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.cb-body::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+}
+
+.cb-body::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+/* Tin nhắn chung */
+.cb-message {
+    display: flex;
+    flex-direction: column;
+    animation: cbFadeIn 0.25s ease-out;
+}
+
+@keyframes cbFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tin nhắn từ Người dùng */
+.cb-message-user {
+    align-self: flex-end;
+    max-width: 82%;
+}
+
+.cb-message-user .cb-bubble {
+    background-color: var(--cb-primary);
+    color: #ffffff;
+    padding: 10px 16px;
+    border-radius: 18px 18px 4px 18px;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    word-break: break-word;
+    box-shadow: 0 2px 6px rgba(0, 77, 64, 0.25);
+}
+
+/* Tin nhắn từ Bot */
+.cb-message-bot {
+    align-self: flex-start;
+    max-width: 88%;
+}
+
+.cb-message-bot .cb-bubble {
+    background-color: #ffffff;
+    color: var(--cb-text-main);
+    padding: 12px 16px;
+    border-radius: 18px 18px 18px 4px;
+    font-size: 0.91rem;
+    line-height: 1.55;
+    word-break: break-word;
+    border: 1px solid var(--cb-border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.cb-message-bot .cb-bubble p {
+    margin-bottom: 8px;
+}
+
+.cb-message-bot .cb-bubble p:last-child {
+    margin-bottom: 0;
+}
+
+.cb-message-bot .cb-bubble ul,
+.cb-message-bot .cb-bubble ol {
+    margin: 6px 0 8px 18px;
+    padding: 0;
+}
+
+.cb-message-bot .cb-bubble li {
+    margin-bottom: 4px;
+}
+
+.cb-message-bot .cb-bubble a {
+    color: var(--cb-primary);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease;
+}
+
+.cb-message-bot .cb-bubble a:hover {
+    color: #00897b;
+}
+
+.cb-message-bot .cb-bubble strong {
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Thẻ sản phẩm gợi ý kèm theo tin nhắn */
+.cb-products-preview {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cb-product-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+}
+
+.cb-product-card:hover {
+    border-color: var(--cb-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.cb-product-card img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #f1f5f9;
+}
+
+.cb-product-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.cb-product-name {
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: #1f2937;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0 0 2px 0;
+}
+
+.cb-product-price {
+    font-size: 0.8rem;
+    color: #d97706;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Hiệu ứng gõ chữ (Typing Indicator) */
+.cb-typing-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 14px;
+    background-color: #ffffff;
+    border: 1px solid var(--cb-border-color);
+    border-radius: 18px 18px 18px 4px;
+    width: fit-content;
+}
+
+.cb-typing-dot {
+    width: 7px;
+    height: 7px;
+    background-color: var(--cb-primary);
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: cbBounce 1.4s infinite ease-in-out both;
+}
+
+.cb-typing-dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.cb-typing-dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes cbBounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0.6);
+        opacity: 0.4;
+    }
+
+    40% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+
+/* Footer & Khung nhập tin nhắn */
+.cb-footer {
+    background-color: #ffffff;
+    padding: 12px 14px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.cb-input-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.cb-input {
+    flex: 1;
+    height: 44px;
+    border-radius: 25px;
+    border: 1px solid #d1d5db;
+    padding: 0 18px;
+    font-size: 0.9rem;
+    color: var(--cb-text-main);
+    background-color: #ffffff;
+    transition: all 0.2s ease;
+}
+
+.cb-input:focus {
+    outline: none;
+    border-color: var(--cb-primary);
+    box-shadow: 0 0 0 3px rgba(0, 77, 64, 0.12);
+}
+
+.cb-input::placeholder {
+    color: #9ca3af;
+    font-size: 0.88rem;
+}
+
+.cb-send-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--cb-primary);
+    color: #ffffff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.cb-send-btn:hover:not(:disabled) {
+    background-color: var(--cb-primary-hover);
+    transform: scale(1.05);
+}
+
+.cb-send-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.cb-send-btn i {
+    font-size: 1.05rem;
+    margin-left: 2px;
+}
+
+/* Modal xác nhận xóa tin nhắn */
+.cb-confirm-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+}
+
+.cb-confirm-overlay.cb-show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cb-confirm-box {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transform: scale(0.9);
+    transition: transform 0.2s ease;
+}
+
+.cb-confirm-overlay.cb-show .cb-confirm-box {
+    transform: scale(1);
+}
+
+.cb-confirm-box h6 {
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #1f2937;
+}
+
+.cb-confirm-box p {
+    font-size: 0.86rem;
+    color: #64748b;
+    margin-bottom: 16px;
+}
+
+.cb-confirm-btns {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.cb-btn-cancel,
+.cb-btn-delete {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cb-btn-cancel {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.cb-btn-cancel:hover {
+    background: #e2e8f0;
+}
+
+.cb-btn-delete {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.cb-btn-delete:hover {
+    background: #dc2626;
+}
+
+/* Responsive cho màn hình nhỏ (Mobile) */
+@media (max-width: 480px) {
+    .cb-widget-window {
+        bottom: 0;
+        right: 0;
+        width: 100vw;
+        max-width: 100vw;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .cb-launcher-btn {
+        bottom: 16px;
+        right: 16px;
+    }
+}
