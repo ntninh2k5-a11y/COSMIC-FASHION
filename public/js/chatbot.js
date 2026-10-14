@@ -386,6 +386,10 @@
         // In đậm: **text** hoặc __text__
         html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
+        // Loại bỏ đoạn link bị cắt dở ở cuối (nếu câu trả lời bị ngắt giữa chừng)
+        html = html.replace(/\[[^\]]*$/g, '');
+        html = html.replace(/\[[^\]]+\]\([^\)]*$/g, '');
+
         // Đường dẫn markdown: [label](url)
         html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1 <i class="bi bi-box-arrow-up-right" style="font-size:0.75rem;"></i></a>');
         html = html.replace(/\[([^\]]+)\]\((\/[^\s\)]+)\)/g, '<a href="$2" target="_blank">$1 <i class="bi bi-box-arrow-up-right" style="font-size:0.75rem;"></i></a>');

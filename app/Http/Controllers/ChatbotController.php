@@ -16,33 +16,25 @@ class ChatbotController extends Controller
     }
 
     /**
-     * Gửi tin nhắn đến Chatbot và nhận phản hồi
+     * Nhận câu hỏi từ giao diện và trả lời qua ChatbotService
      */
     public function sendMessage(Request $request): JsonResponse
     {
-        $request->validate([
-            'message' => 'required|string|max:1000',
-            'history' => 'nullable|array|max:20',
-            'history.*.role' => 'required_with:history|string|in:user,assistant',
-            'history.*.content' => 'required_with:history|string',
-        ]);
+        $message = trim((string) $request->input('message', ''));
+        if (empty($message)) {
+            return response()->json(['success' => false, 'reply' => 'Vui lòng nhập nội dung tin nhắn.']);
+        }
 
-        $userMessage = trim($request->input('message'));
-        $history = $request->input('history', []);
-
-        $result = $this->chatbotService->generateReply($userMessage, $history);
+        $result = $this->chatbotService->generateReply($message);
 
         return response()->json($result);
     }
 
     /**
-     * Xóa lịch sử phiên chat (nếu có lưu session)
+     * Xóa lịch sử (client quản lý qua localStorage)
      */
     public function clearHistory(): JsonResponse
     {
-        return response()->json([
-            'success' => true,
-            'message' => 'Lịch sử đoạn chat đã được làm mới thành công.',
-        ]);
+        return response()->json(['success' => true]);
     }
 }
